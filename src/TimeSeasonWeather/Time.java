@@ -1,4 +1,4 @@
-package time;
+package TimeSeasonWeather;
 public class Time{
     private int hour;
     private int minute;
