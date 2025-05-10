@@ -1,6 +1,6 @@
 package NPC;
 
-import java.util.ArrayList;
+//import java.util.ArrayList;
 
 /**
  * @author @hananda23
@@ -12,28 +12,27 @@ import java.util.ArrayList;
  */
 
 
-public class NPC{
+public abstract class NPC{
     
     //Attribute
     private String name;
     private int heartPoints;
     private static int MAX_HEARTPOINTS = 150;
-    private ArrayList<String> lovedItems;
+    /*private ArrayList<String> lovedItems;
     private ArrayList<String> likedItems;
-    private ArrayList<String> hatedItems;
+    private ArrayList<String> hatedItems;*/
     private Relationship relationshipStatus;
 
     //Contructor
-    public NPC(String name, ArrayList<String> lovedItems, ArrayList<String> likedItems, ArrayList<String> hatedItems){
+    public NPC(String name /*ArrayList<String> lovedItems, ArrayList<String> likedItems, ArrayList<String> hatedItems */){
         this.name = name;
-        this.lovedItems = lovedItems;
-        this.likedItems = likedItems;
-        this.hatedItems = hatedItems;
+        //this.lovedItems = lovedItems;
+        //this.likedItems = likedItems;
+        //this.hatedItems = hatedItems;
         heartPoints = 0;
         relationshipStatus = Relationship.SINGLE;
     }
 
-    //Methods
     //Getter
     public String getName(){
         return name;
@@ -43,7 +42,7 @@ public class NPC{
         return heartPoints;
     }
 
-    public ArrayList<String> getLovedItems(){
+    /*public ArrayList<String> getLovedItems(){
         return lovedItems;
     }
 
@@ -53,7 +52,7 @@ public class NPC{
 
     public ArrayList<String> getHateItems(){
         return hatedItems;
-    }
+    }*/
 
     public Relationship getRelationship(){
         return relationshipStatus;
@@ -76,5 +75,34 @@ public class NPC{
         } else if(heartPoints < 0){
             this.heartPoints = 0;
         }
+    }
+
+    //Methods
+    /**
+     * Method respon interaksi dengan player, tiap NPC memiliki definisi
+     * 
+     */
+    public abstract void interact();
+
+    /*private Boolean isLovedItem(String item){
+        return lovedItems.contains(item);
+    }
+
+    private Boolean isLikedItem(String item){
+        return likedItems.contains(item);
+    }
+
+    private Boolean isHatedItem(String item){
+        return hatedItems.contains(item);
+    }*/
+
+    public void recieveGifts(String player, String item){
+        System.out.println("Nunggu Itemnya");
+
+        /*
+         * 
+         * 
+         *  
+         */
     }
 }
