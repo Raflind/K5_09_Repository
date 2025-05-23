@@ -1,6 +1,7 @@
 package Entity;
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
@@ -10,18 +11,26 @@ import main.KeyHandler;
 public class Player extends Entity{
     GamePanel gp;
     KeyHandler keyH;
-    String direction;
-    
+    public final int screenX;
+    public final int screenY;
+
     public Player(GamePanel gp, KeyHandler keyH){
         this.gp = gp;
         this.keyH = keyH;
+        screenX = gp.screenWidth/2 - gp.tileSize/2;
+        screenY = gp.screenWidth/2 - gp.tileSize/2;
+        solidArea = new Rectangle();
+        solidArea.x = 15;
+        solidArea.y = 18;
+        solidArea.width = 18;
+        solidArea.height = 30;
         setDefaultValues();
         getPlayerImage();
     }
 
     public void setDefaultValues(){
-        x = 100;
-        y = 100;
+        worldX = gp.tileSize*13; // 13 ini tile ke-n yg mau karakternya digambarin
+        worldY = gp.tileSize*13; // sama kyk di atas
         speed = 5;
         direction = "diam";
     }
@@ -45,23 +54,38 @@ public class Player extends Entity{
 
     public void update(){
     if(keyH.up == true){
-        y -= speed;
         direction = "blkg";
     }
     else if(keyH.down == true){
-        y += speed;
         direction = "depan";
     }
     else if(keyH.right == true){
-        x += speed;
         direction = "kanan";
     }
     else if(keyH.left == true){
-        x -= speed;
         direction = "kiri";
     }
     else{
         direction = "diam";
+    }
+    //collision
+    collisionOn = false;
+    gp.cChecker.checkTile(this);
+    if(collisionOn == false){
+        switch(direction){
+            case "depan":
+            worldY += speed;
+            break;
+            case "blkg":
+            worldY -= speed;
+            break;
+            case "kiri":
+            worldX -= speed;
+            break;
+            case "kanan":
+            worldX += speed;
+            break;
+        }
     }
     if(keyH.up==true || keyH.down==true || keyH.left==true || keyH.right==true){
         spriteCounter++;
@@ -100,6 +124,6 @@ public class Player extends Entity{
             image = diam;
             break;
         }
-        comp.drawImage(image, x, y, gp.tileSize, gp.tileSize, null);
+        comp.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
     }
 }
