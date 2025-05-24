@@ -29,8 +29,8 @@ public class Player extends Entity{
     }
 
     public void setDefaultValues(){
-        worldX = gp.tileSize*13; // 13 ini tile ke-n yg mau karakternya digambarin
-        worldY = gp.tileSize*13; // sama kyk di atas
+        worldX = gp.tileSize*16; // 13 ini tile ke-n yg mau karakternya digambarin
+        worldY = gp.tileSize*11; // sama kyk di atas
         speed = 5;
         direction = "diam";
     }

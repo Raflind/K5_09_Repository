@@ -5,7 +5,10 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import Entity.Player;
-import Map.TileManager;
+import Map.FarmMap;
+import Map.Ocean;
+import Map.ForestRiver;
+import Map.MountainLake;
 
 import javax.swing.JPanel;
 
@@ -18,7 +21,7 @@ public class GamePanel extends JPanel implements Runnable{
    final public int screenWidth = w*tileSize;
    final public int screenHeight =h*tileSize;
    final int FPS = 60;
-   TileManager tileM = new TileManager(this);
+   FarmMap tileM = new FarmMap(this);
    KeyHandler keyH = new KeyHandler();
    Thread gameThread;
    public CollisionChecker cChecker = new CollisionChecker(this);

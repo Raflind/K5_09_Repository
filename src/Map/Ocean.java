@@ -9,12 +9,12 @@ import java.awt.Graphics2D;
 
 import main.GamePanel;
 
-public class TileManager {
+public class Ocean {
     GamePanel gp;
     public Tile[] tile;
     public int mapTileNum[][];
 
-    public TileManager(GamePanel gp){
+    public Ocean(GamePanel gp){
         this.gp = gp;
         tile = new Tile[32];
         mapTileNum = new int[gp.worldwh][gp.worldwh];
