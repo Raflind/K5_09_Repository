@@ -2,7 +2,7 @@ package Action.Cooking;
 
 import java.util.List;
 
-import Player.Inventory;
+import Items.Inventory;
 
 public class Recipe {
     private String name;

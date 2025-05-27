@@ -23,6 +23,7 @@ public class GamePanel extends JPanel implements Runnable{
    final int FPS = 60;
    FarmMap tileM = new FarmMap(this);
    KeyHandler keyH = new KeyHandler(this);
+   UI ui = new UI(this);
    public Menu menu = new Menu(this);
    Thread gameThread;
    public CollisionChecker cChecker = new CollisionChecker(this);
@@ -38,8 +39,10 @@ public class GamePanel extends JPanel implements Runnable{
    //state
    public int gameState;
    public final int titleState = 0;
+   public final int inventoryState = 1;
    public final int playState = 2;
    public final int dialogueState = 3; 
+   public final int pauseState = 4;
 
    public GamePanel() {
     this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -47,6 +50,7 @@ public class GamePanel extends JPanel implements Runnable{
     this.setDoubleBuffered(true);
     this.addKeyListener(keyH);
     this.setFocusable(true);
+    setupGame();
    }
 
    public void setupGame(){
@@ -83,9 +87,7 @@ public class GamePanel extends JPanel implements Runnable{
     if(gameState==playState){
         player.update();
     }
-    if(gameState==titleState){
-        
-    }
+
    }
    public void paintComponent(Graphics g){
     Graphics2D comp = (Graphics2D) g;
@@ -98,5 +100,16 @@ public class GamePanel extends JPanel implements Runnable{
         player.draw(comp);
         comp.dispose();
     }
+    else if(gameState==inventoryState){
+        ui.draw(comp);
+    }
+    else if(gameState==dialogueState){
+        // Draw dialogue box or other UI elements for dialogue state
+        // This can be implemented later
+    }
+    else if(gameState==pauseState){ 
+        ui.draw(comp);
+        // Handle other game states if necessary
    }
+}
 }

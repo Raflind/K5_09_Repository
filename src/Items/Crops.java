@@ -8,8 +8,8 @@ public class Crops extends Items {
     private boolean isWatered;
     private int dayelapsed;
 
-    public Crops(String name, int sellPrice, int buyPrice, boolean isEdible, int itemID, int daystoHarvest) {
-        super(name, sellPrice, buyPrice, isEdible, itemID);
+    public Crops(String name, int sellPrice, int buyPrice, boolean isEdible, int itemID, int daystoHarvest, BufferedImage image) {
+        super(name, sellPrice, buyPrice, isEdible, itemID, image);
         this.daystoHarvest = daystoHarvest;
         this.isWatered = false;
         this.dayelapsed = 0;

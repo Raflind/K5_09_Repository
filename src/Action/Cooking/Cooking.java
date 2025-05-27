@@ -1,6 +1,6 @@
 package Action.Cooking;
 
-import Player.Inventory;
+import Items.*;
 
 abstract class Cooking {
     public final void cook(Inventory inventory) {

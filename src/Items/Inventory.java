@@ -1,8 +1,9 @@
+package Items;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Inventory {
-    private List<Item> items;
+    private List<Items> items;
     private int capacity;
 
     public Inventory() {
@@ -15,7 +16,7 @@ public class Inventory {
         this.capacity = capacity; 
     }
 
-    public boolean addItem(Item item) {
+    public boolean addItem(Items item) {
         if (items.size() >= capacity) {
             System.out.println("Inventory penuh!");
             return false;
@@ -24,15 +25,15 @@ public class Inventory {
         return true;
     }
 
-    public boolean removeItem(Item item) {
+    public boolean removeItem(Items item) {
         return items.remove(item);
     }
 
-    public boolean containsItem(Item item) {
+    public boolean containsItem(Items item) {
         return items.contains(item);
     }
 
-    public List<Item> getItems() {
+    public List<Items> getItems() {
         return items;
     }
 
@@ -41,7 +42,7 @@ public class Inventory {
         if (items.isEmpty()) {
             System.out.println("Inventory kosong.");
         } else {
-            for (Item item : items) {
+            for (Items item : items) {
                 System.out.println("- " + item.getName() + " (Sell: " + item.getSellPrice() + ")");
             }
         }

@@ -1,13 +1,11 @@
 package Action.Cooking;
 
-import Player.Inventory;
-
 import java.util.List;
 import java.util.ArrayList;
 
 import Items.Fish;
 import Items.Items;
-import Player.Inventory;
+import Items.Inventory;
 import Items.Foods;
 import Items.ItemFactory;
 

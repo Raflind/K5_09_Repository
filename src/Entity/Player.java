@@ -5,12 +5,15 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+
+import Items.Inventory;
 import main.GamePanel;
 import main.KeyHandler;
 
 public class Player extends Entity{
     GamePanel gp;
     KeyHandler keyH;
+    Inventory inventory = new Inventory();
     public final int screenX;
     public final int screenY;
 
