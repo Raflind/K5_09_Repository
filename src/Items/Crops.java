@@ -1,5 +1,8 @@
 package Items;
 
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+
 public class Crops extends Items {
     private int daystoHarvest;
     private boolean isWatered;

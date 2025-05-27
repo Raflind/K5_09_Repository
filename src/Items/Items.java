@@ -1,19 +1,24 @@
 package Items;
 
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+
 public class Items {
     private String name;
     private int sellPrice;
     private int buyPrice;
     private boolean isEdible;
     private int itemID;
+    private BufferedImage image;
 
 
-    public Items(String name, int sellPrice, int buyPrice, boolean isEdible, int itemID){
+    public Items(String name, int sellPrice, int buyPrice, boolean isEdible, int itemID, BufferedImage image) {
         this.name = name;
         this.sellPrice = sellPrice;
         this.buyPrice = buyPrice;
         this.isEdible = isEdible;
         this.itemID = itemID;
+        this.image = image;
     }
     public String getName() {
         return name;
