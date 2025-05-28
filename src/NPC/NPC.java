@@ -3,6 +3,7 @@ package NPC;
 
 
 import java.util.ArrayList;
+import Items.Items;
 
 import Exception.*;
 
@@ -22,17 +23,17 @@ public abstract class NPC{
     private String name;
     private int heartPoints;
     private static int MAX_HEARTPOINTS = 150;
-    private ArrayList<String> lovedItems;
-    private ArrayList<String> likedItems;
-    private ArrayList<String> hatedItems;
+    private ArrayList<Items> lovedItems;
+    private ArrayList<Items> likedItems;
+    private ArrayList<Items> hatedItems;
     private Relationship relationshipStatus;
 
     //Contructor
     public NPC(String name){
         this.name = name;
-        this.lovedItems = new ArrayList<String>();
-        this.likedItems = new ArrayList<String>();
-        this.hatedItems = new ArrayList<String>();
+        this.lovedItems = new ArrayList<Items>();
+        this.likedItems = new ArrayList<Items>();
+        this.hatedItems = new ArrayList<Items>();
         heartPoints = 0;
         relationshipStatus = Relationship.SINGLE;
     }
@@ -50,15 +51,15 @@ public abstract class NPC{
         return heartPoints;
     }
 
-    public ArrayList<String> getLovedItems(){
+    public ArrayList<Items> getLovedItems(){
         return lovedItems;
     }
 
-    public ArrayList<String> getLikeddItems(){
+    public ArrayList<Items> getLikeddItems(){
         return likedItems;
     }
 
-    public ArrayList<String> getHateItems(){
+    public ArrayList<Items> getHateItems(){
         return hatedItems;
     }
 
@@ -71,15 +72,15 @@ public abstract class NPC{
         this.name = name;
     }
 
-    public void addLovedItem(String item){
+    public void addLovedItem(Items item){
         lovedItems.add(item);
     }
 
-    public void addLikedItem(String item){
+    public void addLikedItem(Items item){
         likedItems.add(item);
     }
 
-    public void addHatedItem(String item){
+    public void addHatedItem(Items item){
         hatedItems.add(item);
     }
 
@@ -108,15 +109,15 @@ public abstract class NPC{
     }
 
     //Methods
-    private Boolean isLovedItem(String item){
+    private Boolean isLovedItem(Items item){
         return lovedItems.contains(item);
     }
 
-    private Boolean isLikedItem(String item){
+    private Boolean isLikedItem(Items item){
         return likedItems.contains(item);
     }
 
-    private Boolean isHatedItem(String item){
+    private Boolean isHatedItem(Items item){
         return hatedItems.contains(item);
     }
 
@@ -133,7 +134,7 @@ public abstract class NPC{
      * @param playerName isinya nama player nya buat dipake jadi parameter ngeluarin pesan
      * @param item item yang mau dikasih ke si npc ini
      */
-    public void recieveGifts(String playerName, String item) throws WrongUseFunctionException{
+    public void recieveGifts(String playerName, Items item) throws WrongUseFunctionException{
         
         //System Calling
         System.out.println(getName() + " menerima barang yang diberikan " + playerName);

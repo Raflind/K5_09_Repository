@@ -1,6 +1,6 @@
 package NPC;
 
-public class Emily extends NPC {
+public class Emily extends NPC implements Store {
     
     public Emily(){
         super("Emily");
@@ -9,6 +9,10 @@ public class Emily extends NPC {
     @Override
     public void interact(){
         System.out.println("On-Develop");
+    }
+
+    public void selling(){
+
     }
     
 }
