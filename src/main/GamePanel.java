@@ -22,7 +22,7 @@ public class GamePanel extends JPanel implements Runnable{
    final public int screenHeight =h*tileSize; // 16*12*3 = 572
    final int FPS = 60;
    private int frameCounter = 0;
-   TileManager tileM = new TileManager(this, "Mountain");
+   TileManager tileM = new TileManager(this, "Farm");
    KeyHandler keyH = new KeyHandler(this);
    
    public UI ui = new UI(this);
