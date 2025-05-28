@@ -15,6 +15,9 @@ public class UI {
 
     public void draw(Graphics2D g2) {
         this.g2 = g2;
+        if(gp.gameState == gp.playState){
+            drawGameStatus();
+        }
         /* if (gp.gameState == gp.pauseState) {
             drawPauseScreen(); }*/
         if (gp.gameState == gp.inventoryState){
@@ -60,7 +63,7 @@ public class UI {
         g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorheight, 10, 10); 
 
         /*DRAW ITEMS
-        for(int i = 0; i < gp.player.inventory.getSize(); i++) {
+        for(int i = 0; i < gp.player.inventory.getCapacity(); i++) {
             if(gp.player.inventory.getItem(i) != null) {
                 g2.drawImage(gp.player.inventory.getItem(i).image, slotX, slotY, null);
             }
@@ -78,5 +81,25 @@ public class UI {
         g2.setColor(new Color(255, 255, 255)); // Semi-transparent white for the border
         g2.setStroke(new BasicStroke(5));
         g2.drawRoundRect(x+5, y+5, width-10, height-10, 25,25); // Draw the border
+    }
+
+    public void drawGameStatus(){
+        int width = gp.tileSize*5;
+        int height = gp.tileSize*2;
+        int x = gp.screenWidth - width - gp.tileSize / 2;
+        int y = gp.tileSize / 2;
+
+        drawSubWindow(x, y, width, height);
+            
+        int hour = gp.time.getHour();
+        int minute = gp.time.getMinute();
+        String season = gp.environmentStatus.season.name();
+
+        g2.setColor(Color.WHITE);
+        g2.setFont(g2.getFont().deriveFont(24f));
+        int textX = x + 20;
+        int textY = y + 15;
+        g2.drawString("Time: " + hour + ":" + minute, textX, textY + 30);
+        g2.drawString("Season: " + season, textX, textY + 60);   
     }
 }

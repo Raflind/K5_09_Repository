@@ -9,7 +9,7 @@ public class Items {
     private int buyPrice;
     private boolean isEdible;
     private int itemID;
-    private BufferedImage image;
+    public BufferedImage image;
 
 
     public Items(String name, int sellPrice, int buyPrice, boolean isEdible, int itemID, BufferedImage image) {

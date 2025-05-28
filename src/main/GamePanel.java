@@ -9,6 +9,7 @@ import Map.FarmMap;
 import Map.Ocean;
 import Map.ForestRiver;
 import Map.MountainLake;
+import TimeSeasonWeather.*;
 
 import javax.swing.JPanel;
 
@@ -23,8 +24,10 @@ public class GamePanel extends JPanel implements Runnable{
    final int FPS = 60;
    FarmMap tileM = new FarmMap(this);
    KeyHandler keyH = new KeyHandler(this);
-   UI ui = new UI(this);
+   public UI ui = new UI(this);
    public Menu menu = new Menu(this);
+   public Time time = new Time(06, 00);
+   public EnvironmentStatus environmentStatus = new EnvironmentStatus(time);
    Thread gameThread;
    public CollisionChecker cChecker = new CollisionChecker(this);
    public Player player = new Player(this, keyH);
@@ -87,7 +90,6 @@ public class GamePanel extends JPanel implements Runnable{
     if(gameState==playState){
         player.update();
     }
-
    }
    public void paintComponent(Graphics g){
     Graphics2D comp = (Graphics2D) g;
@@ -98,6 +100,7 @@ public class GamePanel extends JPanel implements Runnable{
         super.paintComponent(g);
         tileM.draw(comp);
         player.draw(comp);
+        ui.draw(comp);
         comp.dispose();
     }
     else if(gameState==inventoryState){
