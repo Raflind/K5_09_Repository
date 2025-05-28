@@ -1,6 +1,7 @@
 package main;
 
 import Entity.Entity;
+import Map.Tile;
 
 public class CollisionChecker {
     GamePanel gp;
@@ -17,39 +18,43 @@ public class CollisionChecker {
         int entityTRow = entityTopY/gp.tileSize;
         int entityBRow = entityBotY/gp.tileSize;
         int tileNum1, tileNum2;
+
+        // Get the correct tile array for the current map
+        Tile[] tile = gp.tileM.getActiveTileArray();
+
         switch(entity.direction){
             case "depan":
-            entityBRow = (entityBotY+entity.speed)/gp.tileSize;
-            tileNum1 = gp.tileM.mapTileNum[entityLCol][entityBRow];
-            tileNum2 = gp.tileM.mapTileNum[entityRCol][entityBRow];
-            if(gp.tileM.tile[tileNum1].collision==true || gp.tileM.tile[tileNum2].collision==true){
-                entity.collisionOn = true;
-            }
-            break;
+                entityBRow = (entityBotY+entity.speed)/gp.tileSize;
+                tileNum1 = gp.tileM.mapTileNum[entityLCol][entityBRow];
+                tileNum2 = gp.tileM.mapTileNum[entityRCol][entityBRow];
+                if(tile[tileNum1].collision || tile[tileNum2].collision){
+                    entity.collisionOn = true;
+                }
+                break;
             case "blkg":
-            entityTRow = (entityTopY-entity.speed)/gp.tileSize;
-            tileNum1 = gp.tileM.mapTileNum[entityLCol][entityTRow];
-            tileNum2 = gp.tileM.mapTileNum[entityRCol][entityTRow];
-            if(gp.tileM.tile[tileNum1].collision==true || gp.tileM.tile[tileNum2].collision==true){
-                entity.collisionOn = true;
-            }
-            break;
+                entityTRow = (entityTopY-entity.speed)/gp.tileSize;
+                tileNum1 = gp.tileM.mapTileNum[entityLCol][entityTRow];
+                tileNum2 = gp.tileM.mapTileNum[entityRCol][entityTRow];
+                if(tile[tileNum1].collision || tile[tileNum2].collision){
+                    entity.collisionOn = true;
+                }
+                break;
             case "kiri":
-            entityLCol = (entityLeftX-entity.speed)/gp.tileSize;
-            tileNum1 = gp.tileM.mapTileNum[entityLCol][entityTRow];
-            tileNum2 = gp.tileM.mapTileNum[entityLCol][entityBRow];
-            if(gp.tileM.tile[tileNum1].collision==true || gp.tileM.tile[tileNum2].collision==true){
-                entity.collisionOn = true;
-            }
-            break;
+                entityLCol = (entityLeftX-entity.speed)/gp.tileSize;
+                tileNum1 = gp.tileM.mapTileNum[entityLCol][entityTRow];
+                tileNum2 = gp.tileM.mapTileNum[entityLCol][entityBRow];
+                if(tile[tileNum1].collision || tile[tileNum2].collision){
+                    entity.collisionOn = true;
+                }
+                break;
             case "kanan":
-            entityRCol = (entityRightX+entity.speed)/gp.tileSize;
-            tileNum1 = gp.tileM.mapTileNum[entityRCol][entityTRow];
-            tileNum2 = gp.tileM.mapTileNum[entityRCol][entityBRow];
-            if(gp.tileM.tile[tileNum1].collision==true || gp.tileM.tile[tileNum2].collision==true){
-                entity.collisionOn = true;
-            }
-            break;
+                entityRCol = (entityRightX+entity.speed)/gp.tileSize;
+                tileNum1 = gp.tileM.mapTileNum[entityRCol][entityTRow];
+                tileNum2 = gp.tileM.mapTileNum[entityRCol][entityBRow];
+                if(tile[tileNum1].collision || tile[tileNum2].collision){
+                    entity.collisionOn = true;
+                }
+                break;
         }
     }
 }

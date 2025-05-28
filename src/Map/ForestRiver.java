@@ -16,7 +16,7 @@ public class ForestRiver {
 
     public ForestRiver(GamePanel gp){
         this.gp = gp;
-        tile = new Tile[67];
+        tile = new Tile[67]; //variasi type yang dipake
         mapTileNum = new int[gp.worldwh][gp.worldwh];
         loadMap();
         getTileImage();

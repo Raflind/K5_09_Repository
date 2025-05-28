@@ -1,5 +1,8 @@
 package TimeSeasonWeather;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class EnvironmentStatus {
     public enum Season {
         SPRING, SUMMER, AUTUMN, WINTER
@@ -63,5 +66,15 @@ public class EnvironmentStatus {
             }
             day = 1; // Reset day to 1 for the new season
         }
+    }
+
+    public void nextDay() {
+        if(time.getHour() == 0 && time.getMinute() == 0) {
+            setDay(this.day + 1);
+        if (day > 30) {
+            day = 1; // Reset to 1 after 30 days
+            nextSeason(); // Check for season change
+        }
+    }
     }
 }

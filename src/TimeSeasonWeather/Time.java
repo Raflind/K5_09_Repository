@@ -17,17 +17,25 @@ public class Time{
         if(0 <= hour && hour < 24){
             this.hour = hour;
         }
+        if(hour >= 24){
+            this.hour = 0;
+            setMinute(0);
+        }
     }
     public void setMinute(int minute){
         if(0 <= minute && minute < 60){
             this.minute = minute;
         }
-        else if(minute > 60){
-            this.hour = minute / 60;
+        else if(minute >= 60){
+            setHour(this.hour + (minute/60));
             this.minute = minute % 60;
         }
     }
     public void displayTime(){
         System.out.println(hour + ":" + minute);
+    }
+
+    public void addFiveMinutes(){
+        setMinute(this.minute + 5);
     }
 }

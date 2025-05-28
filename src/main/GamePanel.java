@@ -4,11 +4,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.Timer;
+import java.util.TimerTask;
 import Entity.Player;
-import Map.FarmMap;
-import Map.Ocean;
-import Map.ForestRiver;
-import Map.MountainLake;
+import Map.TileManager;
 import TimeSeasonWeather.*;
 
 import javax.swing.JPanel;
@@ -22,11 +21,14 @@ public class GamePanel extends JPanel implements Runnable{
    final public int screenWidth = w*tileSize; //16*16*3=768
    final public int screenHeight =h*tileSize; // 16*12*3 = 572
    final int FPS = 60;
-   FarmMap tileM = new FarmMap(this);
+   private int frameCounter = 0;
+   TileManager tileM = new TileManager(this, "Farm");
    KeyHandler keyH = new KeyHandler(this);
+   
    public UI ui = new UI(this);
    public Menu menu = new Menu(this);
-   public Time time = new Time(06, 00);
+   public Time time = new Time(23, 30);
+   Timer timer = new Timer();
    public EnvironmentStatus environmentStatus = new EnvironmentStatus(time);
    Thread gameThread;
    public CollisionChecker cChecker = new CollisionChecker(this);
@@ -89,6 +91,14 @@ public class GamePanel extends JPanel implements Runnable{
    public void update(){
     if(gameState==playState){
         player.update();
+        frameCounter++;
+        if(frameCounter >= FPS) {
+            time.addFiveMinutes();
+            environmentStatus.setTime(time);
+            environmentStatus.nextDay();
+            frameCounter = 0;
+            // Update other environmental aspects if needed
+        }
     }
    }
    public void paintComponent(Graphics g){
@@ -98,7 +108,7 @@ public class GamePanel extends JPanel implements Runnable{
     }
     else if(gameState==playState){
         super.paintComponent(g);
-        tileM.draw(comp);
+        tileM.draw(comp, tileM.getActiveTileArray());
         player.draw(comp);
         ui.draw(comp);
         comp.dispose();
