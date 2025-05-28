@@ -26,13 +26,12 @@ public class GamePanel extends JPanel implements Runnable{
    KeyHandler keyH = new KeyHandler(this);
    
    public UI ui = new UI(this);
-   public Menu menu = new Menu(this);
    public Time time = new Time(23, 30);
    Timer timer = new Timer();
    public EnvironmentStatus environmentStatus = new EnvironmentStatus(time);
    Thread gameThread;
    public CollisionChecker cChecker = new CollisionChecker(this);
-   public Player player = new Player(this, keyH);
+   public Player player = new Player(this, keyH, tileM.worldX*tileSize, tileM.worldY*tileSize);
    //default pos
    int x = 100;
    int y = 100;
@@ -48,6 +47,7 @@ public class GamePanel extends JPanel implements Runnable{
    public final int playState = 2;
    public final int dialogueState = 3; 
    public final int pauseState = 4;
+   public final int mapSelectState = 5;
 
    public GamePanel() {
     this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -104,7 +104,7 @@ public class GamePanel extends JPanel implements Runnable{
    public void paintComponent(Graphics g){
     Graphics2D comp = (Graphics2D) g;
     if(gameState==titleState){
-        menu.draw(comp);
+        ui.draw(comp);
     }
     else if(gameState==playState){
         super.paintComponent(g);
@@ -124,5 +124,8 @@ public class GamePanel extends JPanel implements Runnable{
         ui.draw(comp);
         // Handle other game states if necessary
    }
+   else if(gameState==mapSelectState){
+        ui.draw(comp);
+    }
 }
 }

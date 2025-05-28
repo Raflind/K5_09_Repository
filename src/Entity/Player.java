@@ -17,7 +17,7 @@ public class Player extends Entity{
     public final int screenX;
     public final int screenY;
 
-    public Player(GamePanel gp, KeyHandler keyH){
+    public Player(GamePanel gp, KeyHandler keyH, int worldX, int worldY){
         this.gp = gp;
         this.keyH = keyH;
         screenX = gp.screenWidth/2 - gp.tileSize/2;
@@ -27,15 +27,11 @@ public class Player extends Entity{
         solidArea.y = 18;
         solidArea.width = 18;
         solidArea.height = 30;
-        setDefaultValues();
-        getPlayerImage();
-    }
-
-    public void setDefaultValues(){
-        worldX = gp.tileSize*16; // 13 ini tile ke-n yg mau karakternya digambarin
-        worldY = gp.tileSize*11; // sama kyk di atas
         speed = 5;
         direction = "diam";
+        this.worldX = worldX;
+        this.worldY = worldY;
+        getPlayerImage();
     }
 
     public void getPlayerImage(){
