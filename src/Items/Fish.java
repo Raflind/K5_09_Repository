@@ -49,5 +49,9 @@ public class Fish extends Items {
         int newSellPrice = (4/seasonCount + 24/timeCount + 2/weatherCount + 4/locationCount) * basePrice;
         setSellPrice(newSellPrice);
     }
+
+    public boolean isLegendary() {
+        return fishType == FishType.Legendary;
+    }
     
 }

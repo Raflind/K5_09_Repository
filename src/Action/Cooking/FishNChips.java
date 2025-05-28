@@ -34,6 +34,10 @@ public class FishNChips extends Cooking {
 
     @Override
     public void consumeIngredients(Inventory inventory) {
+        if(fishFound.size() < 2 || potatoFound.size() < 1) {
+            System.out.println("Tidak cukup bahan untuk membuat Fish and Chips.");
+            return; // Tidak cukup bahan untuk membuat Fish and Chips
+        }
         inventory.removeItem(fishFound.get(0)); // Remove one fish
         inventory.removeItem(fishFound.get(1)); // Remove another fish
         inventory.removeItem(potatoFound.get(0)); // Remove one potato
