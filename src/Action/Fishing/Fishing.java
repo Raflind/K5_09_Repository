@@ -1,9 +1,14 @@
 package Action.Fishing;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
-
 import Entity.Player;
 import Items.Inventory;
 import TimeSeasonWeather.Time;
+import Items.Fish;
+import Items.Fish.FishType;
 
 
 public class Fishing {
@@ -11,6 +16,17 @@ public class Fishing {
     private Player player;
     private Inventory inventory;
     private Time time;
+    private List<Fish> possibleFish;
+    private int attempt;
+    public static Map<FishType, Integer> countFish = new HashMap<>();
+
+
+    public Fishing(Player player){
+        generator = new Random();
+        this.player = player;
+        possibleFish = new ArrayList<>();
+        attempt = 0;
+    }
 
     
     public void start(){

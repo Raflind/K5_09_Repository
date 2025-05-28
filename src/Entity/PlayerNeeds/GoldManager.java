@@ -1,3 +1,5 @@
+package Entity.PlayerNeeds;
+
 public class GoldManager {
     private int gold;
 

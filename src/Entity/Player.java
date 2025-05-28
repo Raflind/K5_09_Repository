@@ -1,21 +1,46 @@
 package Entity;
 
 import java.awt.Graphics2D;
+import java.util.HashMap;
+import java.util.Map;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-
+import Entity.PlayerNeeds.*;
+import Exception.EnergyLowException;
 import Items.Inventory;
+import NPC.NPC;
+import NPC.Relationship;
 import main.GamePanel;
 import main.KeyHandler;
 
 public class Player extends Entity{
+    //atribut related to game
     GamePanel gp;
     KeyHandler keyH;
-    public Inventory inventory = new Inventory();
+    public Inventory inventory = new Inventory(); // ini nggak diinstansiasi di konstruktor?
     public final int screenX;
     public final int screenY;
+
+    //atribut related to player logic
+    private String name;
+    private String farmName;
+    private int energy;
+    private int MAX_ENERGY = 100;
+    public enum Gender{
+        F, M
+    }
+    private Gender gender;
+    private Map<String, Relationship> partner = new HashMap<>();
+    private GoldManager goldManager;
+    private ShippingBin shippingBin;
+
+    /**
+     * mau bikin constructor yang bisa masukin energy, name, farmName, dan gender
+     * tapi takut ngeganggu si GamePanel jadi konstruktornya dibikin nanti aja - @hananda23
+     */
+
 
     public Player(GamePanel gp, KeyHandler keyH, int worldX, int worldY){
         this.gp = gp;
@@ -125,4 +150,58 @@ public class Player extends Entity{
         }
         comp.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
     }
+
+    //getter
+    public int getEnergy(){
+        return energy;
+    }
+    public String getName(){
+        return name;
+    }
+    public String getFarmName() {
+        return farmName;
+    }
+    public Gender getGender(){
+        return gender;
+    }
+    public GoldManager getPlayerWallet(){
+        return goldManager;
+    }
+    public ShippingBin getShippingBin(){
+        return shippingBin;
+    }
+    public Relationship getPartnerStatus(String npcName){
+        return partner.get(npcName);
+    }
+    public Inventory getInventory(){
+        return inventory;
+    }
+    
+    //setter
+
+    public void setName(String name){
+        this.name = name;
+    }
+
+    public void consumeEnergy(int energy) throws EnergyLowException{
+        if (this.energy - energy >= 0) {
+            this.energy -= energy;
+        } else if (this.energy - energy < 0) {
+            throw new EnergyLowException();
+        }
+    }
+
+    public void setFarmName(String farmName){
+        this.farmName = farmName;
+    }
+    public void setGender(Gender gender){
+        this.gender = gender;
+    }
+
+    public void setPartnerStatus(NPC npc){
+        partner.replace(npc.getName(), npc.getRelationship());
+
+    }
+
+
 }

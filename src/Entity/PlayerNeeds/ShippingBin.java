@@ -1,21 +1,24 @@
+package Entity.PlayerNeeds;
 import java.util.ArrayList;
 import java.util.List;
 
+import Items.Items;
+
 public class ShippingBin {
-    private List<Item> itemsToShip;
+    private List<Items> itemsToShip;
 
     public ShippingBin() {
         this.itemsToShip = new ArrayList<>();
     }
 
-    public void addItem(Item item) {
+    public void addItem(Items item) {
         itemsToShip.add(item);
         System.out.println(item.getName() + " ditambahkan ke Shipping Bin.");
     }
 
     public int calculateTotalValue() {
         int total = 0;
-        for (Item item : itemsToShip) {
+        for (Items item : itemsToShip) {
             total += item.getSellPrice();
         }
         return total;
@@ -33,7 +36,7 @@ public class ShippingBin {
         if (itemsToShip.isEmpty()) {
             System.out.println("Shipping Bin kosong.");
         } else {
-            for (Item item : itemsToShip) {
+            for (Items item : itemsToShip) {
                 System.out.println("- " + item.getName() + " (Sell: " + item.getSellPrice() + ")");
             }
         }
