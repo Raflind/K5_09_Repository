@@ -1,20 +1,22 @@
 package TimeSeasonWeather;
 
 public class EnvironmentStatus {
-    private Season season;
-    private Weather weather;
-    private Time time;
-    private int day;
-
-    public EnvironmentStatus(Season season, Weather weather, Time time, int day) {
-        this.time = time;
-        this.day = day;
-        this.season = season;
-        this.weather = weather;
+    public enum Season {
+        SPRING, SUMMER, AUTUMN, WINTER
     }
+    public enum Weather {
+        RAINY, SUNNY
+    }
+    public Season season;
+    public Weather weather;
+    public Time time;
+    public int day;
 
-    public Season getSeason() {
-        return season;
+    public EnvironmentStatus(Time time) {
+        this.time = time;
+        this.day = 1;
+        this.weather = Weather.RAINY;
+        this.season = Season.SPRING; // Default season
     }
 
     public Weather getWeather() {
@@ -25,9 +27,6 @@ public class EnvironmentStatus {
     }
     public int getDay() {
         return day;
-    }
-    public void setSeason(Season season) {
-        this.season = season;
     }
     public void setWeather(Weather weather) {
         this.weather = weather;
@@ -44,5 +43,25 @@ public class EnvironmentStatus {
         System.out.print("Time: ");
         time.displayTime();
         System.out.println("Day: " + day);
+    }
+
+    public void nextSeason(){
+        if(day >= 30) {
+            switch (season) {
+                case SPRING:
+                    season = Season.SUMMER;
+                    break;
+                case SUMMER:
+                    season = Season.AUTUMN;
+                    break;
+                case AUTUMN:
+                    season = Season.WINTER;
+                    break;
+                case WINTER:
+                    season = Season.SPRING;
+                    break;
+            }
+            day = 1; // Reset day to 1 for the new season
+        }
     }
 }

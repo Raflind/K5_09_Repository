@@ -9,6 +9,7 @@ import Map.FarmMap;
 import Map.Ocean;
 import Map.ForestRiver;
 import Map.MountainLake;
+import TimeSeasonWeather.*;
 
 import javax.swing.JPanel;
 
@@ -25,6 +26,8 @@ public class GamePanel extends JPanel implements Runnable{
    KeyHandler keyH = new KeyHandler(this);
    public UI ui = new UI(this);
    public Menu menu = new Menu(this);
+   public Time time = new Time(06, 00);
+   public EnvironmentStatus environmentStatus = new EnvironmentStatus(time);
    Thread gameThread;
    public CollisionChecker cChecker = new CollisionChecker(this);
    public Player player = new Player(this, keyH);

@@ -92,16 +92,15 @@ public class UI {
 
         drawSubWindow(x, y, width, height);
             
-        String time = "6.00";
-        String weather = "Sunny";
-        String season = "Spring";
+        int hour = gp.time.getHour();
+        int minute = gp.time.getMinute();
+        String season = gp.environmentStatus.season.name();
 
         g2.setColor(Color.WHITE);
         g2.setFont(g2.getFont().deriveFont(24f));
         int textX = x + 20;
         int textY = y + 15;
-        g2.drawString("Time: " + time, textX, textY + 30);
-        g2.drawString("Weather: " + weather, textX, textY + 60);
-        
+        g2.drawString("Time: " + hour + ":" + minute, textX, textY + 30);
+        g2.drawString("Season: " + season, textX, textY + 60);   
     }
 }
