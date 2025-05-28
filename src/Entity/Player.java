@@ -73,17 +73,17 @@ public class Player extends Entity{
     if(collisionOn == false){
         switch(direction){
             case "depan":
-            worldY += speed;
-            break;
+                worldY = Math.min(worldY + speed, gp.tileM.size * gp.tileSize - 4*gp.tileSize/3);
+                break;
             case "blkg":
-            worldY -= speed;
-            break;
+                worldY = Math.max(worldY - speed, 0);
+                break;
             case "kiri":
-            worldX -= speed;
-            break;
+                worldX = Math.max(worldX - speed, 0);
+                break;
             case "kanan":
-            worldX += speed;
-            break;
+                worldX = Math.min(worldX + speed, gp.tileM.size * gp.tileSize - gp.tileSize);
+                break;
         }
     }
     if(keyH.up==true || keyH.down==true || keyH.left==true || keyH.right==true){

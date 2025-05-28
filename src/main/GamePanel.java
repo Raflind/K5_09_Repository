@@ -22,7 +22,8 @@ public class GamePanel extends JPanel implements Runnable{
    final public int screenHeight =h*tileSize; // 16*12*3 = 572
    final int FPS = 60;
    private int frameCounter = 0;
-   TileManager tileM = new TileManager(this, "Farm");
+   public TileManager farmMap, oceanMap, forestMap, mountainMap, storeMap; /*blm lengkap*/
+   public TileManager tileM;
    KeyHandler keyH = new KeyHandler(this);
    
    public UI ui = new UI(this);
@@ -31,7 +32,7 @@ public class GamePanel extends JPanel implements Runnable{
    public EnvironmentStatus environmentStatus = new EnvironmentStatus(time);
    Thread gameThread;
    public CollisionChecker cChecker = new CollisionChecker(this);
-   public Player player = new Player(this, keyH, tileM.worldX*tileSize, tileM.worldY*tileSize);
+   public Player player;
    //default pos
    int x = 100;
    int y = 100;
@@ -55,6 +56,13 @@ public class GamePanel extends JPanel implements Runnable{
     this.setDoubleBuffered(true);
     this.addKeyListener(keyH);
     this.setFocusable(true);
+    farmMap = new TileManager(this, "Farm");
+    oceanMap = new TileManager(this, "Ocean");
+    forestMap = new TileManager(this, "Forest");
+    mountainMap = new TileManager(this, "Mountain");
+    storeMap = new TileManager(this, "Store");
+    tileM = farmMap;
+    player = new Player(this, keyH, tileM.worldX*tileSize, tileM.worldY*tileSize);
     setupGame();
    }
 

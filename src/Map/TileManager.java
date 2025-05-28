@@ -23,7 +23,7 @@ public class TileManager {
     public int worldY;
     BufferedReader br;
     String currMap;
-    int size;
+    public int size;
 
     public TileManager(GamePanel gp, String map){
         this.gp = gp;
@@ -41,7 +41,7 @@ public class TileManager {
             loadFarm();
         } else if(map.equals("Mountain")) {
             worldX = 5;
-            worldY = 13;
+            worldY = 11;
             size=32;
             loadMountain();
         } else if(map.equals("Forest")) {

@@ -3,6 +3,8 @@ package main;
 import java.awt.RenderingHints.Key;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+
+import Entity.Player;
 import Map.TileManager;
 
 public class KeyHandler implements KeyListener {
@@ -200,16 +202,18 @@ public class KeyHandler implements KeyListener {
                 if(gp.ui.mapSelectionNum < totalMaps){
                     System.out.println("Map dipilih: " + gp.ui.mapList.get(gp.ui.mapSelectionNum).name);
                     if(gp.ui.mapList.get(gp.ui.mapSelectionNum).name.equals("Ocean")) {
-                        gp.tileM = new TileManager(gp, "Ocean");
+                        gp.tileM = gp.oceanMap;
                     } else if(gp.ui.mapList.get(gp.ui.mapSelectionNum).name.equals("Forest River")) {
-                        gp.tileM = new TileManager(gp, "Forest");
+                        gp.tileM = gp.forestMap;
                     } else if(gp.ui.mapList.get(gp.ui.mapSelectionNum).name.equals("Mountain Lake")) {
-                        gp.tileM = new TileManager(gp, "Mountain");
+                        gp.tileM = gp.mountainMap;
                     } else if(gp.ui.mapList.get(gp.ui.mapSelectionNum).name.equals("Farm")) {
-                        gp.tileM = new TileManager(gp, "Farm");
+                        gp.tileM = gp.farmMap;
                     } else if(gp.ui.mapList.get(gp.ui.mapSelectionNum).name.equals("Store")) {
-                        gp.tileM = new TileManager(gp, "Store");
+                        gp.tileM = gp.storeMap;
                     }
+                    gp.player.worldX = gp.tileM.worldX * gp.tileSize;
+                    gp.player.worldY = gp.tileM.worldY * gp.tileSize;
                     gp.gameState = gp.playState;
                 } else if (gp.ui.mapSelectionNum == totalMaps){
                     gp.gameState = gp.playState;
