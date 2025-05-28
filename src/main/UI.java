@@ -93,6 +93,7 @@ public class UI {
             
         int hour = gp.time.getHour();
         int minute = gp.time.getMinute();
+        int day = gp.environmentStatus.getDay();
         String season = gp.environmentStatus.season.name();
 
         g2.setColor(Color.WHITE);
@@ -100,6 +101,6 @@ public class UI {
         int textX = x + 20;
         int textY = y + 15;
         g2.drawString("Time: " + hour + ":" + minute, textX, textY + 30);
-        g2.drawString("Season: " + season, textX, textY + 60);   
+        g2.drawString("Day " + day, textX, textY + 60);   
     }
 }
