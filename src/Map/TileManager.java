@@ -3,7 +3,6 @@ package Map;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
@@ -29,25 +28,21 @@ public class TileManager {
         this.currMap = map;
         mapTileNum = new int[gp.worldwh][gp.worldwh];
         if(map.equals("Ocean")) {
-            oceanTile = new Tile[32];
             size=32;
             loadOcean();
         } else if(map.equals("Farm")) {
-            farmTile = new Tile[70];
             size=32;
             loadFarm();
         } else if(map.equals("Mountain")) {
-            mountainTile = new Tile[350];
             size=32;
             loadMountain();
         } else if(map.equals("Forest")) {
-            forestTile = new Tile[67];
             size=32;
             loadForest();
-        } /*else if(map.equals("Store")) {
-            storeTile = new Tile[32];
+        } else if(map.equals("Store")) {
+            size=16;
             loadStore();
-        } else if(map.equals("Abigail")) {
+        } /*else if(map.equals("Abigail")) {
             house = new Tile[32];
             loadAbigail();
         } else if(map.equals("Caroline")) {
@@ -150,6 +145,29 @@ public class TileManager {
         loadMap();
     }
 
+    public void loadStore(){
+        try{
+            storeTile = new Tile[30];
+            for(int i = 0; i <= 29; i++){
+                storeTile[i] = new Tile();
+                String path = "res/Store/" + i + ".png";
+                java.io.InputStream is = getClass().getClassLoader().getResourceAsStream(path);
+                if(is != null){
+                    storeTile[i].image = ImageIO.read(is);
+                } else {
+                    // Pakai gambar default jika file tidak ada
+                    storeTile[i].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Store/default.png"));
+                }
+                if(i != 0) storeTile[i].collision = true; // Semua collision kecuali 0
+            }
+            br = new BufferedReader(new FileReader("res/Store/Store.txt"));
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+        loadMap();
+    }
+
     // public void loadAbigail(){
     //     try{
     //         int[] abigailIdx = {
@@ -221,6 +239,7 @@ public class TileManager {
         else if (currMap.equals("Farm")) return farmTile;
         else if (currMap.equals("Mountain")) return mountainTile;
         else if (currMap.equals("Forest")) return forestTile;
+        else if (currMap.equals("Store")) return storeTile;
         return null;
     }
 }
