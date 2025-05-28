@@ -7,10 +7,7 @@ import java.awt.Graphics2D;
 import java.util.Timer;
 import java.util.TimerTask;
 import Entity.Player;
-import Map.FarmMap;
-import Map.Ocean;
-import Map.ForestRiver;
-import Map.MountainLake;
+import Map.TileManager;
 import TimeSeasonWeather.*;
 
 import javax.swing.JPanel;
@@ -25,7 +22,7 @@ public class GamePanel extends JPanel implements Runnable{
    final public int screenHeight =h*tileSize; // 16*12*3 = 572
    final int FPS = 60;
    private int frameCounter = 0;
-   FarmMap tileM = new FarmMap(this);
+   TileManager tileM = new TileManager(this, "Mountain");
    KeyHandler keyH = new KeyHandler(this);
    
    public UI ui = new UI(this);
@@ -111,7 +108,7 @@ public class GamePanel extends JPanel implements Runnable{
     }
     else if(gameState==playState){
         super.paintComponent(g);
-        tileM.draw(comp);
+        tileM.draw(comp, tileM.getActiveTileArray());
         player.draw(comp);
         ui.draw(comp);
         comp.dispose();
