@@ -19,6 +19,8 @@ public class TileManager {
     public Tile[] houseNPC;
     public Tile[] housePlayer;
     public int mapTileNum[][];
+    public int worldX;
+    public int worldY;
     BufferedReader br;
     String currMap;
     int size;
@@ -28,18 +30,28 @@ public class TileManager {
         this.currMap = map;
         mapTileNum = new int[gp.worldwh][gp.worldwh];
         if(map.equals("Ocean")) {
+            worldX = 11;
+            worldY = 16;
             size=32;
             loadOcean();
         } else if(map.equals("Farm")) {
             size=32;
+            worldX = 12;
+            worldY = 16;
             loadFarm();
         } else if(map.equals("Mountain")) {
+            worldX = 5;
+            worldY = 13;
             size=32;
             loadMountain();
         } else if(map.equals("Forest")) {
+            worldX = 9;
+            worldY = 8;
             size=32;
             loadForest();
         } else if(map.equals("Store")) {
+            worldX = 15;
+            worldY = 11;
             size=16;
             loadStore();
         } /*else if(map.equals("Abigail")) {
@@ -62,7 +74,11 @@ public class TileManager {
 
     public void loadOcean(){
         try{
+            oceanTile = new Tile[32];
             for(int i = 0; i <= 31; i++){
+                if(i==2 || i==5 || i==8){
+                    continue;
+                }
                 oceanTile[i] = new Tile();
                 oceanTile[i].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Ocean/" + i + ".png"));
             }

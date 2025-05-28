@@ -3,6 +3,7 @@ package main;
 import java.awt.RenderingHints.Key;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import Map.TileManager;
 
 public class KeyHandler implements KeyListener {
     public boolean up, down, left, right;
@@ -32,6 +33,9 @@ public class KeyHandler implements KeyListener {
         }
         if(gp.gameState == gp.pauseState){
             pauseState(code);
+        }
+        if(gp.gameState == gp.mapSelectState){
+            mapSelectState(code);
         }
     }
 
@@ -75,7 +79,7 @@ public class KeyHandler implements KeyListener {
             }
         }
         if(code == KeyEvent.VK_ESCAPE){
-            gp.gameState = gp.playState;
+            // gp.gameState = gp.playState;
         }
     }
 
@@ -94,8 +98,8 @@ public class KeyHandler implements KeyListener {
         }
         if(code == KeyEvent.VK_ESCAPE){
             gp.gameState = gp.titleState;
-            gp.menu.titleScreenState = 0;
-            gp.menu.commandNum = 0;
+            gp.ui.titleScreenState = 0;    
+            gp.ui.commandNum = 0;       
         }
         if(code == KeyEvent.VK_I){
             gp.gameState = gp.inventoryState;
@@ -103,88 +107,40 @@ public class KeyHandler implements KeyListener {
         if(code == KeyEvent.VK_P){
             gp.gameState = gp.pauseState;
         }
+        if(code == KeyEvent.VK_V){
+            gp.gameState = gp.mapSelectState;
+        }
     }
 
     public void titleState(int code){
-        if(gp.menu.titleScreenState == 0){
+        if(gp.ui.titleScreenState == 0){
             if(code == KeyEvent.VK_W || code == KeyEvent.VK_UP){
-                if (gp.menu.commandNum > 0){
-                    gp.menu.commandNum--;
+                if (gp.ui.commandNum > 0){
+                    gp.ui.commandNum--;
                 }
             }
             if(code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN){
-                if (gp.menu.commandNum < 2){
-                    gp.menu.commandNum++;
+                if (gp.ui.commandNum < 2){
+                    gp.ui.commandNum++;
                 }
             }
             if(code == KeyEvent.VK_ENTER){
-                if(gp.menu.commandNum == 0){
-                    gp.menu.titleScreenState = 1;
-                    gp.menu.mapSelectionNum = 0;
+                if(gp.ui.commandNum == 0){
+                    gp.ui.titleScreenState = 1;
+                    gp.ui.mapSelectionNum = 0;
                 }
-                if(gp.menu.commandNum == 1){
+                if(gp.ui.commandNum == 1){
                     System.out.println("Anda memilih CREDITS.");
                 }
-                if(gp.menu.commandNum == 2){
+                if(gp.ui.commandNum == 2){
                     System.exit(0);
                 }
             }
         }
-        else if(gp.menu.titleScreenState == 1){
-            int totalMaps = gp.menu.mapList.size();
-            int mapsPerRow = 5;
-            int totalOptions = totalMaps + 1;
-
-            if(code == KeyEvent.VK_W || code == KeyEvent.VK_UP){
-                if (gp.menu.mapSelectionNum < totalMaps) {
-                    if (gp.menu.mapSelectionNum >= mapsPerRow) {
-                        gp.menu.mapSelectionNum -= mapsPerRow;
-                    } else {
-                        gp.menu.mapSelectionNum = totalMaps;
-                    }
-                } else {
-                    gp.menu.mapSelectionNum = totalMaps - 1;
-                }
-            }
-            if(code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN){
-                if (gp.menu.mapSelectionNum < totalMaps) {
-                    if (gp.menu.mapSelectionNum < mapsPerRow) {
-                        if (gp.menu.mapSelectionNum + mapsPerRow < totalMaps) {
-                            gp.menu.mapSelectionNum += mapsPerRow;
-                        } else {
-                            gp.menu.mapSelectionNum = totalMaps;
-                        }
-                    } else {
-                        gp.menu.mapSelectionNum = totalMaps;
-                    }
-                } else {
-                    gp.menu.mapSelectionNum = 0;
-                }
-            }
-            if(code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT){
-                if (gp.menu.mapSelectionNum > 0 && gp.menu.mapSelectionNum <= totalMaps){
-                    gp.menu.mapSelectionNum--;
-                } else if (gp.menu.mapSelectionNum == 0) {
-                        gp.menu.mapSelectionNum = totalMaps;
-                } else if (gp.menu.mapSelectionNum == totalMaps) {
-                    gp.menu.mapSelectionNum = totalMaps - 1;
-                }
-            }
-            if(code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT){
-                if (gp.menu.mapSelectionNum < totalMaps){
-                    gp.menu.mapSelectionNum++;
-                } else if (gp.menu.mapSelectionNum == totalMaps) {
-                    gp.menu.mapSelectionNum = 0;
-                }
-            }
+        else if(gp.ui.titleScreenState == 1){
             if(code == KeyEvent.VK_ENTER){
-                if(gp.menu.mapSelectionNum < totalMaps){
-                    System.out.println("Map dipilih: " + gp.menu.mapList.get(gp.menu.mapSelectionNum).name);
-                    gp.gameState = gp.playState;
-                } else if (gp.menu.mapSelectionNum == totalMaps){
-                    gp.menu.titleScreenState = 0;
-                    gp.menu.commandNum = 0;
-                }
+                gp.gameState = gp.playState;
+                gp.ui.titleScreenState = 0;
             }
         }
     }
@@ -192,5 +148,72 @@ public class KeyHandler implements KeyListener {
         if(code == KeyEvent.VK_ESCAPE){
             gp.gameState = gp.playState;
         }
+    }
+    public void mapSelectState(int code){
+        int totalMaps = gp.ui.mapList.size();
+            int mapsPerRow = 5;
+            int totalOptions = totalMaps + 1;
+
+            if(code == KeyEvent.VK_W || code == KeyEvent.VK_UP){
+                if (gp.ui.mapSelectionNum < totalMaps) {
+                    if (gp.ui.mapSelectionNum >= mapsPerRow) {
+                        gp.ui.mapSelectionNum -= mapsPerRow;
+                    } else {
+                        gp.ui.mapSelectionNum = totalMaps;
+                    }
+                } else {
+                    gp.ui.mapSelectionNum = totalMaps - 1;
+                }
+            }
+            if(code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN){
+                if (gp.ui.mapSelectionNum < totalMaps) {
+                    if (gp.ui.mapSelectionNum < mapsPerRow) {
+                        if (gp.ui.mapSelectionNum + mapsPerRow < totalMaps) {
+                            gp.ui.mapSelectionNum += mapsPerRow;
+                        } else {
+                            gp.ui.mapSelectionNum = totalMaps;
+                        }
+                    } else {
+                        gp.ui.mapSelectionNum = totalMaps;
+                    }
+                } else {
+                    gp.ui.mapSelectionNum = 0;
+                }
+            }
+            if(code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT){
+                if (gp.ui.mapSelectionNum > 0 && gp.ui.mapSelectionNum <= totalMaps){
+                    gp.ui.mapSelectionNum--;
+                } else if (gp.ui.mapSelectionNum == 0) {
+                        gp.ui.mapSelectionNum = totalMaps;
+                } else if (gp.ui.mapSelectionNum == totalMaps) {
+                    gp.ui.mapSelectionNum = totalMaps - 1;
+                }
+            }
+            if(code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT){
+                if (gp.ui.mapSelectionNum < totalMaps){
+                    gp.ui.mapSelectionNum++;
+                } else if (gp.ui.mapSelectionNum == totalMaps) {
+                    gp.ui.mapSelectionNum = 0;
+                }
+            }
+            if(code == KeyEvent.VK_ENTER){
+                if(gp.ui.mapSelectionNum < totalMaps){
+                    System.out.println("Map dipilih: " + gp.ui.mapList.get(gp.ui.mapSelectionNum).name);
+                    if(gp.ui.mapList.get(gp.ui.mapSelectionNum).name.equals("Ocean")) {
+                        gp.tileM = new TileManager(gp, "Ocean");
+                    } else if(gp.ui.mapList.get(gp.ui.mapSelectionNum).name.equals("Forest River")) {
+                        gp.tileM = new TileManager(gp, "Forest");
+                    } else if(gp.ui.mapList.get(gp.ui.mapSelectionNum).name.equals("Mountain Lake")) {
+                        gp.tileM = new TileManager(gp, "Mountain");
+                    } else if(gp.ui.mapList.get(gp.ui.mapSelectionNum).name.equals("Farm")) {
+                        gp.tileM = new TileManager(gp, "Farm");
+                    } else if(gp.ui.mapList.get(gp.ui.mapSelectionNum).name.equals("Store")) {
+                        gp.tileM = new TileManager(gp, "Store");
+                    }
+                    gp.gameState = gp.playState;
+                } else if (gp.ui.mapSelectionNum == totalMaps){
+                    gp.gameState = gp.playState;
+                }
+            }
     }
 }
