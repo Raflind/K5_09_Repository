@@ -37,6 +37,13 @@ public class Inventory {
         return items;
     }
 
+    public Items getItem(int index) {
+        if (index < 0 || index >= items.size()) {
+            throw new IndexOutOfBoundsException("Index out of bounds: " + index);
+        }
+        return items.get(index);
+    }
+
     public void displayInventory() {
         System.out.println("== Inventory ==");
         if (items.isEmpty()) {
@@ -46,5 +53,8 @@ public class Inventory {
                 System.out.println("- " + item.getName() + " (Sell: " + item.getSellPrice() + ")");
             }
         }
+    }
+    public int getCapacity() {
+        return capacity;
     }
 }

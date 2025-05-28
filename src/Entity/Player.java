@@ -13,7 +13,7 @@ import main.KeyHandler;
 public class Player extends Entity{
     GamePanel gp;
     KeyHandler keyH;
-    Inventory inventory = new Inventory();
+    public Inventory inventory = new Inventory();
     public final int screenX;
     public final int screenY;
 
