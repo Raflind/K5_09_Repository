@@ -22,7 +22,6 @@ public class UI {
             drawPauseScreen(); }*/
         if (gp.gameState == gp.inventoryState){
             drawInventory();
-            drawGameStatus();
         }
         if(gp.gameState == gp.pauseState) {
             drawPauseScreen();
