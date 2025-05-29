@@ -204,7 +204,7 @@ public class TileManager {
         loadMap();
     }
 
-    
+
     public void loadAbigail(){
         try{
             abigail= new Tile[139];
@@ -272,7 +272,7 @@ public class TileManager {
             caroline[i].collision = !isNotCollision;
         }
 
-        br = new BufferedReader(new FileReader("res/Interior_2/Interior_2_cropped.txt"));
+        br = new BufferedReader(new FileReader("res/Interior_2/Interior_2_fix.txt"));
     } catch (IOException e) {
         e.printStackTrace();
     }
@@ -440,6 +440,11 @@ public class TileManager {
         else if (currMap.equals("Mountain")) return mountainTile;
         else if (currMap.equals("Forest")) return forestTile;
         else if (currMap.equals("Store")) return storeTile;
+        else if (currMap.equals("Abigail")) return abigail;
+        else if (currMap.equals("Caroline")) return caroline;
+        else if (currMap.equals("Dasco")) return dasco;
+        else if (currMap.equals("Mayor")) return mayor;
+        else if (currMap.equals("Perry")) return perry;
         else if (currMap.equals("HousePlayer")) return housePlayer;
         return null;
     }
