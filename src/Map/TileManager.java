@@ -21,7 +21,7 @@ public class TileManager {
     public Tile[] dasco;
     public Tile[] mayor;
     public Tile[] perry;
-    public Tile[] housePlayer;
+    public Tile[] housePlayer; 
     public int mapTileNum[][];
     public int worldX;
     public int worldY;
@@ -58,22 +58,32 @@ public class TileManager {
             worldY = 11;
             size=16;
             loadStore();
-        } /*else if(map.equals("Abigail")) {
-            
+        } else if(map.equals("Abigail")) {
+            worldX = 5;
+            worldY = 23;
+            size = 24;
             loadAbigail();
         } else if(map.equals("Caroline")) {
-            house = new Tile[32];
+            worldX = 5;
+            worldY = 23;
+            size = 24;
             loadCaroline();
         } else if(map.equals("Dasco")) {
-            house = new Tile[32];
+            worldX = 5;
+            worldY = 23;
+            size = 24;
             loadDasco();
         } else if(map.equals("Mayor")) {
-            house = new Tile[32];
+            worldX = 5;
+            worldY = 23;
+            size = 24;
             loadMayor();
         } else if(map.equals("Perry")) {
-            house = new Tile[32];
+            worldX = 5;
+            worldY = 23;
+            size = 24;
             loadPerry();
-        }*/
+        }
         else if (map.equals("HousePlayer")) {
             worldX = 5;
             worldY = 13;
@@ -194,32 +204,168 @@ public class TileManager {
         loadMap();
     }
 
-    // public void loadAbigail(){
-    //     try{
-    //         int[] abigailIdx = {
-    //             0, 9, 10, 12, 14, 19, 20, 21, 22, 23, 26, 34, 36, 37, 38, 39, 40, 45, 47, 48, 49, 50,
-    //             51, 52, 53, 61, 62, 63, 64, 65, 66, 72, 73, 74, 75, 76, 78, 80, 81, 82, 105, 106,
-    //             107, 108, 188, 189, 191, 192, 193, 215, 216, 217, 218, 219, 240, 241, 242, 243, 244,
-    //             245, 247, 248, 249, 250, 266, 267, 269, 270, 271, 272, 273, 274, 275, 276, 293, 294,
-    //             295, 296, 297, 298, 299, 300, 302, 303, 319, 320, 321, 322, 323, 324, 325, 326, 327,
-    //             328, 329, 335, 346, 347, 348, 349, 350, 351, 352, 353, 354, 355, 356, 375, 376, 377,
-    //             378, 380, 402, 403, 404, 405, 406, 536, 537, 538, 552, 553, 555, 567, 568, 569, 570,
-    //             571, 573
-    //         };
-    //         int maxIdx = 0;
-    //         for(int idx : abigailIdx) if(idx > maxIdx) maxIdx = idx;
-    //         houseNPC = new Tile[maxIdx + 1];
-    //         for(int idx : abigailIdx){
-    //             houseNPC[idx] = new Tile();
-    //             houseNPC[idx].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/interior_2/" + idx + ".png"));
-    //         }
+    
+    public void loadAbigail(){
+        try{
+            abigail= new Tile[139];
+            int[] notCollisionIdx = {15, 50, 51, 53, 54, 55, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 
+                67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87,
+                88, 89, 90, 91, 92, 93, 94, 95, 96, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107,
+                110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123};
+            for(int i = 0; i <= 138; i++){
+                abigail[i] = new Tile();
+                abigail[i].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Interior_1/" + i + ".png"));
+                boolean isNotCollision = false;
+                for(int idx : notCollisionIdx){
+                    if(i == idx){
+                        isNotCollision = true;
+                        break;
+                    }
+                }
+                if(isNotCollision){
+                    abigail[i].collision = false;
+                } else {
+                    abigail[i].collision = true;
+                }
+            }
+            br = new BufferedReader(new FileReader("res/Interior_1/Interior_1_cropped.txt"));
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+        loadMap();
+    }
 
-    //         br = new BufferedReader(new FileReader("res/HouseNPC/interior_2/interior_2.txt"));
-    //     }
-    //     catch(IOException e){
-    //         e.printStackTrace();
-    //     }
-    // }
+    public void loadCaroline() {
+    try {
+        int[] tileIdx = {
+            0, 9, 10, 12, 14, 19, 20, 21, 22, 23, 26, 34, 36, 37, 38, 39, 40, 45, 47, 48, 49, 50, 52,
+            53, 62, 63, 64, 65, 66, 67, 72, 73, 74, 75, 76, 78, 80, 81, 82, 105, 106, 107, 108, 188,
+            189, 191, 192, 193, 215, 216, 217, 218, 219, 224, 235, 240, 241, 242, 243, 244, 245, 246,
+            247, 248, 249, 250, 266, 267, 269, 270, 271, 272, 273, 274, 275, 276, 293, 294, 295, 296,
+            297, 298, 299, 300, 302, 303, 319, 320, 321, 322, 323, 324, 325, 326, 327, 328, 335, 346,
+            347, 348, 349, 350, 351, 352, 353, 354, 355, 375, 376, 377, 378, 380, 402, 403, 404, 405,
+            406, 490, 512, 536, 537, 538, 547, 552, 553, 555, 562, 563, 564, 567, 568, 569, 570, 571,
+            573
+        };
+
+        int[] notCollisionIdx = {
+            67, 188, 189, 191, 192, 193, 215, 216, 217, 218, 219, 240, 241, 242, 243, 244, 245, 247,
+            248, 249, 250, 266, 267, 269, 273, 274, 275, 276, 293, 294, 295, 299, 300, 302, 303, 319,
+            320, 325, 326, 327, 328, 347, 348, 349, 350, 351, 352, 353, 354, 355, 375, 376, 377, 378,
+            380, 402, 403, 404, 405, 406
+        };
+
+        caroline = new Tile[tileIdx.length];
+        for (int i = 0; i < tileIdx.length; i++) {
+            int idx = tileIdx[i];
+            caroline[i] = new Tile();
+            caroline[i].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Interior_2/" + idx + ".png"));
+            
+            boolean isNotCollision = false;
+            for (int notCol : notCollisionIdx) {
+                if (idx == notCol) {
+                    isNotCollision = true;
+                    break;
+                }
+            }
+            caroline[i].collision = !isNotCollision;
+        }
+
+        br = new BufferedReader(new FileReader("res/Interior_2/Interior_2_cropped.txt"));
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+    loadMap();
+}
+
+
+    public void loadDasco(){
+        try{
+            dasco = new Tile[119];
+            int[] notCollisionIdx = {21, 55, 56, 57, 58, 62, 65, 66, 70, 73, 77, 80, 81, 86, 87, 88, 89};
+            for(int i = 0; i <= 118; i++){
+                dasco[i] = new Tile();
+                dasco[i].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Interior_3/" + i + ".png"));
+                boolean isNotCollision = false;
+                for(int idx : notCollisionIdx){
+                    if(i == idx){
+                        isNotCollision = true;
+                        break;
+                    }
+                }
+                if(isNotCollision){
+                    dasco[i].collision = false;
+                } else {
+                    dasco[i].collision = true;
+                }
+            }
+            br = new BufferedReader(new FileReader("res/Interior_3/Interior_3_cropped.txt"));
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+        loadMap();
+    }
+
+    public void loadMayor(){
+        try{
+            mayor = new Tile[137];
+            int[] notCollisionIdx = {14, 48, 49, 51, 52, 53, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 
+                65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 
+                86, 87, 88, 89, 90, 91, 92, 93, 94, 96, 97, 98, 99, 100, 101, 102, 103, 104, 107, 
+                108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121};
+            for(int i = 0; i <= 136; i++){
+                mayor[i] = new Tile();
+                mayor[i].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Interior_4/" + i + ".png"));
+                boolean isNotCollision = false;
+                for(int idx : notCollisionIdx){
+                    if(i == idx){
+                        isNotCollision = true;
+                        break;
+                    }
+                }
+                if(isNotCollision){
+                    mayor[i].collision = false;
+                } else {
+                    mayor[i].collision = true;
+                }
+            }
+            br = new BufferedReader(new FileReader("res/Interior_4/Interior_4_cropped.txt"));
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+        loadMap();
+    }
+
+    public void loadPerry(){
+        try{
+            perry = new Tile[143];
+            int[] notCollisionIdx = {25, 66, 67, 68, 69, 73, 76, 82, 85, 96, 99, 110, 111, 112, 113};
+            for(int i = 0; i <= 142; i++){
+                perry[i] = new Tile();
+                perry[i].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Interior_5/" + i + ".png"));
+                boolean isNotCollision = false;
+                for(int idx : notCollisionIdx){
+                    if(i == idx){
+                        isNotCollision = true;
+                        break;
+                    }
+                }
+                if(isNotCollision){
+                    perry[i].collision = false;
+                } else {
+                    perry[i].collision = true;
+                }
+            }
+            br = new BufferedReader(new FileReader("res/Interior_5/Interior_5_cropped.txt"));
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+        loadMap();
+    }
 
     public void loadHousePlayer(){
         try{
