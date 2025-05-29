@@ -123,6 +123,10 @@ public class KeyHandler implements KeyListener {
             gp.player.worldY = 8*gp.tileSize;
             gp.ui.inHouse = false;
         }
+        if(code == KeyEvent.VK_Z && gp.ui.showSleepPrompt) {
+            gp.ui.startSleepScreen();
+            gp.ui.showSleepPrompt = false;
+        }
     }
 
     public void titleState(int code){
@@ -225,6 +229,10 @@ public class KeyHandler implements KeyListener {
                     }
                     gp.player.worldX = gp.tileM.worldX * gp.tileSize;
                     gp.player.worldY = gp.tileM.worldY * gp.tileSize;
+                    gp.player.consumeEnergy(10);
+                    for(int i = 0; i<15/5; i++){
+                        gp.environmentStatus.time.addFiveMinutes(); //nambah 15 minit
+                    }
                     gp.gameState = gp.playState;
                 } else if (gp.ui.mapSelectionNum == totalMaps){
                     gp.gameState = gp.playState;

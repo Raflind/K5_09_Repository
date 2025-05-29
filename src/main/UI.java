@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import Entity.Player;
 
 public class UI {
     GamePanel gp;
@@ -31,6 +32,12 @@ public class UI {
     public int slotRow = 0;
     public boolean showVisitHousePrompt = false; // Tambahkan variabel ini
     public boolean inHouse = false; // Untuk menandakan apakah pemain berada di dalam rumah NPC
+    public boolean showFishPrompt = false;
+    public boolean showSleepPrompt = false;
+    public boolean showSleepScreen = false;
+    private long sleepScreenStartTime = 0;
+    public boolean isAction = false;
+    public boolean isTired = false;
 
     public UI(GamePanel gp) {
         this.gp = gp;
@@ -69,13 +76,37 @@ public class UI {
     public void draw(Graphics2D g2) {
         this.g2 = g2;
         if(gp.gameState == gp.playState){
-            drawGameStatus();
+            if(showSleepScreen) {
+                drawSleepScreen();
+                if(System.currentTimeMillis() - sleepScreenStartTime >= 3000) {
+                    showSleepScreen = false;
+                    if (gp.player.getEnergy()<0.1*gp.player.MAX_ENERGY) {
+                        gp.player.setEnergy(gp.player.MAX_ENERGY/2);
+                    }   
+                    else {
+                        gp.player.setEnergy(gp.player.MAX_ENERGY); // Reset energy to 100 after sleep
+                    }
+                    gp.environmentStatus.bangun();
+                }
+                return;
+            }
+            if(!isAction){
+                drawGameStatus();
+                drawEnergyBar(g2, gp.player);
+            }
             if(showVisitHousePrompt){
                 drawEnterHouse();
             }
             if(inHouse) {
                 publicExitHouse();
             }
+            if(showSleepPrompt) {
+                drawSleepPrompt();
+            }
+            if(isTired){
+                drawTiredPrompt();
+            }
+            
         }
         if (gp.gameState == gp.inventoryState){
             drawInventory();
@@ -398,9 +429,8 @@ public class UI {
         g2.setFont(stardew.deriveFont(Font.BOLD, 24F));
         g2.setColor(Color.white);
         String msg = "Want to Visit Player House? Click Y";
-        int x = gp.tileSize; // posisi X
         int y = gp.screenHeight - gp.tileSize; // posisi Y (bawah layar)
-        g2.drawString(msg, x, y);
+        g2.drawString(msg, getXforCenteredText(msg), y);
     }
 
     public void publicExitHouse(){
@@ -409,5 +439,74 @@ public class UI {
         String msg = "Want to Exit House? Click X";
         int y = gp.screenHeight - gp.tileSize; // posisi Y (bawah layar)
         g2.drawString(msg, getXforCenteredText(msg), y);
+    }
+
+    public void drawEnergyBar(Graphics2D g2, Player player) {
+        int barX = gp.tileSize;
+        int barY = gp.tileSize / 2;
+        int barWidth = gp.tileSize * 4;
+        int barHeight = gp.tileSize / 2;
+
+        // Background bar (abu-abu)
+        // g2.setColor(Color.GRAY);
+        // g2.fillRoundRect(barX, barY, barWidth, barHeight, 10, 10);
+
+        // Isi bar (merah/oranye)
+        float energyPercent = Math.max(0, Math.min(1, player.getEnergy() / 100f));
+        int fillWidth = (int)(barWidth * energyPercent);
+        g2.setColor(new Color(255, 140, 0)); // oranye
+        g2.fillRoundRect(barX, barY, fillWidth, barHeight, 10, 10);
+
+        // Border
+        g2.setColor(new Color(139, 69, 19, 180));
+        g2.drawRoundRect(barX, barY, barWidth, barHeight, 10, 10);
+
+        // Text
+        g2.setColor(kuninggelap);
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 18f));
+        String text = "Energy: " + player.getEnergy();
+        int textX = barX + barWidth/2 - g2.getFontMetrics().stringWidth(text)/2;
+        int textY = barY + barHeight - 5;
+        g2.drawString(text, textX, textY);
+    }
+
+    public void drawFishPrompt() {
+        g2.setFont(stardew.deriveFont(Font.BOLD, 24F));
+        g2.setColor(Color.white);
+        String msg = "Click F to Fish";
+        int y = gp.screenHeight - gp.tileSize * 2; 
+        g2.drawString(msg, getXforCenteredText(msg), y);
+    }
+
+    public void drawSleepPrompt() {
+        g2.setFont(stardew.deriveFont(Font.BOLD, 24F));
+        g2.setColor(Color.white);
+        String msg = "Click Z to Sleep";
+        int y = gp.screenHeight - gp.tileSize * 2; 
+        g2.drawString(msg, getXforCenteredText(msg), y);
+    }
+
+    public void drawTiredPrompt() {
+        g2.setFont(stardew.deriveFont(Font.BOLD, 24F));
+        g2.setColor(Color.white);
+        String msg = "You are overly tired, you are sleeping now";
+        int y = gp.screenHeight - gp.tileSize * 2; 
+        g2.drawString(msg, getXforCenteredText(msg), y);
+    }
+
+    public void startSleepScreen() {
+        showSleepScreen = true;
+        sleepScreenStartTime = System.currentTimeMillis();
+    }
+    
+    public void drawSleepScreen() {
+        g2.setColor(Color.black);
+        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+        g2.setFont(stardew.deriveFont(Font.BOLD, 48F));
+        g2.setColor(Color.white);
+        String msg = "You are sleeping";
+        int x = getXforCenteredText(msg);
+        int y = gp.screenHeight / 2;
+        g2.drawString(msg, x, y);
     }
 }

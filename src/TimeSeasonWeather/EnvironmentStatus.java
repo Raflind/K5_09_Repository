@@ -77,4 +77,16 @@ public class EnvironmentStatus {
         }
     }
     }
+
+    public void bangun(){
+        if(time.getHour()<6){
+            time.setHour(6);
+            time.setMinute(0);
+        }
+        else if(time.getHour()<24){
+            time.setHour(6);
+            time.setMinute(0);
+            day++;
+        }
+    }
 }

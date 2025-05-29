@@ -38,4 +38,8 @@ public class Time{
     public void addFiveMinutes(){
         setMinute(this.minute + 5);
     }
+
+    public void addOneHour(){
+        setHour(this.hour + 1);
+    }
 }

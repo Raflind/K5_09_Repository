@@ -3,6 +3,7 @@ package Entity;
 import java.awt.Graphics2D;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimerTask;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -14,6 +15,8 @@ import NPC.NPC;
 import NPC.Relationship;
 import main.GamePanel;
 import main.KeyHandler;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Player extends Entity{
     //atribut related to game
@@ -22,12 +25,14 @@ public class Player extends Entity{
     public Inventory inventory = new Inventory(); // ini nggak diinstansiasi di konstruktor?
     public final int screenX;
     public final int screenY;
+    public BufferedImage lelah;
+    public boolean enMove = true; // kl bisa move
 
     //atribut related to player logic
     private String name;
     private String farmName;
     private int energy;
-    private int MAX_ENERGY = 100;
+    public int MAX_ENERGY = 100;
     public enum Gender{
         F, M
     }
@@ -56,6 +61,7 @@ public class Player extends Entity{
         direction = "diam";
         this.worldX = worldX;
         this.worldY = worldY;
+        energy = 20;
         getPlayerImage();
     }
 
@@ -70,6 +76,7 @@ public class Player extends Entity{
             kanan2 = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Player/kanan2.png"));
             kiri1 = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Player/kiri1.png"));
             kiri2 = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Player/kiri2.png"));
+            lelah = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Player/lelah.png"));
         }
         catch(IOException e){
             e.printStackTrace();
@@ -78,28 +85,32 @@ public class Player extends Entity{
 
     public void update(){
         if(gp.tileM.currMap.equals("Farm")){
-            int playerTileX = worldX / gp.tileSize;
-            int playerTileY = worldY / gp.tileSize;
-            int tileNum = gp.tileM.mapTileNum[playerTileX][playerTileY];
-            if(tileNum==38 || tileNum==39 || tileNum==29 || tileNum==37 || tileNum==31 || tileNum==32){
+            if(isVisitHouseTile()){
                 gp.ui.showVisitHousePrompt = true;
             } else {
                 gp.ui.showVisitHousePrompt = false;
             }
         }
-        if(keyH.up == true){
+        if(gp.tileM.currMap.equals("HousePlayer")){
+            if(isSleepTile()){
+                gp.ui.showSleepPrompt = true;
+            } else {
+                gp.ui.showSleepPrompt = false;
+            }
+        }
+        if(keyH.up == true && enMove){
             direction = "blkg";
         }
-        else if(keyH.down == true){
+        else if(keyH.down == true && enMove){
             direction = "depan";
         }
-        else if(keyH.right == true){
+        else if(keyH.right == true && enMove){
             direction = "kanan";
         }
-        else if(keyH.left == true){
+        else if(keyH.left == true && enMove){
             direction = "kiri";
         }
-        else{
+        else if(enMove){
             direction = "diam";
         }
         //collision
@@ -157,6 +168,9 @@ public class Player extends Entity{
             case "diam":
             image = diam;
             break;
+            case "lelah":
+            image = lelah;
+            break;
         }
         comp.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
     }
@@ -193,11 +207,33 @@ public class Player extends Entity{
         this.name = name;
     }
 
-    public void consumeEnergy(int energy) throws EnergyLowException{
-        if (this.energy - energy >= 0) {
-            this.energy -= energy;
-        } else if (this.energy - energy < 0) {
-            throw new EnergyLowException();
+    public void setEnergy(int energy) {
+        if (energy <= MAX_ENERGY && energy >= -20) {
+            this.energy = energy;
+        } else if (energy > MAX_ENERGY) {
+            this.energy = MAX_ENERGY;
+        } else {
+            this.energy = -20; // batas bawah energi
+        }
+    }
+
+    public void consumeEnergy(int energy) {
+        setEnergy(this.energy - energy);
+        if(this.energy<=-20){
+            gp.ui.isAction = true;
+            direction = "lelah";
+            enMove = false;
+            gp.ui.isTired = true;
+            new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                gp.ui.isTired = false;
+                direction = "diam";
+                enMove = true;
+                gp.environmentStatus.bangun();
+                setEnergy(10);
+                gp.ui.isAction = false;
+            }}, 3000);
         }
     }
 
@@ -213,5 +249,23 @@ public class Player extends Entity{
 
     }
 
+    public boolean isVisitHouseTile() {
+        int[] visitTilesOld = {29, 31, 32, 37, 38, 39};
+        for(int t : visitTilesOld){
+            if(gp.cChecker.colTile1 == t || gp.cChecker.colTile2 == t){
+                return true;
+            }
+        }
+        return false;
+    }
 
+    public boolean isSleepTile() {
+        int[] visitTiles = {28, 29, 40, 41, 51, 52, 66, 67};
+        for(int t : visitTiles){
+            if(gp.cChecker.colTile1 == t || gp.cChecker.colTile2 == t){
+                return true;
+            }
+        }
+        return false;
+    }
 }

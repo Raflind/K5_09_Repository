@@ -19,7 +19,7 @@ public class GamePanel extends JPanel implements Runnable{
    final public int w = 16;
    final public int h = 12;
    final public int screenWidth = w*tileSize; //16*16*3=768
-   final public int screenHeight =h*tileSize; // 16*12*3 = 572
+   final public int screenHeight =h*tileSize; // 16*12*3 = 576
    final int FPS = 60;
    private int frameCounter = 0;
    public TileManager farmMap, oceanMap, forestMap, mountainMap, storeMap, housePlayerMap; /*blm lengkap*/
@@ -27,7 +27,7 @@ public class GamePanel extends JPanel implements Runnable{
    KeyHandler keyH = new KeyHandler(this);
    
    public UI ui = new UI(this);
-   public Time time = new Time(23, 30);
+   public Time time = new Time(6, 0);
    Timer timer = new Timer();
    public EnvironmentStatus environmentStatus = new EnvironmentStatus(time);
    Thread gameThread;

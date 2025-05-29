@@ -5,6 +5,7 @@ import Map.Tile;
 
 public class CollisionChecker {
     GamePanel gp;
+    public int colTile1, colTile2;
     public CollisionChecker(GamePanel gp){
         this.gp = gp;
     }
@@ -30,6 +31,8 @@ public class CollisionChecker {
                 if(tile[tileNum1].collision || tile[tileNum2].collision){
                     entity.collisionOn = true;
                 }
+                colTile1 = tileNum1;
+                colTile2 = tileNum2;
                 break;
             case "blkg":
                 entityTRow = (entityTopY-entity.speed)/gp.tileSize;
@@ -38,6 +41,8 @@ public class CollisionChecker {
                 if(tile[tileNum1].collision || tile[tileNum2].collision){
                     entity.collisionOn = true;
                 }
+                colTile1 = tileNum1;
+                colTile2 = tileNum2;
                 break;
             case "kiri":
                 entityLCol = (entityLeftX-entity.speed)/gp.tileSize;
@@ -46,6 +51,8 @@ public class CollisionChecker {
                 if(tile[tileNum1].collision || tile[tileNum2].collision){
                     entity.collisionOn = true;
                 }
+                colTile1 = tileNum1;
+                colTile2 = tileNum2;
                 break;
             case "kanan":
                 entityRCol = (entityRightX+entity.speed)/gp.tileSize;
@@ -54,7 +61,10 @@ public class CollisionChecker {
                 if(tile[tileNum1].collision || tile[tileNum2].collision){
                     entity.collisionOn = true;
                 }
+                colTile1 = tileNum1;
+                colTile2 = tileNum2;
                 break;
         }
     }
+
 }
