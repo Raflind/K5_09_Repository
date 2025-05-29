@@ -38,6 +38,10 @@ public class UI {
     private long sleepScreenStartTime = 0;
     public boolean isAction = false;
     public boolean isTired = false;
+    public String inputName = "";
+    public boolean showNameInputScreen = false;
+    public String errorMessage = "";
+    public long errorMessageTime = 0;
 
     public UI(GamePanel gp) {
         this.gp = gp;
@@ -119,7 +123,13 @@ public class UI {
                 drawTitleScreen();
             }
             else if (titleScreenState == 1) {
-                drawStoryScreen(); 
+                drawNameInputScreen(); 
+            }
+            else if (titleScreenState == 2) {
+                drawFarmNameInputScreen();
+            }
+            else if (titleScreenState == 3) {
+                drawStoryScreen();
             }
         }
         if(gp.gameState == gp.mapSelectState){
@@ -508,5 +518,103 @@ public class UI {
         int x = getXforCenteredText(msg);
         int y = gp.screenHeight / 2;
         g2.drawString(msg, x, y);
+    }
+
+    public void drawNameInputScreen() {
+        g2.setColor(Color.black);
+        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+        BufferedImage bg;
+        try{
+            bg = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Menu/Background-dimmed.png"));
+            g2.drawImage(bg, 0, 0, null); 
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+        g2.setFont(stardew.deriveFont(Font.BOLD, 36F));
+        g2.setColor(kuninggelap);
+        String prompt = "Enter Your Name:";
+        int promptX = getXforCenteredText(prompt);
+        int promptY = gp.screenHeight / 2 - gp.tileSize;
+        g2.drawString(prompt, promptX+3, promptY+3);
+        g2.setColor(kuning);
+        g2.drawString(prompt, promptX, promptY);
+
+        // Kotak input
+        int boxWidth = gp.tileSize * 6;
+        int boxHeight = gp.tileSize;
+        int boxX = (gp.screenWidth - boxWidth) / 2;
+        int boxY = gp.screenHeight / 2 - 30;
+        g2.setColor(new Color(139, 69, 19, 180));
+        g2.drawRect(boxX, boxY, boxWidth, boxHeight);
+
+        // Nama yang sedang diketik
+        g2.setFont(stardew.deriveFont(Font.PLAIN, 32F));
+        g2.setColor(Color.white);
+        g2.drawString(inputName, boxX + 10, boxY + boxHeight - 15);
+
+        // Petunjuk
+        g2.setFont(stardew.deriveFont(Font.PLAIN, 24F));
+        g2.setColor(kuninggelap);
+        String info = "Press ENTER to confirm";
+        g2.drawString(info, getXforCenteredText(info) + 3, boxY + boxHeight + 30 + 3);
+        g2.setColor(kuning);
+        g2.drawString(info, getXforCenteredText(info), boxY + boxHeight + 30);
+
+        // Pesan error
+        if(!errorMessage.isEmpty() && System.currentTimeMillis() - errorMessageTime < 2000){
+            g2.setColor(Color.RED);
+            g2.setFont(stardew.deriveFont(Font.BOLD, 18F));
+            g2.drawString(errorMessage, getXforCenteredText(errorMessage), boxY + boxHeight + 60);
+        }
+    }
+
+    public void drawFarmNameInputScreen() {
+        g2.setColor(Color.black);
+        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+        BufferedImage bg;
+        try{
+            bg = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Menu/Background-dimmed.png"));
+            g2.drawImage(bg, 0, 0, null); 
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+        g2.setFont(stardew.deriveFont(Font.BOLD, 36F));
+        g2.setColor(kuninggelap);
+        String prompt = "Enter Your Farm Name:";
+        int promptX = getXforCenteredText(prompt);
+        int promptY = gp.screenHeight / 2 - gp.tileSize;
+        g2.drawString(prompt, promptX+3, promptY+3);
+        g2.setColor(kuning);
+        g2.drawString(prompt, promptX, promptY);
+
+        // Kotak input
+        int boxWidth = gp.tileSize * 6;
+        int boxHeight = gp.tileSize;
+        int boxX = (gp.screenWidth - boxWidth) / 2;
+        int boxY = gp.screenHeight / 2 - 30;
+        g2.setColor(new Color(139, 69, 19, 180));
+        g2.drawRect(boxX, boxY, boxWidth, boxHeight);
+
+        // Nama yang sedang diketik
+        g2.setFont(stardew.deriveFont(Font.PLAIN, 32F));
+        g2.setColor(Color.white);
+        g2.drawString(inputName, boxX + 10, boxY + boxHeight - 15);
+
+        // Petunjuk
+        g2.setFont(stardew.deriveFont(Font.PLAIN, 24F));
+        g2.setColor(kuninggelap);
+        String info = "Press ENTER to confirm";
+        g2.drawString(info, getXforCenteredText(info) + 3, boxY + boxHeight + 30 + 3);
+        g2.setColor(kuning);
+        g2.drawString(info, getXforCenteredText(info), boxY + boxHeight + 30);
+
+        // Pesan error
+        if(!errorMessage.isEmpty() && System.currentTimeMillis() - errorMessageTime < 2000){
+            g2.setColor(Color.RED);
+            g2.setFont(stardew.deriveFont(Font.BOLD, 18F));
+            g2.drawString(errorMessage, getXforCenteredText(errorMessage), boxY + boxHeight + 60);
+        }
     }
 }

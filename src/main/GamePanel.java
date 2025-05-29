@@ -22,7 +22,7 @@ public class GamePanel extends JPanel implements Runnable{
    final public int screenHeight =h*tileSize; // 16*12*3 = 576
    final int FPS = 60;
    private int frameCounter = 0;
-   public TileManager farmMap, oceanMap, forestMap, mountainMap, storeMap, housePlayerMap; /*blm lengkap*/
+   public TileManager farmMap, oceanMap, forestMap, mountainMap, storeMap, housePlayerMap, abigailMap, carolineMap, dascoMap, mayorMap, perryMap; /*blm lengkap*/
    public TileManager tileM;
    KeyHandler keyH = new KeyHandler(this);
    
@@ -63,6 +63,11 @@ public class GamePanel extends JPanel implements Runnable{
     mountainMap = new TileManager(this, "Mountain");
     storeMap = new TileManager(this, "Store");
     housePlayerMap = new TileManager(this, "HousePlayer");
+    abigailMap = new TileManager(this, "Abigail");
+    carolineMap = new TileManager(this, "Caroline");
+    dascoMap = new TileManager(this, "Dasco");
+    mayorMap = new TileManager(this, "Mayor");
+    perryMap = new TileManager(this, "Perry");
     tileM = farmMap;
     player = new Player(this, keyH, tileM.worldX*tileSize, tileM.worldY*tileSize);
     setupGame();

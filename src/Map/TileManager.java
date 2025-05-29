@@ -204,7 +204,6 @@ public class TileManager {
         loadMap();
     }
 
-
     public void loadAbigail(){
         try{
             abigail= new Tile[139];
@@ -260,7 +259,7 @@ public class TileManager {
         for (int i = 0; i < tileIdx.length; i++) {
             int idx = tileIdx[i];
             caroline[i] = new Tile();
-            caroline[i].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Interior_2/" + idx + ".png"));
+            caroline[i].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/interior_2/" + idx + ".png"));
             
             boolean isNotCollision = false;
             for (int notCol : notCollisionIdx) {
@@ -272,7 +271,7 @@ public class TileManager {
             caroline[i].collision = !isNotCollision;
         }
 
-        br = new BufferedReader(new FileReader("res/Interior_2/Interior_2_fix.txt"));
+        br = new BufferedReader(new FileReader("res/interior_2/Interior_2_fix.txt"));
     } catch (IOException e) {
         e.printStackTrace();
     }
@@ -286,7 +285,7 @@ public class TileManager {
             int[] notCollisionIdx = {21, 55, 56, 57, 58, 62, 65, 66, 70, 73, 77, 80, 81, 86, 87, 88, 89};
             for(int i = 0; i <= 118; i++){
                 dasco[i] = new Tile();
-                dasco[i].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Interior_3/" + i + ".png"));
+                dasco[i].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/interior_3/" + i + ".png"));
                 boolean isNotCollision = false;
                 for(int idx : notCollisionIdx){
                     if(i == idx){
@@ -300,7 +299,7 @@ public class TileManager {
                     dasco[i].collision = true;
                 }
             }
-            br = new BufferedReader(new FileReader("res/Interior_3/Interior_3_cropped.txt"));
+            br = new BufferedReader(new FileReader("res/interior_3/Interior_3_cropped.txt"));
         }
         catch(IOException e){
             e.printStackTrace();

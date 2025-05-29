@@ -23,10 +23,10 @@ public class KeyHandler implements KeyListener {
     public void keyPressed(KeyEvent e){
         int code = e.getKeyCode();
         if(gp.gameState == gp.titleState){
-            titleState(code);
+            titleState(code, e);
         }
         if(gp.gameState == gp.playState){
-          playState(code);  
+            playState(code);  
         }
         if(gp.gameState == gp.inventoryState){
             inventoryState(code);
@@ -129,7 +129,7 @@ public class KeyHandler implements KeyListener {
         }
     }
 
-    public void titleState(int code){
+    public void titleState(int code, KeyEvent e){
         if(gp.ui.titleScreenState == 0){
             if(code == KeyEvent.VK_W || code == KeyEvent.VK_UP){
                 if (gp.ui.commandNum > 0){
@@ -156,20 +156,64 @@ public class KeyHandler implements KeyListener {
         }
         else if(gp.ui.titleScreenState == 1){
             if(code == KeyEvent.VK_ENTER){
-                gp.gameState = gp.playState;
-                gp.ui.titleScreenState = 0;
+                if(!gp.ui.inputName.trim().isEmpty()){
+                    gp.player.setName(gp.ui.inputName);
+                    gp.ui.inputName = "";
+                    gp.ui.titleScreenState = 2;
+                    gp.ui.errorMessage = "";
+                } else {
+                    gp.ui.errorMessage = "Name cannot be empty!";
+                    gp.ui.errorMessageTime = System.currentTimeMillis();
+                }
+            } else if(code == KeyEvent.VK_BACK_SPACE){
+                if(gp.ui.inputName.length() > 0){
+                    gp.ui.inputName = gp.ui.inputName.substring(0, gp.ui.inputName.length()-1);
+                }
+            } else {
+                char c = e.getKeyChar();
+                if((Character.isLetterOrDigit(c) || c==' ')&& gp.ui.inputName.length() < 12){
+                    gp.ui.inputName += c;
+                }
             }
         }
+        else if(gp.ui.titleScreenState == 2){
+            if(code == KeyEvent.VK_ENTER){
+                if(!gp.ui.inputName.trim().isEmpty()){
+                    gp.player.setFarmName(gp.ui.inputName);
+                    gp.ui.inputName = "";
+                    gp.ui.titleScreenState = 3;
+                    gp.ui.errorMessage = "";
+                } else {
+                    gp.ui.errorMessage = "Farm Name cannot be empty!";
+                    gp.ui.errorMessageTime = System.currentTimeMillis();
+                }
+            } else if(code == KeyEvent.VK_BACK_SPACE){
+                if(gp.ui.inputName.length() > 0){
+                    gp.ui.inputName = gp.ui.inputName.substring(0, gp.ui.inputName.length()-1);
+                }
+            } else {
+                char c = e.getKeyChar();
+                if((Character.isLetterOrDigit(c) || c==' ')&& gp.ui.inputName.length() < 12){
+                    gp.ui.inputName += c;
+                }
+            }
+        }
+        else if(gp.ui.titleScreenState == 3){
+            if(code == KeyEvent.VK_ENTER){
+                gp.gameState = gp.playState; // atau state lain
+            } 
+        }
     }
+
     public void pauseState(int code){
         if(code == KeyEvent.VK_ESCAPE){
             gp.gameState = gp.playState;
         }
     }
+
     public void mapSelectState(int code){
         int totalMaps = gp.ui.mapList.size();
             int mapsPerRow = 5;
-            int totalOptions = totalMaps + 1;
 
             if(code == KeyEvent.VK_W || code == KeyEvent.VK_UP){
                 if (gp.ui.mapSelectionNum < totalMaps) {
@@ -226,6 +270,16 @@ public class KeyHandler implements KeyListener {
                         gp.tileM = gp.farmMap;
                     } else if(gp.ui.mapList.get(gp.ui.mapSelectionNum).name.equals("Store")) {
                         gp.tileM = gp.storeMap;
+                    } else if(gp.ui.mapList.get(gp.ui.mapSelectionNum).name.equals("Abigail's House")) {
+                        gp.tileM = gp.abigailMap;
+                    } else if(gp.ui.mapList.get(gp.ui.mapSelectionNum).name.equals("Caroline's House")) {
+                        gp.tileM = gp.carolineMap;
+                    } else if(gp.ui.mapList.get(gp.ui.mapSelectionNum).name.equals("Dasco's House")) {
+                        gp.tileM = gp.dascoMap;
+                    } else if(gp.ui.mapList.get(gp.ui.mapSelectionNum).name.equals("Mayor Tadi's House")) {
+                        gp.tileM = gp.mayorMap;
+                    } else if(gp.ui.mapList.get(gp.ui.mapSelectionNum).name.equals("Perry's House")) {
+                        gp.tileM = gp.perryMap;
                     }
                     gp.player.worldX = gp.tileM.worldX * gp.tileSize;
                     gp.player.worldY = gp.tileM.worldY * gp.tileSize;
