@@ -99,9 +99,7 @@ public class KeyHandler implements KeyListener {
             right = true;
         }
         if(code == KeyEvent.VK_ESCAPE){
-            gp.gameState = gp.titleState;
-            gp.ui.titleScreenState = 0;    
-            gp.ui.commandNum = 0;       
+            gp.gameState = gp.optionState; 
         }
         if(code == KeyEvent.VK_I){
             gp.gameState = gp.inventoryState;
@@ -111,6 +109,10 @@ public class KeyHandler implements KeyListener {
         }
         if(code == KeyEvent.VK_V){
             gp.gameState = gp.mapSelectState;
+        }
+        if(code == KeyEvent.VK_Y && gp.ui.showVisitHousePrompt) {
+            gp.tileM = gp.housePlayerMap;
+            gp.ui.showVisitHousePrompt = false;
         }
     }
 

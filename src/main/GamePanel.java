@@ -22,7 +22,7 @@ public class GamePanel extends JPanel implements Runnable{
    final public int screenHeight =h*tileSize; // 16*12*3 = 572
    final int FPS = 60;
    private int frameCounter = 0;
-   public TileManager farmMap, oceanMap, forestMap, mountainMap, storeMap; /*blm lengkap*/
+   public TileManager farmMap, oceanMap, forestMap, mountainMap, storeMap, housePlayerMap; /*blm lengkap*/
    public TileManager tileM;
    KeyHandler keyH = new KeyHandler(this);
    
@@ -49,6 +49,7 @@ public class GamePanel extends JPanel implements Runnable{
    public final int dialogueState = 3; 
    public final int pauseState = 4;
    public final int mapSelectState = 5;
+   public final int optionState = 6;
 
    public GamePanel() {
     this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -61,6 +62,7 @@ public class GamePanel extends JPanel implements Runnable{
     forestMap = new TileManager(this, "Forest");
     mountainMap = new TileManager(this, "Mountain");
     storeMap = new TileManager(this, "Store");
+    housePlayerMap = new TileManager(this, "HousePlayer");
     tileM = farmMap;
     player = new Player(this, keyH, tileM.worldX*tileSize, tileM.worldY*tileSize);
     setupGame();
@@ -130,10 +132,12 @@ public class GamePanel extends JPanel implements Runnable{
     }
     else if(gameState==pauseState){ 
         ui.draw(comp);
-        // Handle other game states if necessary
    }
    else if(gameState==mapSelectState){
         ui.draw(comp);
     }
-}
+    else if(gameState==optionState){
+        ui.draw(comp);
+    }
+    }
 }

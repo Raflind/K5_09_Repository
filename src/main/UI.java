@@ -29,6 +29,7 @@ public class UI {
     Color kuninggelap = new Color(0x413014);
     public int slotCol = 0;
     public int slotRow = 0;
+    public boolean showVisitHousePrompt = false; // Tambahkan variabel ini
 
     public UI(GamePanel gp) {
         this.gp = gp;
@@ -85,6 +86,21 @@ public class UI {
         }
         if(gp.gameState == gp.mapSelectState){
             drawMapSelectionScreen();
+        }
+        if(gp.gameState == gp.dialogueState){
+            // drawDialogueScreen();
+        }
+        if(gp.gameState == gp.optionState){
+            drawOptionScreen();
+        }        
+        // Tambahkan pemanggilan untuk menggambar prompt kunjungan rumah
+        if(showVisitHousePrompt) {
+            g2.setFont(stardew.deriveFont(Font.BOLD, 24F));
+            g2.setColor(Color.white); // semi-transparent brown
+            String msg = "Want to Visit Player House? Click Y";
+            int x = gp.tileSize; // posisi X
+            int y = gp.screenHeight - gp.tileSize; // posisi Y (bawah layar)
+            g2.drawString(msg, x, y);
         }
     }
     
@@ -367,5 +383,16 @@ public class UI {
         int textY = y + 15;
         g2.drawString("Time: " + hour + ":" + minute, textX, textY + 30);
         g2.drawString("Day " + day, textX, textY + 60);   
+    }
+
+    public void drawOptionScreen() {
+        BufferedImage bg;
+        try{
+            bg = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Menu/Background-dimmed.png"));
+            g2.drawImage(bg, 0, 0, null); 
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
     }
 }

@@ -77,52 +77,62 @@ public class Player extends Entity{
     }
 
     public void update(){
-    if(keyH.up == true){
-        direction = "blkg";
-    }
-    else if(keyH.down == true){
-        direction = "depan";
-    }
-    else if(keyH.right == true){
-        direction = "kanan";
-    }
-    else if(keyH.left == true){
-        direction = "kiri";
-    }
-    else{
-        direction = "diam";
-    }
-    //collision
-    collisionOn = false;
-    gp.cChecker.checkTile(this);
-    if(collisionOn == false){
-        switch(direction){
-            case "depan":
-                worldY = Math.min(worldY + speed, gp.tileM.size * gp.tileSize - 4*gp.tileSize/3);
-                break;
-            case "blkg":
-                worldY = Math.max(worldY - speed, 0);
-                break;
-            case "kiri":
-                worldX = Math.max(worldX - speed, 0);
-                break;
-            case "kanan":
-                worldX = Math.min(worldX + speed, gp.tileM.size * gp.tileSize - gp.tileSize);
-                break;
-        }
-    }
-    if(keyH.up==true || keyH.down==true || keyH.left==true || keyH.right==true){
-        spriteCounter++;
-        if(spriteCounter>15){
-            if(spriteNum==1){
-                spriteNum = 2;
+        if(gp.tileM.currMap.equals("Farm")){
+            int playerTileX = worldX / gp.tileSize;
+            int playerTileY = worldY / gp.tileSize;
+            int tileNum = gp.tileM.mapTileNum[playerTileX][playerTileY];
+            if(tileNum==38 || tileNum==39 || tileNum==29 || tileNum==37 || tileNum==31 || tileNum==32){
+                gp.ui.showVisitHousePrompt = true;
+            } else {
+                gp.ui.showVisitHousePrompt = false;
             }
-            else if(spriteNum==2){
-                spriteNum=1;
-            }
-            spriteCounter=0;
         }
-    }
+        if(keyH.up == true){
+            direction = "blkg";
+        }
+        else if(keyH.down == true){
+            direction = "depan";
+        }
+        else if(keyH.right == true){
+            direction = "kanan";
+        }
+        else if(keyH.left == true){
+            direction = "kiri";
+        }
+        else{
+            direction = "diam";
+        }
+        //collision
+        collisionOn = false;
+        gp.cChecker.checkTile(this);
+        if(collisionOn == false){
+            switch(direction){
+                case "depan":
+                    worldY = Math.min(worldY + speed, gp.tileM.size * gp.tileSize - 4*gp.tileSize/3);
+                    break;
+                case "blkg":
+                    worldY = Math.max(worldY - speed, 0);
+                    break;
+                case "kiri":
+                    worldX = Math.max(worldX - speed, 0);
+                    break;
+                case "kanan":
+                    worldX = Math.min(worldX + speed, gp.tileM.size * gp.tileSize - gp.tileSize);
+                    break;
+            }
+        }
+        if(keyH.up==true || keyH.down==true || keyH.left==true || keyH.right==true){
+            spriteCounter++;
+            if(spriteCounter>15){
+                if(spriteNum==1){
+                    spriteNum = 2;
+                }
+                else if(spriteNum==2){
+                    spriteNum=1;
+                }
+                spriteCounter=0;
+            }
+        }
     }
 
     public void draw(Graphics2D comp){

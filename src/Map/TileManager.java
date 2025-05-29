@@ -26,7 +26,7 @@ public class TileManager {
     public int worldX;
     public int worldY;
     BufferedReader br;
-    String currMap;
+    public String currMap;
     public int size;
 
     public TileManager(GamePanel gp, String map){
@@ -74,6 +74,12 @@ public class TileManager {
             house = new Tile[32];
             loadPerry();
         }*/
+        else if (map.equals("HousePlayer")) {
+            worldX = 5;
+            worldY = 13;
+            size=24;
+            loadHousePlayer();
+        }
     }
 
     public void loadOcean(){
@@ -215,6 +221,34 @@ public class TileManager {
     //     }
     // }
 
+    public void loadHousePlayer(){
+        try{
+            housePlayer = new Tile[140];
+            int[] notCollisionIdx = {16, 32, 33, 34, 35, 36, 37, 42, 43, 44, 45, 54, 59, 69, 74, 81, 82, 83, 84, 85, 86, 91, 92, 93, 94};
+            for(int i = 0; i <= 130; i++){
+                housePlayer[i] = new Tile();
+                housePlayer[i].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Interior_6/" + i + ".png"));
+                boolean isNotCollision = false;
+                for(int idx : notCollisionIdx){
+                    if(i == idx){
+                        isNotCollision = true;
+                        break;
+                    }
+                }
+                if(isNotCollision){
+                    housePlayer[i].collision = false;
+                } else {
+                    housePlayer[i].collision = true;
+                }
+            }
+            br = new BufferedReader(new FileReader("res/Interior_6/Interior_6_cropped.txt"));
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+        loadMap();
+    }
+
     public void loadMap(){
         try{
             for(int row = 0; row < size; row++){
@@ -260,6 +294,7 @@ public class TileManager {
         else if (currMap.equals("Mountain")) return mountainTile;
         else if (currMap.equals("Forest")) return forestTile;
         else if (currMap.equals("Store")) return storeTile;
+        else if (currMap.equals("HousePlayer")) return housePlayer;
         return null;
     }
 }
