@@ -16,7 +16,11 @@ public class TileManager {
     public Tile[] mountainTile;
     public Tile[] forestTile;
     public Tile[] storeTile;
-    public Tile[] houseNPC;
+    public Tile[] abigail;
+    public Tile[] caroline;
+    public Tile[] dasco;
+    public Tile[] mayor;
+    public Tile[] perry;
     public Tile[] housePlayer;
     public int mapTileNum[][];
     public int worldX;
@@ -30,10 +34,10 @@ public class TileManager {
         this.currMap = map;
         mapTileNum = new int[gp.worldwh][gp.worldwh];
         if(map.equals("Ocean")) {
-            worldX = 11;
-            worldY = 16;
-            size=32;
-            loadOcean();
+            worldX = 11; // sumbu x di mana character bakal spawn
+            worldY = 16; // sumbu y di mana character bakal spawn
+            size=32; // ukuran map (kalo house otomatis 24x24)
+            loadOcean(); // fungsi load mapnya
         } else if(map.equals("Farm")) {
             size=32;
             worldX = 12;
@@ -55,7 +59,7 @@ public class TileManager {
             size=16;
             loadStore();
         } /*else if(map.equals("Abigail")) {
-            house = new Tile[32];
+            
             loadAbigail();
         } else if(map.equals("Caroline")) {
             house = new Tile[32];
@@ -74,19 +78,19 @@ public class TileManager {
 
     public void loadOcean(){
         try{
-            oceanTile = new Tile[32];
-            for(int i = 0; i <= 31; i++){
-                if(i==2 || i==5 || i==8){
+            oceanTile = new Tile[32]; // jumlah variasi tilenya (banyak file .png)
+            for(int i = 0; i <= 31; i++){  // ini banyak filenya, kalo di Ocean itu urut semua png dari 0-31, tapi kalo di house hrsnya ngga gitu, disimpen di array aja dulu png png yang ada di folder
+                if(i==2 || i==5 || i==8){ // ini file yg ngga ada pngnya, tp kalo di house kan banyak jdnya jgn pake kek gini
                     continue;
                 }
-                oceanTile[i] = new Tile();
-                oceanTile[i].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Ocean/" + i + ".png"));
+                oceanTile[i] = new Tile(); // inisiasi tilenya
+                oceanTile[i].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Ocean/" + i + ".png")); // load gambar tilenya
             }
-            int[] collisionIdx = {3, 6, 10, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22};
-            for(int idx : collisionIdx){
+            int[] collisionIdx = {3, 6, 10, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22}; // ini index tile yg collision, jadi tile yg ada di array oceanTile yg collisionnya true
+            for(int idx : collisionIdx){ // yauda ini ngesetting collision true
                 if(oceanTile[idx] != null) oceanTile[idx].collision = true;
             }
-            br = new BufferedReader(new FileReader("res/Ocean/Ocean.txt"));
+            br = new BufferedReader(new FileReader("res/Ocean/Ocean.txt")); // ini ngebaca file txtnya
         }
         catch(IOException e){
             e.printStackTrace();
