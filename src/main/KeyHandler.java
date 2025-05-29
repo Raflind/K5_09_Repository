@@ -112,7 +112,16 @@ public class KeyHandler implements KeyListener {
         }
         if(code == KeyEvent.VK_Y && gp.ui.showVisitHousePrompt) {
             gp.tileM = gp.housePlayerMap;
+            gp.player.worldX = 5*gp.tileSize;
+            gp.player.worldY = 13*gp.tileSize;
             gp.ui.showVisitHousePrompt = false;
+            gp.ui.inHouse = true;
+        }
+        if(gp.ui.inHouse && code == KeyEvent.VK_X) {
+            gp.tileM = gp.farmMap;
+            gp.player.worldX = 4*gp.tileSize;
+            gp.player.worldY = 8*gp.tileSize;
+            gp.ui.inHouse = false;
         }
     }
 

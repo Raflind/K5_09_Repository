@@ -30,6 +30,7 @@ public class UI {
     public int slotCol = 0;
     public int slotRow = 0;
     public boolean showVisitHousePrompt = false; // Tambahkan variabel ini
+    public boolean inHouse = false; // Untuk menandakan apakah pemain berada di dalam rumah NPC
 
     public UI(GamePanel gp) {
         this.gp = gp;
@@ -69,6 +70,12 @@ public class UI {
         this.g2 = g2;
         if(gp.gameState == gp.playState){
             drawGameStatus();
+            if(showVisitHousePrompt){
+                drawEnterHouse();
+            }
+            if(inHouse) {
+                publicExitHouse();
+            }
         }
         if (gp.gameState == gp.inventoryState){
             drawInventory();
@@ -93,15 +100,6 @@ public class UI {
         if(gp.gameState == gp.optionState){
             drawOptionScreen();
         }        
-        // Tambahkan pemanggilan untuk menggambar prompt kunjungan rumah
-        if(showVisitHousePrompt) {
-            g2.setFont(stardew.deriveFont(Font.BOLD, 24F));
-            g2.setColor(Color.white); // semi-transparent brown
-            String msg = "Want to Visit Player House? Click Y";
-            int x = gp.tileSize; // posisi X
-            int y = gp.screenHeight - gp.tileSize; // posisi Y (bawah layar)
-            g2.drawString(msg, x, y);
-        }
     }
     
     public void drawTitleScreen(){
@@ -394,5 +392,22 @@ public class UI {
         catch(IOException e){
             e.printStackTrace();
         }
+    }
+
+    public void drawEnterHouse(){
+        g2.setFont(stardew.deriveFont(Font.BOLD, 24F));
+        g2.setColor(Color.white);
+        String msg = "Want to Visit Player House? Click Y";
+        int x = gp.tileSize; // posisi X
+        int y = gp.screenHeight - gp.tileSize; // posisi Y (bawah layar)
+        g2.drawString(msg, x, y);
+    }
+
+    public void publicExitHouse(){
+        g2.setFont(stardew.deriveFont(Font.BOLD, 24F));
+        g2.setColor(Color.white);
+        String msg = "Want to Exit House? Click X";
+        int y = gp.screenHeight - gp.tileSize; // posisi Y (bawah layar)
+        g2.drawString(msg, getXforCenteredText(msg), y);
     }
 }
