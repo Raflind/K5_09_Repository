@@ -24,7 +24,6 @@ public class Player extends Entity{
     public Inventory inventory = new Inventory(); // ini nggak diinstansiasi di konstruktor?
     public final int screenX;
     public final int screenY;
-    public BufferedImage lelah;
     public BufferedImage lelah, hoe, axe, rod, can;
     public boolean enMove = true; // kl bisa move
     public int currTileNum;
