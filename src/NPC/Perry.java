@@ -1,14 +1,12 @@
 package NPC;
 
+import main.GamePanel;
+
 public class Perry extends NPC {
     
-    public Perry(){
-        super("Perry");
+    public Perry(GamePanel gp){
+        super("Perry", gp);
     }
 
-    @Override
-    public void interact(){
-        System.out.println("On-Develop");
-    }
     
 }

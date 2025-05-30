@@ -1,14 +1,11 @@
 package NPC;
 
+import main.GamePanel;
+
 public class Dasco extends NPC {
     
-    public Dasco(){
-        super("Dasco");
+    public Dasco(GamePanel gp){
+        super("Dasco", gp);
     }
 
-    @Override
-    public void interact(){
-        System.out.println("On-Develop");
-    }
-    
 }

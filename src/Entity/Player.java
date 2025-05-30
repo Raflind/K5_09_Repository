@@ -36,7 +36,7 @@ public class Player extends Entity{
         F, M
     }
     private Gender gender;
-    private Map<String, Relationship> partner = new HashMap<>();
+    private NPC partner;
     private GoldManager goldManager;
     private ShippingBin shippingBin;
 
@@ -200,8 +200,11 @@ public class Player extends Entity{
     public ShippingBin getShippingBin(){
         return shippingBin;
     }
-    public Relationship getPartnerStatus(String npcName){
-        return partner.get(npcName);
+    public NPC getPartner(){
+        return partner;
+    }
+    public Relationship getPartnerStatus(){
+        return getPartner().getRelationship();
     }
     public Inventory getInventory(){
         return inventory;
@@ -213,7 +216,7 @@ public class Player extends Entity{
         this.name = name;
     }
 
-    public void setEnergy(int energy) {
+    private void setEnergy(int energy) {
         if (energy <= MAX_ENERGY && energy >= -20) {
             this.energy = energy;
         } else if (energy > MAX_ENERGY) {
@@ -250,9 +253,8 @@ public class Player extends Entity{
         this.gender = gender;
     }
 
-    public void setPartnerStatus(NPC npc){
-        partner.replace(npc.getName(), npc.getRelationship());
-
+    public void setPartner(NPC partner){
+        this.partner = partner;
     }
 
     public boolean isVisitHouseTile() {
