@@ -1,4 +1,4 @@
-package NPC;
+package Entity.NPC;
 
 import Exception.NotInTheListException;
 import Factory.Factory;

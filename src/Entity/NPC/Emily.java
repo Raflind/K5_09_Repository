@@ -1,4 +1,4 @@
-package NPC;
+package Entity.NPC;
 
 import Entity.Player;
 import main.GamePanel;
