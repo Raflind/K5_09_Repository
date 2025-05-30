@@ -209,6 +209,9 @@ public class GamePanel extends JPanel implements Runnable{
         else if(gameState == optionState) {
             ui.drawOptionScreen(comp);
         }
+        else if(gameState == cookingState){
+            ui.draw(comp);
+        }
         comp.dispose();
     }
     public void cookSelectedRecipe(String recipeName){
@@ -252,7 +255,6 @@ public class GamePanel extends JPanel implements Runnable{
             else{
                 cooking.cook(player.getInventory());
             }
-
         }
     }
 }

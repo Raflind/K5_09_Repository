@@ -77,10 +77,10 @@ public class Player extends Entity{
             kiri1 = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Player/kiri1.png"));
             kiri2 = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Player/kiri2.png"));
             lelah = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Player/lelah.png"));
-            hoe = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Player/Hoe.png"));
+            /*hoe = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Player/Hoe.png"));
             axe = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Player/Pickaxe.png"));
             rod = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Player/Fishing.png"));
-            can = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Player/WateringCan.png"));
+            can = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Player/WateringCan.png")); */
         }
         catch(IOException e){
             e.printStackTrace();

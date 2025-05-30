@@ -13,9 +13,9 @@ public class Inventory {
         this.items = new ArrayList<>();
         this.capacity = 20; 
         try {
-            items.add(new Items("Wheat", 10, 5, true, 1, ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Items/Wheat.png"))));
-            items.add(new Items("Wheat", 10, 5, true, 1, ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Items/Wheat.png"))));
-            items.add(new Items("Wheat", 10, 5, true, 1, ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Items/Wheat.png"))));
+            items.add(new Items("Wheat", 10, 5, true, ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Items/Wheat.png"))));
+            items.add(new Items("Wheat", 10, 5, true, ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Items/Wheat.png"))));
+            items.add(new Items("Wheat", 10, 5, true, ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Items/Wheat.png"))));
         } catch (IOException e) {
             e.printStackTrace();
         } 

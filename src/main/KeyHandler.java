@@ -40,12 +40,11 @@ public class KeyHandler implements KeyListener {
         if(gp.gameState == gp.mapSelectState){
             mapSelectState(code);
         }
-<<<<<<< HEAD
-        if(gp.gameState == gp.cookingState){
-            cookingState(code);
-=======
         if(gp.gameState == gp.optionState){
             optionState(code);
+        }
+        if(gp.gameState == gp.cookingState){
+            cookingState(code);
         }
 
     }
@@ -85,7 +84,6 @@ public class KeyHandler implements KeyListener {
                     gp.ui.commandNum = 0;
                 }
             }
->>>>>>> 9564a1ea3ec46dffcc09f9cfcd183ec7cbcc292f
         }
     }
 

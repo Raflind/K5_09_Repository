@@ -45,11 +45,8 @@ public class UI {
     public boolean showNameInputScreen = false;
     public String errorMessage = "";
     public long errorMessageTime = 0;
-<<<<<<< HEAD
     public List<String> availableRecipe = new ArrayList<>();
-=======
-    int subState = 0;
->>>>>>> 9564a1ea3ec46dffcc09f9cfcd183ec7cbcc292f
+    public int subState;
 
     public UI(GamePanel gp) {
         this.gp = gp;
@@ -150,16 +147,11 @@ public class UI {
             // drawDialogueScreen();
         }
         if(gp.gameState == gp.optionState){
-<<<<<<< HEAD
-            drawOptionScreen();
+            drawOptionScreen(g2);
         }  
         if(gp.gameState == gp.cookingState){
             drawCookingList();
         }
-=======
-            drawOptionScreen(g2);
-        }        
->>>>>>> 9564a1ea3ec46dffcc09f9cfcd183ec7cbcc292f
     }
     
     public void drawTitleScreen(){
