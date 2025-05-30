@@ -1,6 +1,7 @@
 package Items;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
+import java.io.IOException;
 
 public enum ItemMiscList implements ItemCreator<Items> {
     ProposalRing("Proposal Ring", 10, 15, false, null),
@@ -28,6 +29,13 @@ public enum ItemMiscList implements ItemCreator<Items> {
      * 
      */
     public Items create(){
+        BufferedImage image = null;
+        try{
+            image = ImageIO.read(ItemMiscList.class.getClassLoader().getResourceAsStream("res/Items/" + name + ".png"));
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
         return new Items(name, sellPrice, buyPrice, isEdible, image);
     }
 }

@@ -2,6 +2,9 @@ package Items;
 
 import java.util.ArrayList;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import TimeSeasonWeather.EnvironmentStatus.Season;
 
@@ -38,6 +41,13 @@ public enum SeedsList implements ItemCreator<Seeds>{
 
     @Override
     public Seeds create() {
+        BufferedImage image = null;
+        try{
+            image = ImageIO.read(SeedsList.class.getClassLoader().getResourceAsStream("res/Items/" + name + ".png"));
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
         return new Seeds(name, sellPrice, buyPrice, isEdible, daystoHarvest, image, harvestSeason);
     }
     

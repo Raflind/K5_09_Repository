@@ -36,7 +36,7 @@ public class Baguette extends Cooking {
 
     @Override
     public void addDishToInventory(Inventory inventory) {
-        Foods baguette = ItemFactory.createFoods("Baguette", 5, 10, true, 1002, 0, 0);
+        Foods baguette = new Foods("Baguette", 100, 20, true, 10, null)
         try {
             inventory.addItem(baguette);
         } catch (Exception e) {
