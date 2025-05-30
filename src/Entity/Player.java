@@ -20,7 +20,6 @@ import java.util.TimerTask;
 
 public class Player extends Entity{
     //atribut related to game
-    GamePanel gp;
     KeyHandler keyH;
     public Inventory inventory = new Inventory(); // ini nggak diinstansiasi di konstruktor?
     public final int screenX;
@@ -48,7 +47,7 @@ public class Player extends Entity{
 
 
     public Player(GamePanel gp, KeyHandler keyH, int worldX, int worldY){
-        this.gp = gp;
+        super(gp);
         this.keyH = keyH;
         screenX = gp.screenWidth/2 - gp.tileSize/2;
         screenY = gp.screenWidth/2 - gp.tileSize/2;
