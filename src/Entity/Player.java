@@ -9,7 +9,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
-import Entity.NPC.NPC;
 import Entity.NPC.*;
 import Entity.PlayerNeeds.*;
 import Exception.EnergyLowException;
@@ -134,7 +133,10 @@ public class Player extends Entity{
         }
         //collision
         collisionOn = false;
-        gp.cChecker.checkTile(this);
+        gp.cChecker.checkTile(this); 
+        if(gp.npcManager.getActiveNPC()!=null){
+            System.out.println(gp.cChecker.checkEntity(this, gp.npcManager.getActiveNPC()));
+        }
         if(collisionOn == false){
             switch(direction){
                 case "depan":

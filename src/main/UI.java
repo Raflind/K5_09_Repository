@@ -680,7 +680,7 @@ public class UI {
             "Note:",
             "- Some actions need items or conditions.",
             "- Use energy and time wisely.",
-            "- Smart planning = rich or married 😏"
+            "- Smart planning = rich or married"
         };
 
         for (int i = 0; i < actionsText.length; i++) {

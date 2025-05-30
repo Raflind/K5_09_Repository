@@ -11,6 +11,7 @@ import Entity.Player;
 import Map.TileManager;
 import TimeSeasonWeather.*;
 import Action.Cooking.*;
+import Entity.NPCManager;
 
 import javax.swing.JPanel;
 
@@ -26,6 +27,7 @@ public class GamePanel extends JPanel implements Runnable{
    private int frameCounter = 0;
    public TileManager farmMap, oceanMap, forestMap, mountainMap, storeMap, housePlayerMap, abigailMap, carolineMap, dascoMap, mayorMap, perryMap; /*blm lengkap*/
    public TileManager tileM;
+   public NPCManager npcManager;
    KeyHandler keyH = new KeyHandler(this);
    
    public Cooking curCooking;
@@ -95,6 +97,7 @@ public class GamePanel extends JPanel implements Runnable{
     perryMap = new TileManager(this, "Perry");
     tileM = farmMap;
     player = new Player(this, keyH, tileM.worldX*tileSize, tileM.worldY*tileSize);
+    npcManager = new Entity.NPCManager(this);
     setupGame();
    }
 
@@ -131,6 +134,8 @@ public class GamePanel extends JPanel implements Runnable{
    public void update(){
     if(gameState==playState){
         player.update();
+        npcManager.activeNPC();      // Pilih NPC aktif sesuai map
+        npcManager.updateActiveNPC(); // Update NPC aktif
         frameCounter++;
         if(frameCounter >= FPS) {
             time.addFiveMinutes();
@@ -193,6 +198,7 @@ public class GamePanel extends JPanel implements Runnable{
         else if(gameState == playState){
             super.paintComponent(g);
             tileM.draw(comp, tileM.getActiveTileArray());
+            npcManager.drawActiveNPC(comp); // <-- Tambahkan ini
             player.draw(comp);
             ui.draw(comp);
         }

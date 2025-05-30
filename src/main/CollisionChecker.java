@@ -67,4 +67,87 @@ public class CollisionChecker {
         }
     }
 
+    public boolean checkEntity(Entity entity, Entity target) {
+        int solidEntityX = entity.solidArea.x;
+        int solidEntityY = entity.solidArea.y;
+        int solidTargetX = target.solidArea.x;
+        int solidTargetY = target.solidArea.y;
+        boolean contactPlayer = false;
+        if (target != null) {
+            // Get entity's solid area position
+            entity.solidArea.x = entity.worldX + entity.solidArea.x;
+            entity.solidArea.y = entity.worldY + entity.solidArea.y;
+
+            // Get target's solid area position
+            target.solidArea.x = target.worldX + target.solidArea.x;
+            target.solidArea.y = target.worldY + target.solidArea.y;
+
+            // Simulasikan pergerakan entity
+            switch (entity.direction) {
+                case "blkg":
+                    entity.solidArea.y -= entity.speed;
+                    break;
+                case "depan":
+                    entity.solidArea.y += entity.speed;
+                    break;
+                case "kiri":
+                    entity.solidArea.x -= entity.speed;
+                    break;
+                case "kanan":
+                    entity.solidArea.x += entity.speed;
+                    break;
+            }
+
+            if (entity.solidArea.intersects(target.solidArea)) {
+                if (target != entity) {
+                    entity.collisionOn = true;
+                    contactPlayer = true;
+                }
+            }
+
+            // Reset posisi solid area
+            entity.solidArea.x = solidEntityX;
+            entity.solidArea.y = solidEntityY;
+            target.solidArea.x = solidTargetX;
+            target.solidArea.y = solidTargetY;
+        }
+        return contactPlayer;
+    }
+
+     public void checkPlayer(Entity entity) {
+        int solidEntityX = entity.solidArea.x;
+        int solidEntityY = entity.solidArea.y;
+        int solidTargetX = gp.player.solidArea.x;
+        int solidTargetY = gp.player.solidArea.y;
+
+        // Get entity's solid area position
+        entity.solidArea.x = entity.worldX + entity.solidArea.x;
+        entity.solidArea.y = entity.worldY + entity.solidArea.y;
+
+        // Get object's solid area position
+        gp.player.solidArea.x = gp.player.worldX + gp.player.solidArea.x;
+        gp.player.solidArea.y = gp.player.worldY + gp.player.solidArea.y;
+
+        switch (entity.direction) {
+            case "up":
+                entity.solidArea.y -= entity.speed;
+                break;
+            case "down":
+                entity.solidArea.y += entity.speed;
+                break;
+            case "left":
+                entity.solidArea.x -= entity.speed;
+                break;
+            case "right":
+                entity.solidArea.x += entity.speed;
+                break;
+        }
+        if (entity.solidArea.intersects(gp.player.solidArea)) {
+            entity.collisionOn = true;
+        }
+        entity.solidArea.x = solidEntityX;
+         entity.solidArea.y = solidEntityY;
+        gp.player.solidArea.x = solidTargetX;
+        gp.player.solidArea.y = solidTargetY;
+    }
 }

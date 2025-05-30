@@ -1,11 +1,17 @@
-package Entity.NPC;
+package Entity;
 
 import java.util.ArrayList;
-import Entity.Entity;
-import Entity.Player;
+import java.util.Random;
+
 import Items.Items;
 import main.GamePanel;
 import Exception.*;
+import javax.imageio.ImageIO;
+
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 /**
  * @author @hananda23
@@ -17,14 +23,14 @@ import Exception.*;
  */
 
 
-public abstract class NPC extends Entity{
+public class NPC extends Entity{
 
     public enum Relationship {
         SINGLE,
         FIANCE,
         SPOUSE
     }
-
+    
     //Attribute
     private String name;
     private int heartPoints;
@@ -37,6 +43,9 @@ public abstract class NPC extends Entity{
     private int visitedFreq;
     private int giftedFreq;
     private int chatFreq;
+    private int actionLockCounter = 0;
+    private int spriteCounter = 0;
+    private int spriteNum = 1;
 
     //Contructor
     public NPC(String name, GamePanel gp){
@@ -50,10 +59,103 @@ public abstract class NPC extends Entity{
         giftedFreq = 0;
         chatFreq = 0;
         relationshipStatus = Relationship.SINGLE;
-        if (npcList.size() != 1) {
-            npcList = new ArrayList<>();
+        worldX = 15*gp.tileSize; // Posisi awal NPC, bisa diubah sesuai kebutuhan
+        worldY = 15*gp.tileSize; // Posisi awal NPC, bisa diubah sesuai 
+        solidArea = new Rectangle(0, 0, 48, 48);
+        direction = "diam"; // Arah awal NPC
+        speed = 1; // Kecepatan NPC
+        // if (npcList.size() != 1) {
+        //     npcList = new ArrayList<>();
+        // }
+        // npcList.add(this);
+        loadNPCImages();
+    }
+
+    public void moveAlgo(){
+         actionLockCounter++;
+         if (actionLockCounter == 120) {
+            Random random = new Random();
+            int i = random.nextInt(125)+1; 
+                if (i <= 25) {
+                    direction = "depan"; // depan
+                }
+                if (i > 25 && i <= 50) {
+                    direction = "blkg"; // belakang
+                }
+                if (i > 50 && i <= 75) {
+                    direction = "kiri";
+                }
+                if (i > 75 && i <= 100) {
+                    direction = "kanan";
+                }
+                if (i > 100 && i <= 125) {
+                    direction = "diam"; // diam
+                }
+                actionLockCounter = 0; // Reset counter setelah aksi actionLockCounter = 0; 
+            }
+    }
+
+    public void update(){
+        moveAlgo();
+        collisionOn = false;
+        gp.cChecker.checkTile(this);
+        gp.cChecker.checkPlayer(this);
+        if(collisionOn == false){
+            switch(direction){
+                case "depan":
+                    worldY = Math.min(worldY + speed, gp.tileM.size * gp.tileSize - 4*gp.tileSize/3);
+                    break;
+                case "blkg":
+                    worldY = Math.max(worldY - speed, 0);
+                    break;
+                case "kiri":
+                    worldX = Math.max(worldX - speed, 0);
+                    break;
+                case "kanan":
+                    worldX = Math.min(worldX + speed, gp.tileM.size * gp.tileSize - gp.tileSize);
+                    break;
+            }
         }
-        npcList.add(this);
+
+        // Animasi sprite: ganti spriteNum tiap beberapa frame
+        spriteCounter++;
+        if(spriteCounter > 18) { // ganti angka sesuai kecepatan animasi yang diinginkan
+            spriteNum = (spriteNum == 1) ? 2 : 1;
+            spriteCounter = 0;
+        }
+    }
+    
+    public void draw(Graphics2D g2) {
+        // Hitung posisi relatif terhadap layar
+        int screenX = worldX - gp.player.worldX + gp.player.screenX;
+        int screenY = worldY - gp.player.worldY + gp.player.screenY;
+
+        BufferedImage image = null;
+        switch(direction){
+            case "depan":
+                image = (spriteNum==1) ? depan1 : depan2;
+                break;
+            case "blkg":
+                image = (spriteNum==1) ? blkg1 : blkg2;
+                break;
+            case "kiri":
+                image = (spriteNum==1) ? kiri1 : kiri2;
+                break;
+            case "kanan":
+                image = (spriteNum==1) ? kanan1 : kanan2;
+                break;
+            case "diam":
+                image = diam;
+                break;
+        }
+
+        // IF: hanya gambar jika masih dalam layar (range screen player)
+        if (worldX + gp.tileSize > gp.player.worldX - gp.player.screenX &&
+            worldX - gp.tileSize < gp.player.worldX + gp.player.screenX &&
+            worldY + gp.tileSize > gp.player.worldY - gp.player.screenY &&
+            worldY - gp.tileSize < gp.player.worldY + gp.player.screenY) {
+            g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+        }
     }
 
     //Getter
@@ -97,7 +199,6 @@ public abstract class NPC extends Entity{
         return giftedFreq;
     }
 
-    
 
     //Setter
     public void setName(String name){
@@ -235,5 +336,23 @@ public abstract class NPC extends Entity{
         npcResponse("apakah ada yang bisa saya bantu?");
         int opt = 0; //harusnya string intinya pilihan optionnya
         Boolean isInteract = true;
+    }
+
+    public void loadNPCImages() {
+        String basePath = "res/" + name + "/";
+        try {
+            diam   = ImageIO.read(getClass().getClassLoader().getResourceAsStream(basePath + "diam.png"));
+            depan1 = ImageIO.read(getClass().getClassLoader().getResourceAsStream(basePath + "depan1.png"));
+            depan2 = ImageIO.read(getClass().getClassLoader().getResourceAsStream(basePath + "depan2.png"));
+            blkg1  = ImageIO.read(getClass().getClassLoader().getResourceAsStream(basePath + "blkg1.png"));
+            blkg2  = ImageIO.read(getClass().getClassLoader().getResourceAsStream(basePath + "blkg2.png"));
+            kanan1 = ImageIO.read(getClass().getClassLoader().getResourceAsStream(basePath + "kanan1.png"));
+            kanan2 = ImageIO.read(getClass().getClassLoader().getResourceAsStream(basePath + "kanan2.png"));
+            kiri1  = ImageIO.read(getClass().getClassLoader().getResourceAsStream(basePath + "kiri1.png"));
+            kiri2  = ImageIO.read(getClass().getClassLoader().getResourceAsStream(basePath + "kiri2.png"));
+        } catch (IOException | IllegalArgumentException e) {
+            System.err.println("Gagal load gambar NPC: " + name);
+            e.printStackTrace();
+        }
     }
 }

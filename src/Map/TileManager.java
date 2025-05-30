@@ -238,14 +238,14 @@ public class TileManager {
     public void loadCaroline() {
     try {
         int[] tileIdx = {
-            0, 9, 10, 12, 14, 19, 20, 21, 22, 23, 26, 34, 36, 37, 38, 39, 40, 45, 47, 48, 49, 50, 52,
-            53, 62, 63, 64, 65, 66, 67, 72, 73, 74, 75, 76, 78, 80, 81, 82, 105, 106, 107, 108, 188,
-            189, 191, 192, 193, 215, 216, 217, 218, 219, 224, 235, 240, 241, 242, 243, 244, 245, 246,
-            247, 248, 249, 250, 266, 267, 269, 270, 271, 272, 273, 274, 275, 276, 293, 294, 295, 296,
-            297, 298, 299, 300, 302, 303, 319, 320, 321, 322, 323, 324, 325, 326, 327, 328, 335, 346,
-            347, 348, 349, 350, 351, 352, 353, 354, 355, 375, 376, 377, 378, 380, 402, 403, 404, 405,
-            406, 490, 512, 536, 537, 538, 547, 552, 553, 555, 562, 563, 564, 567, 568, 569, 570, 571,
-            573
+            0, 9, 10, 12, 14, 19, 20, 21, 22, 23, 26, 34, 36, 37, 38, 39, 40, 45, 47, 48, 49, 50,
+            52, 53, 62, 63, 64, 65, 66, 67, 72, 73, 74, 75, 76, 78, 80, 81, 82, 105, 106, 107,
+            108, 188, 189, 191, 192, 193, 215, 216, 217, 218, 219, 224, 235, 240, 241, 242, 243,
+            244, 245, 246, 247, 248, 249, 250, 266, 267, 269, 270, 271, 272, 273, 274, 275, 276,
+            293, 294, 295, 296, 297, 298, 299, 300, 302, 303, 319, 320, 321, 322, 323, 324, 325,
+            326, 327, 328, 335, 346, 347, 348, 349, 350, 351, 352, 353, 354, 355, 375, 376, 377,
+            378, 380, 402, 403, 404, 405, 406, 490, 512, 536, 537, 538, 547, 552, 553, 555, 562,
+            563, 564, 567, 568, 569, 570, 571, 573
         };
 
         int[] notCollisionIdx = {
@@ -255,20 +255,27 @@ public class TileManager {
             380, 402, 403, 404, 405, 406
         };
 
-        caroline = new Tile[tileIdx.length];
-        for (int i = 0; i < tileIdx.length; i++) {
-            int idx = tileIdx[i];
-            caroline[i] = new Tile();
-            caroline[i].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/interior_2/" + idx + ".png"));
-            
-            boolean isNotCollision = false;
-            for (int notCol : notCollisionIdx) {
-                if (idx == notCol) {
-                    isNotCollision = true;
+        caroline = new Tile[574];
+        for (int i = 0; i <=573; i++){
+            boolean ada = false;
+            for(int j : tileIdx){
+                if(i == j){
+                    ada = true;
                     break;
                 }
             }
-            caroline[i].collision = !isNotCollision;
+            if(ada){
+                caroline[i] = new Tile();
+                 caroline[i].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/interior_2/" + i + ".png"));
+                 boolean isNotCollision = false;
+                for (int notCol : notCollisionIdx) {
+                    if (i == notCol) {
+                        isNotCollision = true;
+                        break;
+                    }
+                }
+                caroline[i].collision = !isNotCollision;
+             }
         }
 
         br = new BufferedReader(new FileReader("res/interior_2/Interior_2_fix.txt"));
