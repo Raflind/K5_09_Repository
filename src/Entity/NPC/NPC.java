@@ -1,9 +1,6 @@
-package NPC;
-
-
+package Entity.NPC;
 
 import java.util.ArrayList;
-
 import Entity.Entity;
 import Entity.Player;
 import Items.Items;
@@ -191,11 +188,11 @@ public abstract class NPC extends Entity{
     
     private void updateRelation(){
         switch (getRelationship()) {
-            case Relationship.SINGLE:
+            case SINGLE:
                 setRelationshipStatus(Relationship.FIANCE);
-            case Relationship.FIANCE:
+            case FIANCE:
                 setRelationshipStatus(Relationship.SPOUSE);
-            case Relationship.SPOUSE:
+            case SPOUSE:
                 setRelationshipStatus(Relationship.SINGLE);
             default:
                 break;

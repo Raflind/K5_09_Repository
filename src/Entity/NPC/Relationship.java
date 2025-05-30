@@ -1,4 +1,4 @@
-package NPC;
+package Entity.NPC;
 
 public enum Relationship {
     SINGLE,

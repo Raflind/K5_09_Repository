@@ -8,11 +8,12 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+
+import Entity.NPC.NPC;
+import Entity.NPC.Relationship;
 import Entity.PlayerNeeds.*;
 import Exception.EnergyLowException;
 import Items.Inventory;
-import NPC.NPC;
-import NPC.Relationship;
 import main.GamePanel;
 import main.KeyHandler;
 import java.util.Timer;
