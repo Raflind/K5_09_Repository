@@ -216,7 +216,7 @@ public class Player extends Entity{
         this.name = name;
     }
 
-    private void setEnergy(int energy) {
+    public void setEnergy(int energy) {
         if (energy <= MAX_ENERGY && energy >= -20) {
             this.energy = energy;
         } else if (energy > MAX_ENERGY) {

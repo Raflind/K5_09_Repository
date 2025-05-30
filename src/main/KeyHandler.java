@@ -166,8 +166,6 @@ public class KeyHandler implements KeyListener {
             gp.player.worldY = 8*gp.tileSize;
             gp.ui.inHouse = false;
         }
-<<<<<<< HEAD
-=======
         if(code == KeyEvent.VK_Z && gp.ui.showSleepPrompt) {
             gp.ui.startSleepScreen();
             gp.ui.showSleepPrompt = false;
@@ -176,7 +174,6 @@ public class KeyHandler implements KeyListener {
             gp.ui.drawCookingMenu();
             gp.ui.showCookingScreen = false;
         }
->>>>>>> da9b464d7715897d2dde30f39c66f102d5cbbbbb
     }
 
     public void titleState(int code, KeyEvent e){

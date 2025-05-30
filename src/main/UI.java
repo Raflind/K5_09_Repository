@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.FontFormatException;
 import javax.imageio.ImageIO;
+import Entity.Player;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -31,9 +32,6 @@ public class UI {
     public int slotRow = 0;
     public boolean showVisitHousePrompt = false; // Tambahkan variabel ini
     public boolean inHouse = false; // Untuk menandakan apakah pemain berada di dalam rumah NPC
-<<<<<<< HEAD
-    int subState = 0;
-=======
     public boolean showFishPrompt = false;
     public boolean showSleepPrompt = false;
     public boolean showSleepScreen = false;
@@ -45,7 +43,7 @@ public class UI {
     public boolean showNameInputScreen = false;
     public String errorMessage = "";
     public long errorMessageTime = 0;
->>>>>>> da9b464d7715897d2dde30f39c66f102d5cbbbbb
+    int subState = 0;
 
     public UI(GamePanel gp) {
         this.gp = gp;
@@ -84,9 +82,6 @@ public class UI {
     public void draw(Graphics2D g2) {
         this.g2 = g2;
         if(gp.gameState == gp.playState){
-<<<<<<< HEAD
-            drawGameStatus();
-=======
             if(showSleepScreen) {
                 drawSleepScreen();
                 if(System.currentTimeMillis() - sleepScreenStartTime >= 3000) {
@@ -108,13 +103,19 @@ public class UI {
                 drawGameStatus();
                 drawEnergyBar(g2, gp.player);
             }
->>>>>>> da9b464d7715897d2dde30f39c66f102d5cbbbbb
             if(showVisitHousePrompt){
                 drawEnterHouse();
             }
             if(inHouse) {
                 publicExitHouse();
             }
+            if(showSleepPrompt) {
+                drawSleepPrompt();
+            }
+            if(isTired){
+                drawTiredPrompt();
+            }
+            
         }
         if (gp.gameState == gp.inventoryState){
             drawInventory();
@@ -701,9 +702,8 @@ public class UI {
         g2.setFont(stardew.deriveFont(Font.BOLD, 24F));
         g2.setColor(Color.white);
         String msg = "Want to Visit Player House? Click Y";
-        int x = gp.tileSize; // posisi X
         int y = gp.screenHeight - gp.tileSize; // posisi Y (bawah layar)
-        g2.drawString(msg, x, y);
+        g2.drawString(msg, getXforCenteredText(msg), y);
     }
 
     public void publicExitHouse(){
@@ -713,8 +713,6 @@ public class UI {
         int y = gp.screenHeight - gp.tileSize; // posisi Y (bawah layar)
         g2.drawString(msg, getXforCenteredText(msg), y);
     }
-<<<<<<< HEAD
-=======
 
     public void drawEnergyBar(Graphics2D g2, Player player) {
         int barX = gp.tileSize;
@@ -950,6 +948,5 @@ public class UI {
             }
         }
     }
->>>>>>> da9b464d7715897d2dde30f39c66f102d5cbbbbb
 }
 
