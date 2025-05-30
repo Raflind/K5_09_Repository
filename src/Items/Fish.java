@@ -1,5 +1,7 @@
 package Items;
 
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
 
 public class Fish extends Items {
     public enum FishType{
@@ -11,8 +13,8 @@ public class Fish extends Items {
     private int weatherCount;
     private int locationCount;
 
-    public Fish(String name, int sellPrice, int buyPrice, boolean isEdible, int itemID, FishType type) {
-        super(name, sellPrice, buyPrice, isEdible, itemID);
+    public Fish(String name, int sellPrice, int buyPrice, boolean isEdible, int itemID, FishType type, BufferedImage image) {
+        super(name, sellPrice, buyPrice, isEdible, itemID, image);
         this.fishType = type;
         this.seasonCount = 0;
         this.timeCount = 0;

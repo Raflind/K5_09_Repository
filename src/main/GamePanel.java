@@ -31,14 +31,14 @@ public class GamePanel extends JPanel implements Runnable{
    public UI ui = new UI(this);
    public Time time = new Time(6, 0);
 public HashMap<String, Boolean> recipe = new HashMap<String, Boolean>() {{
-    put("Fish And Chips", false);
+    put("Fish And Chips", true);
     put("Baguette", true);
-    put("Sashimi", false);
-    put("Fugu", false);
+    put("Sashimi", true);
+    put("Fugu", true);
     put("Wine", true);
-    put("Pumpkin Pie", true);
+    put("Pumpkin Pie", false);
     put("Fish Stew", false);
-    put("Spakbor Salad", true);
+    put("Spakbor Salad", false);
     put("Fish Sandwich", false);
     put("Legends of Spakbor", false);
 }};
@@ -64,6 +64,7 @@ public HashMap<String, Boolean> recipe = new HashMap<String, Boolean>() {{
    public final int pauseState = 4;
    public final int mapSelectState = 5;
    public final int optionState = 6;
+   public final int cookingState = 7;
 
    public GamePanel() {
     this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -158,5 +159,52 @@ public HashMap<String, Boolean> recipe = new HashMap<String, Boolean>() {{
     else if(gameState==optionState){
         ui.draw(comp);
     }
+    else if(gameState==cookingState){
+        ui.draw(comp);
+    }
+    }
+    public void cookSelectedRecipe(String recipeName){
+        Cooking cooking = null;
+        switch(recipeName) {
+            case "Fish And Chips":
+                cooking = new FishNChips();
+                break;
+            case "Baguette":
+                cooking = new Baguette();
+                break;
+            case "Sashimi":
+                cooking = new Sashimi();
+                break;
+            case "Fugu":
+                cooking = new Fugu();
+                break;
+            case "Wine":
+                cooking = new Wine();
+                break;
+            case "Pumpkin Pie":
+                cooking = new PumpkinPie();
+                break;
+            case "Fish Stew":
+                cooking = new FishStew();
+                break;
+            case "Spakbor Salad":
+                cooking = new SpakborSalad();
+                break;
+            case "Fish Sandwich":
+                cooking = new FishSandwich();
+                break;
+            case "Legends of Spakbor":
+                cooking = new TheLegendsofSpakbor();
+                break;
+        }
+        if(cooking != null){
+            if(!cooking.checkIngredients(player.getInventory())){
+                ui.drawErrorMessageforCooking();
+            }
+            else{
+                cooking.cook(player.getInventory());
+            }
+
+        }
     }
 }

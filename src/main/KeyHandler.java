@@ -39,6 +39,9 @@ public class KeyHandler implements KeyListener {
         if(gp.gameState == gp.mapSelectState){
             mapSelectState(code);
         }
+        if(gp.gameState == gp.cookingState){
+            cookingState(code);
+        }
     }
 
     @Override
@@ -60,24 +63,48 @@ public class KeyHandler implements KeyListener {
     }
     
     public void inventoryState(int code){
-        if(code == KeyEvent.VK_A || code == KeyEvent.VK_UP){
+        if(code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT){
             if(gp.ui.slotCol != 0){
                 gp.ui.slotCol--;
             }
         }
-        if(code == KeyEvent.VK_D || code == KeyEvent.VK_DOWN){
+        if(code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT){
             if(gp.ui.slotCol != 4){
                 gp.ui.slotCol++;
             }
         }
-        if(code == KeyEvent.VK_W || code == KeyEvent.VK_LEFT){
+        if(code == KeyEvent.VK_W || code == KeyEvent.VK_UP){
             if(gp.ui.slotRow != 0){
                 gp.ui.slotRow--;
             }
         }
-        if(code == KeyEvent.VK_S || code == KeyEvent.VK_RIGHT){
+        if(code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN){
             if(gp.ui.slotRow != 3){
                 gp.ui.slotRow++;
+            }
+        }
+        if(code == KeyEvent.VK_ESCAPE){
+            gp.gameState = gp.playState;
+        }
+    }
+
+    public void cookingState(int code){
+        if(code == KeyEvent.VK_UP){
+            if(gp.ui.selectRecipe > 0){
+                gp.ui.selectRecipe--;
+            }
+        }
+        if(code == KeyEvent.VK_DOWN){
+            if(gp.ui.selectRecipe < gp.ui.availableRecipe.size() - 1){
+                gp.ui.selectRecipe++;
+            }
+        }
+        if(code == KeyEvent.VK_ENTER){
+            if(gp.ui.selectRecipe < gp.ui.availableRecipe.size()){
+                String selectedRecipe = gp.ui.availableRecipe.get(gp.ui.selectRecipe);
+                gp.cookSelectedRecipe(selectedRecipe);
+                gp.ui.showCookingScreen = false;
+                gp.gameState = gp.playState;
             }
         }
         if(code == KeyEvent.VK_ESCAPE){
@@ -128,8 +155,7 @@ public class KeyHandler implements KeyListener {
             gp.ui.showSleepPrompt = false;
         }
         if(code == KeyEvent.VK_C && gp.ui.showCookingScreen) {
-            gp.ui.drawCookingMenu();
-            gp.ui.showCookingScreen = false;
+            gp.gameState = gp.cookingState;
         }
     }
 

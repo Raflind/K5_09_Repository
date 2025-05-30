@@ -10,7 +10,7 @@ public class FishStew extends Cooking {
     Items hotpepper;
 
     @Override
-    boolean checkIngredients(Inventory inventory) {
+    public boolean checkIngredients(Inventory inventory) {
         for(Items item : inventory.getItems()) {
             if (item instanceof Fish) {
                 fishFound.add((Fish) item);

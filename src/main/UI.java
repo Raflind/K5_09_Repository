@@ -23,6 +23,8 @@ public class UI {
     public boolean finish = false;
     public String currentDialogue = "";
     public int commandNum = 0;
+    public int cookingCommand = 0;
+    public int selectRecipe = 0;
     public int titleScreenState = 0;
     public List<MapInfo> mapList;
     public int mapSelectionNum = 0; // Untuk navigasi pilihan map
@@ -43,6 +45,7 @@ public class UI {
     public boolean showNameInputScreen = false;
     public String errorMessage = "";
     public long errorMessageTime = 0;
+    public List<String> availableRecipe = new ArrayList<>();
 
     public UI(GamePanel gp) {
         this.gp = gp;
@@ -144,7 +147,10 @@ public class UI {
         }
         if(gp.gameState == gp.optionState){
             drawOptionScreen();
-        }        
+        }  
+        if(gp.gameState == gp.cookingState){
+            drawCookingList();
+        }
     }
     
     public void drawTitleScreen(){
@@ -630,64 +636,119 @@ public class UI {
         }
     }
 
-    public void drawCookingMenu(){
-        int width = gp.tileSize*5;
-        int height = gp.tileSize*2;
-        int x = (gp.screenWidth - width)/2;
-        int y = (gp.screenHeight - height)/2;
+    public void drawCookingMenu() {
+        int width = gp.tileSize * 7;
+        int height = gp.tileSize * 4;
+        int x = (gp.screenWidth - width) / 2;
+        int y = (gp.screenHeight - height) / 2;
 
+        // Draw panel background
         drawSubWindow(x, y, width, height);
 
+        // Title
         g2.setFont(stardew.deriveFont(Font.BOLD, 36F));
-        String title = "Memasak";
+        String title = "Cooking";
         int titleX = getXforCenteredText(title);
         int titleY = y + gp.tileSize;
         g2.setColor(kuninggelap);
         g2.drawString(title, titleX + 3, titleY + 3);
         g2.setColor(kuning);
-        g2.drawString(title, titleX, titleY); 
+        g2.drawString(title, titleX, titleY);
 
-
-        g2.setFont(stardew.deriveFont(Font.PLAIN, 24F));
-        String [] option = {"Memasak", "Back"};
-        int optionY = titleY + gp.tileSize;
-        for(int i = 0; i < option.length; i++) {
-            int optionX = getXforCenteredText(option[i]);
-            if(commandNum == i){
-                g2.setColor(kuninggelap);
-                g2.drawString(option[i], optionX + 3, optionY + 3);
-                g2.setColor(kuning);
-                g2.drawString(option[i], optionX, optionY);
-            } else {
-                g2.setColor(Color.white);
-                g2.drawString(option[i], optionX, optionY);
+        // Options
+        g2.setFont(stardew.deriveFont(Font.PLAIN, 28F));
+        String options = "Memasak";
+        int optionX = getXforCenteredText(options);
+        int optionY = titleY + 64; // Start below the title
+        g2.setColor(kuninggelap);
+        g2.drawString(options, optionX+3, optionY+3);
+        g2.setColor(kuning);
+        g2.drawString(options, optionX, optionY);
+        if(cookingCommand==0){
+            g2.setColor(kuninggelap);
+            g2.drawString(">", optionX - 32 + 3, optionY + 3);
+            g2.setColor(kuning);
+            g2.drawString(">", optionX - 32, optionY);
             }
-        }
-        if(commandNum == 0){
-            List<String> availableRecipes = new ArrayList<>();
-            for(String recipe : gp.recipe.keySet()){
-                if(Boolean.TRUE.equals(gp.recipe.get(recipe))) {
-                    availableRecipes.add(recipe);
-                }
+        options = "Kembali";
+        optionX = getXforCenteredText(options);
+        optionY += 64;
+        g2.setColor(kuninggelap);
+        g2.drawString(options, optionX+3, optionY+3);
+        g2.setColor(kuning);
+        g2.drawString(options, optionX, optionY);
+        if(cookingCommand==1){
+            g2.setColor(kuninggelap);
+            g2.drawString(">", optionX-32+3, optionY+3);
+            g2.setColor(kuning);
+            g2.drawString(">", optionX-32, optionY);
             }
-            int recipeY = optionY + gp.tileSize / 2;
-            g2.setFont(stardew.deriveFont(Font.PLAIN, 24F));
-            for (int i = 0; i < availableRecipes.size(); i++) {
-                int recipeX = getXforCenteredText(availableRecipes.get(i));
-                // Suppose you have a variable commandNum2 for recipe selection
-                if (0 == i) {
-                    g2.setColor(kuninggelap);
-                    g2.drawString(">", recipeX - 32 + 3, recipeY + 3);
-                    g2.setColor(kuning);
-                    g2.drawString(">", recipeX - 32, recipeY);
-                }
-                g2.setColor(kuninggelap);
-                g2.drawString(availableRecipes.get(i), recipeX + 3, recipeY + 3);
-                g2.setColor(kuning);
-                g2.drawString(availableRecipes.get(i), recipeX, recipeY);
-                recipeY += gp.tileSize;
-            }
-        }
     }
+
+    public void drawCookingList(){
+        int width = gp.tileSize * 10;
+        int height = gp.tileSize * 7;
+        int x = (gp.screenWidth - width) / 2;
+        int y = (gp.screenHeight - height) / 2;
+
+        drawSubWindow(x, y, width, height);
+
+        g2.setFont(stardew.deriveFont(Font.BOLD, 36F));
+        String title = "Pilih Resep";
+        int titleX = getXforCenteredText(title);
+        int titleY = y + gp.tileSize;
+        g2.setColor(kuninggelap);
+        g2.drawString(title, titleX+3, titleY+3);
+        g2.setColor(kuning);
+        g2.drawString(title, titleX, titleY);
+
+        for(String recipe : gp.recipe.keySet()){
+            if(Boolean.TRUE.equals(gp.recipe.get(recipe))){
+                availableRecipe.add(recipe);
+            }
+        }
+
+        int visibleCount = 4;
+        int totalRecipe = availableRecipe.size();
+        if(selectRecipe < 0) selectRecipe = 0;
+        if(selectRecipe > totalRecipe - 1) selectRecipe = totalRecipe - 1;
+        int startIdx = selectRecipe - visibleCount / 2;
+        if(startIdx < 0) startIdx = 0;
+        if (startIdx > totalRecipe - visibleCount) startIdx = Math.max(0, totalRecipe - visibleCount);
+        int endIdx = Math.min(startIdx + visibleCount, totalRecipe);
+
+        g2.setFont(stardew.deriveFont(Font.PLAIN, 28F));
+        int optionY = titleY + gp.tileSize;
+        for(int i = startIdx; i < endIdx; i++){
+            String recipeName = availableRecipe.get(i);
+            int optionX = getXforCenteredText(recipeName);
+
+            if(i == selectRecipe){
+                g2.setColor(kuninggelap);
+                g2.drawString(">", optionX - 32+3, optionY + 3);
+                g2.setColor(kuning);
+                g2.drawString(">", optionX - 32, optionY);
+            }
+            g2.setColor(kuninggelap);
+            g2.drawString(recipeName, optionX + 3, optionY +3);
+            g2.setColor(kuning);
+            g2.drawString(recipeName, optionX, optionY);
+
+            optionY +=64;
+        } 
+    }
+
+    public void drawErrorMessageforCooking(){
+        int boxWidth = gp.tileSize * 6;
+        int boxHeight = gp.tileSize;
+        int boxX = (gp.screenWidth - boxWidth) / 2;
+        int boxY = gp.screenHeight / 2 - 30;
+        g2.setColor(new Color(139, 69, 19, 180));
+        g2.drawRect(boxX, boxY, boxWidth, boxHeight);
+        g2.setColor(Color.RED);
+        g2.setFont(stardew.deriveFont(Font.BOLD, 18F));
+        g2.drawString("Bahan Tidak Cukup", getXforCenteredText(errorMessage), boxY + boxHeight + 60);
+    }
+        
 }
 
