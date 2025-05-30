@@ -46,6 +46,9 @@ public class KeyHandler implements KeyListener {
         if(gp.gameState == gp.cookingState){
             cookingState(code);
         }
+        if(gp.gameState == gp.insufficientResourcesState){
+            insufficientResourcesState(code);
+        }
 
     }
 
@@ -147,7 +150,6 @@ public class KeyHandler implements KeyListener {
                 String selectedRecipe = gp.ui.availableRecipe.get(gp.ui.selectRecipe);
                 gp.cookSelectedRecipe(selectedRecipe);
                 gp.ui.showCookingScreen = false;
-                gp.gameState = gp.playState;
             }
         }
         if(code == KeyEvent.VK_ESCAPE){
@@ -379,5 +381,12 @@ public class KeyHandler implements KeyListener {
                     gp.gameState = gp.playState;
                 }
             }
+    }
+    public void insufficientResourcesState(int code) {
+        if(gp.gameState == gp.insufficientResourcesState) {
+            if(code == KeyEvent.VK_ESCAPE) {
+                gp.gameState = gp.cookingState; // Kembali ke play state
+            }
+        }
     }
 }

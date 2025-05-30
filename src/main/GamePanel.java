@@ -28,6 +28,7 @@ public class GamePanel extends JPanel implements Runnable{
    public TileManager tileM;
    KeyHandler keyH = new KeyHandler(this);
    
+   public Cooking curCooking;
    public UI ui = new UI(this);
    public Time time = new Time(6, 0);
    public HashMap<String, Boolean> recipe = new HashMap<String, Boolean>() {{
@@ -65,6 +66,8 @@ public class GamePanel extends JPanel implements Runnable{
    public final int mapSelectState = 5;
    public final int optionState = 6;
    public final int cookingState = 7;
+   public final int shippingBinState = 8;
+   public final int insufficientResourcesState = 9;
 
     public int subState = 0;
     public final int subState_none = 0;
@@ -212,6 +215,12 @@ public class GamePanel extends JPanel implements Runnable{
         else if(gameState == cookingState){
             ui.draw(comp);
         }
+        else if(gameState == shippingBinState){
+            ui.draw(comp);
+        }
+        else if(gameState == insufficientResourcesState){
+            ui.draw(comp);
+        }
         comp.dispose();
     }
     public void cookSelectedRecipe(String recipeName){
@@ -250,10 +259,12 @@ public class GamePanel extends JPanel implements Runnable{
         }
         if(cooking != null){
             if(!cooking.checkIngredients(player.getInventory())){
-                ui.drawErrorMessageforCooking();
+                gameState = insufficientResourcesState;
+                
             }
             else{
                 cooking.cook(player.getInventory());
+                gameState = playState;
             }
         }
     }

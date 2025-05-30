@@ -152,6 +152,9 @@ public class UI {
         if(gp.gameState == gp.cookingState){
             drawCookingList();
         }
+        if(gp.gameState == gp.insufficientResourcesState){
+            drawErrorMessageforCooking();
+        }
     }
     
     public void drawTitleScreen(){
@@ -1001,15 +1004,20 @@ public class UI {
     }
 
     public void drawErrorMessageforCooking(){
-        int boxWidth = gp.tileSize * 6;
-        int boxHeight = gp.tileSize;
-        int boxX = (gp.screenWidth - boxWidth) / 2;
-        int boxY = gp.screenHeight / 2 - 30;
-        g2.setColor(new Color(139, 69, 19, 180));
-        g2.drawRect(boxX, boxY, boxWidth, boxHeight);
-        g2.setColor(Color.RED);
-        g2.setFont(stardew.deriveFont(Font.BOLD, 18F));
-        g2.drawString("Bahan Tidak Cukup", getXforCenteredText(errorMessage), boxY + boxHeight + 60);
+        String msg = "Bahan Tidak Cukup";
+        g2.setFont(stardew.deriveFont(Font.BOLD, 28F));
+        int textWidth = g2.getFontMetrics().stringWidth(msg);
+        int textHeight = g2.getFontMetrics().getHeight();
+
+        int windowWidth = textWidth + gp.tileSize * 2;
+        int windowHeight = textHeight + gp.tileSize;
+        int x = (gp.screenWidth - windowWidth) / 2;
+        int y = (gp.screenHeight - windowHeight) / 2;
+
+        drawSubWindow(x, y, windowWidth, windowHeight);
+
+        g2.setColor(kuning);
+        g2.drawString(msg, getXforCenteredText(msg), y + windowHeight / 2 + textHeight / 4);
     }
         
 }
