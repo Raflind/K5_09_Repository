@@ -43,12 +43,7 @@ public class FishStew extends Cooking {
 
     @Override
     void addDishToInventory(Inventory inventory) {
-        Foods fishStew = ItemFactory.createFoods("Fish Stew", 20, 40, true, 1006, 0, 0);
-        try {
-            inventory.addItem(fishStew); // Add Fish Stew to inventory
-        } catch (Exception e) {
-            System.err.println("Gagal menambahkan Fish Stew ke inventory: " + e.getMessage());
-        }
+        inventory.addItem((Items)FoodsList.FishStew.create());
     }
     
 }

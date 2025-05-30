@@ -33,11 +33,6 @@ public class Wine extends Cooking {
 
     @Override
     public void addDishToInventory(Inventory inventory) {
-        Foods wine = ItemFactory.createFoods("Wine", 25, 50, true, 1005, 0, 0);
-        try {
-            inventory.addItem(wine); // Menambahkan Wine ke inventaris
-        } catch (Exception e) {
-            System.err.println("Gagal menambahkan Wine ke inventory: " + e.getMessage());
-        }
+        inventory.addItem((Items)FoodsList.Wine.create());
     }
 }

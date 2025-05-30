@@ -3,11 +3,7 @@ package Action.Cooking;
 import java.util.List;
 import java.util.ArrayList;
 
-import Items.Fish;
-import Items.Items;
-import Items.Inventory;
-import Items.Foods;
-import Items.ItemFactory;
+import Items.*;
 
 public class FishNChips extends Cooking {
     List<Fish> fishFound = new ArrayList<>();
@@ -45,11 +41,6 @@ public class FishNChips extends Cooking {
 
     @Override
     public void addDishToInventory(Inventory inventory) {
-        Foods fishNChips = ItemFactory.createFoods("Fish and Chips", 15, 30, true, 1001, 0, 0);
-        try {
-            inventory.addItem(fishNChips);
-        } catch (Exception e) {
-            System.err.println("Gagal menambahkan Fish and Chips ke inventory: " + e.getMessage());
-        }
+        inventory.addItem((Items)FoodsList.FishNChips.create());
     }
 }

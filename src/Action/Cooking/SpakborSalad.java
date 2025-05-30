@@ -44,12 +44,7 @@ public class SpakborSalad extends Cooking {
 
     @Override
     public void addDishToInventory(Inventory inventory) {
-        Foods spakborSalad = ItemFactory.createFoods("Spakbor Salad", 20, 40, true, 1005, 0, 0);
-        try {
-            inventory.addItem(spakborSalad); // Menambahkan Spakbor Salad ke inventaris
-        } catch (Exception e) {
-            System.err.println("Gagal menambahkan Spakbor Salad ke inventory: " + e.getMessage());
-        }
+        inventory.addItem((Items)FoodsList.SpakborSalad.create()); // Menambahkan Spakbor Salad ke inventaris
     }
     
 }

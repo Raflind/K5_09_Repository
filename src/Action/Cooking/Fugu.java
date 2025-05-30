@@ -29,12 +29,6 @@ public class Fugu extends Cooking {
 
     @Override
     public void addDishToInventory(Inventory inventory) {
-        // Implementasi logika untuk menambahkan Fugu ke inventaris
-        Foods fugu = ItemFactory.createFoods("Fugu", 20, 50, true, 1004, 0, 0);
-        try {
-            inventory.addItem(fugu);
-        } catch (Exception e) {
-            System.err.println("Gagal menambahkan Fugu ke inventory: " + e.getMessage());
-        }
+        inventory.addItem((Items)FoodsList.Fugu.create()); // Menambahkan Fugu ke inventaris
     }
 }

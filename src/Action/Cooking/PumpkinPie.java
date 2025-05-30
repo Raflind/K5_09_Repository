@@ -41,12 +41,6 @@ public class PumpkinPie extends Cooking {
 
     @Override
     public void addDishToInventory(Inventory inventory) {
-        // Implementasi logika untuk menambahkan Pumpkin Pie ke inventaris
-        Foods pumpkinPie = ItemFactory.createFoods("Pumpkin Pie", 15, 30, true, 1005, 0, 0);
-        try {
-            inventory.addItem(pumpkinPie);
-        } catch (Exception e) {
-            System.err.println("Gagal menambahkan Pumpkin Pie ke inventory: " + e.getMessage());
-        }
+        inventory.addItem((Items)FoodsList.PumpkinPie.create()); // Menambahkan Pumpkin Pie ke inventaris
     }
 }

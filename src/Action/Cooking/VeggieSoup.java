@@ -47,11 +47,6 @@ public class VeggieSoup extends Cooking {
 
     @Override
     public void addDishToInventory(Inventory inventory) {
-        Foods veggieSoup = ItemFactory.createFoods("Veggie Soup", 15, 30, true, 1005, 0, 0);
-        try {
-            inventory.addItem(veggieSoup);
-        } catch (Exception e) {
-            System.err.println("Gagal menambahkan Veggie Soup ke inventory: " + e.getMessage());
-        }
+        inventory.addItem((Items)FoodsList.VeggieSoup.create()); // Menambahkan Veggie Soup ke inventaris
     }
 }

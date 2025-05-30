@@ -36,12 +36,7 @@ public class Baguette extends Cooking {
 
     @Override
     public void addDishToInventory(Inventory inventory) {
-        Foods baguette = new Foods("Baguette", 100, 20, true, 10, null)
-        try {
-            inventory.addItem(baguette);
-        } catch (Exception e) {
-            System.err.println("Gagal menambahkan Bread ke inventory: " + e.getMessage());
-        }
+        inventory.addItem((Items)FoodsList.Baguette.create());
     }
     
 }

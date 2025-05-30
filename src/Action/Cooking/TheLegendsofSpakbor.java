@@ -52,13 +52,7 @@ public class TheLegendsofSpakbor extends Cooking {
 
     @Override
     public void addDishToInventory(Inventory inventory) {
-        // Implementasi logika untuk menambahkan The Legend of Spakbor ke inventaris
-        Foods theLegendsofSpakbor = ItemFactory.createFoods("The Legend of Spakbor", 25, 60, true, 1006, 0, 0);
-        try {
-            inventory.addItem(theLegendsofSpakbor);
-        } catch (Exception e) {
-            System.err.println("Gagal menambahkan The Legend of Spakbor ke inventory: " + e.getMessage());
-        }
+        inventory.addItem((Items)FoodsList.TheLegendsofSpakbor.create());
     }
     
 }

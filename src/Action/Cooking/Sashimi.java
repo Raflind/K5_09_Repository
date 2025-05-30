@@ -35,11 +35,6 @@ public class Sashimi extends Cooking {
 
     @Override
     public void addDishToInventory(Inventory inventory) {
-        Foods sashimi = ItemFactory.createFoods("Sashimi", 10, 20, true, 1003, 0, 0);
-        try {
-            inventory.addItem(sashimi);
-        } catch (Exception e) {
-            System.err.println("Gagal menambahkan Sashimi ke inventory: " + e.getMessage());
-        }
+        inventory.addItem((Items)FoodsList.Sashimi.create());
     }
 }

@@ -45,12 +45,7 @@ public class FishSandwich extends Cooking {
 
     @Override
     public void addDishToInventory(Inventory inventory) {
-        Foods fishSandwich = ItemFactory.createFoods("Fish Sandwich", 15, 30, true, 1007, 0, 0);
-        try {
-            inventory.addItem(fishSandwich); // Add Fish Sandwich to inventory
-        } catch (Exception e) {
-            System.err.println("Gagal menambahkan Fish Sandwich ke inventory: " + e.getMessage());
-        }
+        inventory.addItem((Items)FoodsList.FishSandwich.create());
     }
     
 }
