@@ -1,40 +1,61 @@
 package Items;
 
 import java.awt.image.BufferedImage;
+import java.util.List;
+
 import javax.imageio.ImageIO;
+
+import TimeSeasonWeather.EnvironmentStatus.Season;
+import TimeSeasonWeather.EnvironmentStatus.Weather;
 
 public class Fish extends Items {
     public enum FishType{
         Regular, Common, Legendary
     }
     private FishType fishType;
-    private int seasonCount;
-    private int timeCount;
-    private int weatherCount;
-    private int locationCount;
+    private List<Season> season;
+    private int startTime;
+    private int endTime;
+    private List<String> location;
+    private List<Weather> weather;
 
-    public Fish(String name, int sellPrice, int buyPrice, boolean isEdible, int itemID, FishType type, BufferedImage image) {
+    public Fish(String name, int sellPrice, int buyPrice, boolean isEdible, FishType type, List<Season> season, int startTime, int endTime, List<String> location,List<Weather> weather, BufferedImage image) {
         super(name, sellPrice, buyPrice, isEdible, image);
         this.fishType = type;
-        this.seasonCount = 0;
-        this.timeCount = 0;
-        this.weatherCount = 0;
-        this.locationCount = 0;
+        this.season = season;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.location = location;
+        this.weather = weather;
     }
 
     public int getSeasonCount() {
-        return seasonCount;
+        return season.size();
     }
-    public int getTimeCount() {
-        return timeCount;
+    public int endTime() {
+        return endTime;
+    }
+    public int startTime() {
+        return startTime;
+    }
+    public int getInterval(){
+        int interval = 0;
+        if(this.getName().equals("Halibut")){
+            interval = 7;
+        }
+        return (interval + ((endTime - startTime + 24) % 24));
     }
     public int getWeatherCount() {
-        return weatherCount;
+        return weather.size();
     }
     public int getLocationCount() {
-        return locationCount;
+        return location.size();
     }
-    public void calculateSellPrice(int seasonCount, int timeCount, int weatherCount, int locationCount) {
+    public void calculateSellPrice() {
+        int seasonCount = getSeasonCount();
+        int timeCount = getInterval();
+        int weatherCount = getWeatherCount();
+        int locationCount = getLocationCount();
         int basePrice = 0;
         switch(fishType) {
             case Regular:
