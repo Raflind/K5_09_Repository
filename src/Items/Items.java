@@ -8,16 +8,14 @@ public class Items {
     private int sellPrice;
     private int buyPrice;
     private boolean isEdible;
-    private int itemID;
     public BufferedImage image;
 
 
-    public Items(String name, int sellPrice, int buyPrice, boolean isEdible, int itemID, BufferedImage image) {
+    public Items(String name, int sellPrice, int buyPrice, boolean isEdible, BufferedImage image) {
         this.name = name;
         this.sellPrice = sellPrice;
         this.buyPrice = buyPrice;
         this.isEdible = isEdible;
-        this.itemID = itemID;
         this.image = image;
     }
     public String getName() {
@@ -32,9 +30,7 @@ public class Items {
     public boolean isEdible() {
         return isEdible;
     }
-    public int getItemID() {
-        return itemID;
-    }
+    
     public void setSellPrice(int sellPrice) {
         this.sellPrice = sellPrice;
     }

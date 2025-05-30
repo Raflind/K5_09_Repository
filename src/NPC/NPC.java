@@ -70,7 +70,7 @@ public abstract class NPC extends Entity{
         return lovedItems;
     }
 
-    public ArrayList<Items> getLikeddItems(){
+    public ArrayList<Items> getLikedItems(){
         return likedItems;
     }
 
