@@ -51,6 +51,13 @@ public class GamePanel extends JPanel implements Runnable{
    public final int mapSelectState = 5;
    public final int optionState = 6;
 
+    public int subState = 0;
+    public final int subState_none = 0;
+    public final int subState_help = 1;
+    public final int subState_listObject = 2;
+    public final int subState_statistics = 3;
+    public final int subState_actions = 4;
+
    public GamePanel() {
     this.setPreferredSize(new Dimension(screenWidth, screenHeight));
     this.setBackground(Color.black);
@@ -110,34 +117,78 @@ public class GamePanel extends JPanel implements Runnable{
             // Update other environmental aspects if needed
         }
     }
-   }
-   public void paintComponent(Graphics g){
-    Graphics2D comp = (Graphics2D) g;
-    if(gameState==titleState){
-        ui.draw(comp);
+
+    else if(gameState == optionState) {
+        if (subState == subState_none) {
+            if (keyH.up) {
+                ui.commandNum--;
+                if (ui.commandNum < 0) {
+                    ui.commandNum = 5; 
+                }
+                keyH.up = false;
+            }
+            if (keyH.down) {
+                ui.commandNum++;
+                if (ui.commandNum > 5) {
+                    ui.commandNum = 0;
+                }
+                keyH.down = false;
+            }
+
+            if (keyH.enterPressed) {
+                switch (ui.commandNum) {
+                    case 0: subState = subState_help; break;
+                    case 1: subState = subState_listObject; break;
+                    case 2: subState = subState_statistics; break;
+                    case 3: subState = subState_actions; break;
+                    case 4: gameState = titleState; break; 
+                    case 5: gameState = playState; break;  
+                }
+                keyH.enterPressed = false;
+            }
+
+            if (keyH.escPressed) {
+                gameState = playState;
+                keyH.escPressed = false;
+            }
+        } else {
+            if (keyH.enterPressed || keyH.escPressed) {
+                subState = subState_none; 
+                keyH.enterPressed = false;
+                keyH.escPressed = false;
+            }
+        }
     }
-    else if(gameState==playState){
-        super.paintComponent(g);
-        tileM.draw(comp, tileM.getActiveTileArray());
-        player.draw(comp);
-        ui.draw(comp);
+   }
+   
+   @Override
+    public void paintComponent(Graphics g){
+        Graphics2D comp = (Graphics2D) g;
+        if(gameState == titleState){
+            ui.draw(comp);
+        }
+        else if(gameState == playState){
+            super.paintComponent(g);
+            tileM.draw(comp, tileM.getActiveTileArray());
+            player.draw(comp);
+            ui.draw(comp);
+        }
+        else if(gameState == inventoryState){
+            ui.draw(comp);
+        }
+        else if(gameState == dialogueState){
+            // Draw dialogue box or other UI elements for dialogue state
+            // This can be implemented later
+        }
+        else if(gameState == pauseState){ 
+            ui.draw(comp);
+        }
+        else if(gameState == mapSelectState){
+            ui.draw(comp);
+        }
+        else if(gameState == optionState) {
+            ui.drawOptionScreen(comp);
+        }
         comp.dispose();
-    }
-    else if(gameState==inventoryState){
-        ui.draw(comp);
-    }
-    else if(gameState==dialogueState){
-        // Draw dialogue box or other UI elements for dialogue state
-        // This can be implemented later
-    }
-    else if(gameState==pauseState){ 
-        ui.draw(comp);
-   }
-   else if(gameState==mapSelectState){
-        ui.draw(comp);
-    }
-    else if(gameState==optionState){
-        ui.draw(comp);
-    }
     }
 }

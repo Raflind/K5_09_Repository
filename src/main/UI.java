@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import Entity.Player;
 
 public class UI {
     GamePanel gp;
@@ -32,12 +31,7 @@ public class UI {
     public int slotRow = 0;
     public boolean showVisitHousePrompt = false; // Tambahkan variabel ini
     public boolean inHouse = false; // Untuk menandakan apakah pemain berada di dalam rumah NPC
-    public boolean showFishPrompt = false;
-    public boolean showSleepPrompt = false;
-    public boolean showSleepScreen = false;
-    private long sleepScreenStartTime = 0;
-    public boolean isAction = false;
-    public boolean isTired = false;
+    int subState = 0;
 
     public UI(GamePanel gp) {
         this.gp = gp;
@@ -76,37 +70,13 @@ public class UI {
     public void draw(Graphics2D g2) {
         this.g2 = g2;
         if(gp.gameState == gp.playState){
-            if(showSleepScreen) {
-                drawSleepScreen();
-                if(System.currentTimeMillis() - sleepScreenStartTime >= 3000) {
-                    showSleepScreen = false;
-                    if (gp.player.getEnergy()<0.1*gp.player.MAX_ENERGY) {
-                        gp.player.setEnergy(gp.player.MAX_ENERGY/2);
-                    }   
-                    else {
-                        gp.player.setEnergy(gp.player.MAX_ENERGY); // Reset energy to 100 after sleep
-                    }
-                    gp.environmentStatus.bangun();
-                }
-                return;
-            }
-            if(!isAction){
-                drawGameStatus();
-                drawEnergyBar(g2, gp.player);
-            }
+            drawGameStatus();
             if(showVisitHousePrompt){
                 drawEnterHouse();
             }
             if(inHouse) {
                 publicExitHouse();
             }
-            if(showSleepPrompt) {
-                drawSleepPrompt();
-            }
-            if(isTired){
-                drawTiredPrompt();
-            }
-            
         }
         if (gp.gameState == gp.inventoryState){
             drawInventory();
@@ -129,7 +99,7 @@ public class UI {
             // drawDialogueScreen();
         }
         if(gp.gameState == gp.optionState){
-            drawOptionScreen();
+            drawOptionScreen(g2);
         }        
     }
     
@@ -414,14 +384,272 @@ public class UI {
         g2.drawString("Day " + day, textX, textY + 60);   
     }
 
-    public void drawOptionScreen() {
-        BufferedImage bg;
-        try{
-            bg = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Menu/Background-dimmed.png"));
-            g2.drawImage(bg, 0, 0, null); 
+        // BufferedImage bg;
+        // try{
+        //     bg = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Menu/Background-dimmed.png"));
+        //     g2.drawImage(bg, 0, 0, null); 
+        // }
+        // catch(IOException e){
+        //     e.printStackTrace();
+        // }
+
+    public void drawOptionScreen(Graphics2D g2) {
+            g2.setColor(Color.black);
+            g2.setFont(stardew.deriveFont(Font.PLAIN, 32F));
+
+            int frameX = gp.tileSize * 6;
+            int frameY = gp.tileSize;
+            int frameWidth = gp.tileSize * 8;
+            int frameHeight = gp.tileSize * 10;
+            drawSubWindow(frameX, frameY, frameWidth, frameHeight);
+
+            switch (subState) {
+                case 0: options_main(frameX, frameY); break;
+                case 1: options_help(frameX, frameY); break;
+                case 2: options_listObject(frameX, frameY); break;
+                case 3: options_statistics(frameX, frameY); break;
+                case 4: options_actions(frameX, frameY); break;
+                case 5: options_exitConfirmation(frameX, frameY); break;
+            }
+
+            gp.keyH.enterPressed = false;
         }
-        catch(IOException e){
-            e.printStackTrace();
+    
+    // MAIN OPTIONS SCREEN
+    public void options_main(int frameX, int frameY) {
+        int textX = frameX + gp.tileSize;
+        int textY = frameY + gp.tileSize;
+
+        g2.drawString("Options", getXforCenteredText("Options"), textY);
+
+        textY += gp.tileSize * 2;
+
+        String[] options = {
+            "Help", "List Object", "Statistics", "Actions", "Exit", "Back"
+        };
+
+        for (int i = 0; i < options.length; i++) {
+            g2.drawString(options[i], textX, textY);
+            if (commandNum == i) {
+                g2.drawString(">", textX - 25, textY);
+
+                if (gp.keyH.enterPressed) {
+                    switch (i) {
+                        case 0: subState = 1; break;
+                        case 1: subState = 2; break;
+                        case 2: subState = 3; break;
+                        case 3: subState = 4; break;
+                        case 4: subState = 5; break;
+                        case 5: gp.gameState = gp.playState; commandNum = 0; break;
+                    }
+                }
+            }
+            textY += gp.tileSize;
+        }
+    }
+
+    // HELP SCREEN
+    public void options_help(int frameX, int frameY) {
+        int textX = frameX + gp.tileSize / 2;
+        int textY = frameY + gp.tileSize;
+
+        g2.setFont(g2.getFont().deriveFont(18F));
+
+        String[] helpText = {
+            "=== HELP MENU ===",
+            "",
+            "Welcome to Spakbor Hills — a cozy farming simulation game",
+            "where you create your own story.",
+            "",
+            "In this game, you play as a new resident who inherits a plot",
+            "of land. Your goal is simple: live your life however you want.",
+            "You can farm, explore, interact with NPCs, build relationships,",
+            "and even get married.",
+            "",
+            "There is no true ending — the game continues as long as you wish.",
+            "You’re free to play at your own pace, set your own goals, and",
+            "create your own routine.",
+            "",
+            "— HOW TO PLAY —",
+            "",
+            "• Move with W (up), A (left), S (down), D (right).",
+            "• Use game menu or command input to do actions.",
+            "• Actions consume energy and time.",
+            "• Check inventory to manage your items.",
+            "• Use the shipping bin to sell and earn gold.",
+            "• Build relationships: talk, give gifts, fall in love.",
+            "• Sleep to recover and start a new day.",
+            "",
+            "Enjoy the peaceful rhythm of life in Spakbor Hills.",
+            "There's no rush — just farm, live, and explore your way!"
+        };
+
+        for (int i = 0; i < helpText.length; i++) {
+            g2.drawString(helpText[i], textX, textY);
+            textY += 24;
+            if (textY > frameY + gp.tileSize * 9) break; // biar ga overflow
+        }
+
+        // BACK option
+        g2.setFont(g2.getFont().deriveFont(22F));
+        textY = frameY + gp.tileSize * 9 + 10;
+        g2.drawString("Back", textX, textY);
+        if (commandNum == 0) {
+            g2.drawString(">", textX - 20, textY);
+            if (gp.keyH.enterPressed) {
+                subState = 0;
+            }
+        }
+    }
+
+
+    // LIST OBJECTS SCREEN
+    public void options_listObject(int frameX, int frameY) {
+        int textX = frameX + gp.tileSize / 2;
+        int textY = frameY + gp.tileSize;
+
+        g2.setFont(g2.getFont().deriveFont(18F));
+
+        String[] objectList = {
+            "=== OBJECT LIST ===",
+            "",
+            "1. Single Bed      → Tempat untuk tidur dan mengakhiri hari.",
+            "2. TV              → Digunakan untuk hiburan.",
+            "3. Kompor          → Digunakan untuk memasak makanan.",
+            "4. Lemari          → Furniture dekoratif.",
+            "5. Kursi           → Furniture dekoratif.",
+            "6. Meja            → Furniture dekoratif.",
+            "7. Gantungan Baju  → Furniture dekoratif.",
+            "8. Jam             → Furniture dekoratif.",
+            "9. Jendela         → Furniture dekoratif.",
+            "10. Karpet         → Furniture dekoratif.",
+            "",
+            "Kamu dapat berinteraksi dengan beberapa objek tertentu,",
+            "tergantung fungsi dan lokasi di dalam rumah atau luar."
+        };
+
+        for (int i = 0; i < objectList.length; i++) {
+            g2.drawString(objectList[i], textX, textY);
+            textY += 24;
+            if (textY > frameY + gp.tileSize * 9) break;
+        }
+
+        // BACK option
+        g2.setFont(g2.getFont().deriveFont(22F));
+        textY = frameY + gp.tileSize * 9 + 10;
+        g2.drawString("Back", textX, textY);
+        if (commandNum == 0) {
+            g2.drawString(">", textX - 20, textY);
+            if (gp.keyH.enterPressed) {
+                subState = 0;
+            }
+        }
+    }
+
+    // STATISTICS SCREEN
+    public void options_statistics(int frameX, int frameY) {
+        int textX = frameX + gp.tileSize;
+        int textY = frameY + gp.tileSize;
+
+        g2.drawString("Statistics", getXforCenteredText("Statistics"), textY);
+
+        // Masih kosong
+
+        // BACK
+        textY = frameY + gp.tileSize * 9;
+        g2.drawString("Back", textX, textY);
+        if (commandNum == 0) {
+            g2.drawString(">", textX - 25, textY);
+            if (gp.keyH.enterPressed) {
+                subState = 0;
+            }
+        }
+    }
+
+    // ACTIONS SCREEN
+    public void options_actions(int frameX, int frameY) {
+        int textX = frameX + gp.tileSize / 2;
+        int textY = frameY + gp.tileSize;
+
+        g2.setFont(g2.getFont().deriveFont(18F));
+
+        String[] actionsText = {
+            "=== ACTIONS MENU ===",
+            "",
+            "In Spakbor Hills, you can live the life of a farmer while also",
+            "being an active member of the village.",
+            "Here are the various actions you can perform. Each action affects",
+            "your energy, time, or social relationships.",
+            "",
+            "1. Planting        → Plant seeds on tilled soil.",
+            "2. Watering        → Water your crops to help them grow.",
+            "3. Harvesting      → Harvest crops that are ready.",
+            "4. Eating          → Eat food to restore your energy.",
+            "5. Sleeping        → Sleep to recover energy and start a new day.",
+            "6. Fishing         → Fish in specific locations.",
+            "7. Cooking         → Cook food using ingredients from inventory.",
+            "8. Gifting         → Give gifts to NPCs to increase heartPoints.",
+            "9. Chatting        → Talk with NPCs to build relationships.",
+            "10. Proposing      → Propose to an NPC (max heartPoints needed).",
+            "11. Marry          → Marry your fiancé(e) and start a new chapter.",
+            "12. Visiting       → Visit areas outside your farm.",
+            "13. Moving         → Move between tiles on the map.",
+            "14. ShowTime       → Show current time, season, weather, and day.",
+            "15. ShowLocation   → Show your current location.",
+            "16. OpenInventory  → Display all inventory items.",
+            "17. SellToBin      → Sell items using the Shipping Bin.",
+            "18. Tilling        → Turn land into tillable soil.",
+            "19. RecoverLand    → Revert soil back to normal.",
+            "20. Watching       → Watch TV for fun.",
+            "21. Save           → Save your game progress.",
+            "",
+            "Note:",
+            "- Some actions need items or conditions.",
+            "- Use energy and time wisely.",
+            "- Smart planning = rich or married 😏"
+        };
+
+        for (int i = 0; i < actionsText.length; i++) {
+            g2.drawString(actionsText[i], textX, textY);
+            textY += 24;
+            if (textY > frameY + gp.tileSize * 9) break;
+        }
+
+        // BACK option
+        g2.setFont(g2.getFont().deriveFont(22F));
+        textY = frameY + gp.tileSize * 9 + 10;
+        g2.drawString("Back", textX, textY);
+        if (commandNum == 0) {
+            g2.drawString(">", textX - 20, textY);
+            if (gp.keyH.enterPressed) {
+                subState = 0;
+            }
+        }
+    }
+
+    // EXIT CONFIRMATION SCREEN
+    public void options_exitConfirmation(int frameX, int frameY) {
+        int textX = frameX + gp.tileSize;
+        int textY = frameY + gp.tileSize;
+
+        g2.drawString("Are you sure you want to exit?", getXforCenteredText("Are you sure you want to exit?"), textY);
+
+        textY += gp.tileSize * 2;
+
+        String[] options = {"Yes", "No"};
+        for (int i = 0; i < options.length; i++) {
+            g2.drawString(options[i], textX, textY);
+            if (commandNum == i) {
+                g2.drawString(">", textX - 25, textY);
+                if (gp.keyH.enterPressed) {
+                    if (i == 0) {
+                        gp.gameState = gp.titleState; 
+                    } else {
+                        subState = 0; 
+                    }
+                }
+            }
+            textY += gp.tileSize;
         }
     }
 
@@ -429,8 +657,9 @@ public class UI {
         g2.setFont(stardew.deriveFont(Font.BOLD, 24F));
         g2.setColor(Color.white);
         String msg = "Want to Visit Player House? Click Y";
+        int x = gp.tileSize; // posisi X
         int y = gp.screenHeight - gp.tileSize; // posisi Y (bawah layar)
-        g2.drawString(msg, getXforCenteredText(msg), y);
+        g2.drawString(msg, x, y);
     }
 
     public void publicExitHouse(){
@@ -439,74 +668,5 @@ public class UI {
         String msg = "Want to Exit House? Click X";
         int y = gp.screenHeight - gp.tileSize; // posisi Y (bawah layar)
         g2.drawString(msg, getXforCenteredText(msg), y);
-    }
-
-    public void drawEnergyBar(Graphics2D g2, Player player) {
-        int barX = gp.tileSize;
-        int barY = gp.tileSize / 2;
-        int barWidth = gp.tileSize * 4;
-        int barHeight = gp.tileSize / 2;
-
-        // Background bar (abu-abu)
-        // g2.setColor(Color.GRAY);
-        // g2.fillRoundRect(barX, barY, barWidth, barHeight, 10, 10);
-
-        // Isi bar (merah/oranye)
-        float energyPercent = Math.max(0, Math.min(1, player.getEnergy() / 100f));
-        int fillWidth = (int)(barWidth * energyPercent);
-        g2.setColor(new Color(255, 140, 0)); // oranye
-        g2.fillRoundRect(barX, barY, fillWidth, barHeight, 10, 10);
-
-        // Border
-        g2.setColor(new Color(139, 69, 19, 180));
-        g2.drawRoundRect(barX, barY, barWidth, barHeight, 10, 10);
-
-        // Text
-        g2.setColor(kuninggelap);
-        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 18f));
-        String text = "Energy: " + player.getEnergy();
-        int textX = barX + barWidth/2 - g2.getFontMetrics().stringWidth(text)/2;
-        int textY = barY + barHeight - 5;
-        g2.drawString(text, textX, textY);
-    }
-
-    public void drawFishPrompt() {
-        g2.setFont(stardew.deriveFont(Font.BOLD, 24F));
-        g2.setColor(Color.white);
-        String msg = "Click F to Fish";
-        int y = gp.screenHeight - gp.tileSize * 2; 
-        g2.drawString(msg, getXforCenteredText(msg), y);
-    }
-
-    public void drawSleepPrompt() {
-        g2.setFont(stardew.deriveFont(Font.BOLD, 24F));
-        g2.setColor(Color.white);
-        String msg = "Click Z to Sleep";
-        int y = gp.screenHeight - gp.tileSize * 2; 
-        g2.drawString(msg, getXforCenteredText(msg), y);
-    }
-
-    public void drawTiredPrompt() {
-        g2.setFont(stardew.deriveFont(Font.BOLD, 24F));
-        g2.setColor(Color.white);
-        String msg = "You are overly tired, you are sleeping now";
-        int y = gp.screenHeight - gp.tileSize * 2; 
-        g2.drawString(msg, getXforCenteredText(msg), y);
-    }
-
-    public void startSleepScreen() {
-        showSleepScreen = true;
-        sleepScreenStartTime = System.currentTimeMillis();
-    }
-    
-    public void drawSleepScreen() {
-        g2.setColor(Color.black);
-        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
-        g2.setFont(stardew.deriveFont(Font.BOLD, 48F));
-        g2.setColor(Color.white);
-        String msg = "You are sleeping";
-        int x = getXforCenteredText(msg);
-        int y = gp.screenHeight / 2;
-        g2.drawString(msg, x, y);
     }
 }
