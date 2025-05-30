@@ -1,14 +1,24 @@
 package Items;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.imageio.ImageIO;
+
 public class Inventory {
-    private List<Items> items;
+    public List<Items> items;
     private int capacity;
 
     public Inventory() {
         this.items = new ArrayList<>();
         this.capacity = 20; 
+        try {
+            items.add(new Items("Wheat", 10, 5, true, 1, ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Items/Wheat.png"))));
+            items.add(new Items("Wheat", 10, 5, true, 1, ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Items/Wheat.png"))));
+            items.add(new Items("Wheat", 10, 5, true, 1, ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Items/Wheat.png"))));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } 
     }
 
     public Inventory(int capacity) {

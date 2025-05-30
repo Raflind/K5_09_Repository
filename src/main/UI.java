@@ -383,8 +383,8 @@ public class UI {
         g2.setStroke(new BasicStroke(3));
         g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorheight, 10, 10); 
 
-        /*DRAW ITEMS
-        for(int i = 0; i < gp.player.inventory.getCapacity(); i++) {
+        //DRAW ITEMS
+        for(int i = 0; i < gp.player.inventory.items.size(); i++) {
             if(gp.player.inventory.getItem(i) != null) {
                 g2.drawImage(gp.player.inventory.getItem(i).image, slotX, slotY, null);
             }
@@ -393,7 +393,7 @@ public class UI {
                 slotX = slotXstart;
                 slotY += gp.tileSize;
             }
-        }*/
+        }
     }
     public void drawSubWindow(int x, int y, int width, int height) {
         g2.setColor(new Color(0, 0, 0, 200)); // Semi-transparent black
