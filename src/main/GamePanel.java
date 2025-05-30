@@ -4,11 +4,13 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 import Entity.Player;
 import Map.TileManager;
 import TimeSeasonWeather.*;
+import Action.Cooking.*;
 
 import javax.swing.JPanel;
 
@@ -28,6 +30,18 @@ public class GamePanel extends JPanel implements Runnable{
    
    public UI ui = new UI(this);
    public Time time = new Time(6, 0);
+public HashMap<String, Boolean> recipe = new HashMap<String, Boolean>() {{
+    put("Fish And Chips", false);
+    put("Baguette", true);
+    put("Sashimi", false);
+    put("Fugu", false);
+    put("Wine", true);
+    put("Pumpkin Pie", true);
+    put("Fish Stew", false);
+    put("Spakbor Salad", true);
+    put("Fish Sandwich", false);
+    put("Legends of Spakbor", false);
+}};
    Timer timer = new Timer();
    public EnvironmentStatus environmentStatus = new EnvironmentStatus(time);
    Thread gameThread;

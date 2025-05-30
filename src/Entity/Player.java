@@ -98,6 +98,13 @@ public class Player extends Entity{
                 gp.ui.showSleepPrompt = false;
             }
         }
+        if(gp.tileM.currMap.equals("HousePlayer")){
+            if(isCookingTile()){
+                gp.ui.showCookingScreen = true;
+            } else {
+                gp.ui.showCookingScreen = false;
+            }
+        }
         if(keyH.up == true && enMove){
             direction = "blkg";
         }
@@ -262,6 +269,15 @@ public class Player extends Entity{
     public boolean isSleepTile() {
         int[] visitTiles = {28, 29, 40, 41, 51, 52, 66, 67};
         for(int t : visitTiles){
+            if(gp.cChecker.colTile1 == t || gp.cChecker.colTile2 == t){
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean isCookingTile(){
+        int[] cookingTiles = {26,27};
+        for(int t : cookingTiles){
             if(gp.cChecker.colTile1 == t || gp.cChecker.colTile2 == t){
                 return true;
             }

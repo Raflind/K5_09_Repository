@@ -4,24 +4,15 @@ import java.util.HashMap;
 
 import Items.*;
 
-abstract class Cooking {
-    public HashMap<String, Boolean> recipe = new HashMap<String, Boolean>();
-
-    public Cooking() {
-        recipe.put("FishNChips", false);
-        recipe.put("Baguette", true);
-        recipe.put("Sashimi", false);
-        recipe.put("Fugu", false);
-        recipe.put("Wine", true);
-        recipe.put("PumpkinPie", true);
-        recipe.put("FishStew", false);
-        recipe.put("SpakborSalad", true);
-        recipe.put("Sandwich", false);
-        recipe.put("Legends", false);
-    }
+public abstract class Cooking {
     public final void cook(Inventory inventory) {
         if(checkIngredients(inventory)) {
             consumeIngredients(inventory);
+            try {
+                Thread.sleep(12000);
+            } catch (InterruptedException e) {
+                System.err.println("Cooking interrupted: " + e.getMessage());
+            }
             addDishToInventory(inventory);
             System.out.println("Masakan berhasil dibuat!");
         } else {

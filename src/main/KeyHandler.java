@@ -81,7 +81,7 @@ public class KeyHandler implements KeyListener {
             }
         }
         if(code == KeyEvent.VK_ESCAPE){
-            // gp.gameState = gp.playState;
+            gp.gameState = gp.playState;
         }
     }
 
@@ -126,6 +126,10 @@ public class KeyHandler implements KeyListener {
         if(code == KeyEvent.VK_Z && gp.ui.showSleepPrompt) {
             gp.ui.startSleepScreen();
             gp.ui.showSleepPrompt = false;
+        }
+        if(code == KeyEvent.VK_C && gp.ui.showCookingScreen) {
+            gp.ui.drawCookingMenu();
+            gp.ui.showCookingScreen = false;
         }
     }
 

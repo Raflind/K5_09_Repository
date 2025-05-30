@@ -35,6 +35,7 @@ public class UI {
     public boolean showFishPrompt = false;
     public boolean showSleepPrompt = false;
     public boolean showSleepScreen = false;
+    public boolean showCookingScreen = false;
     private long sleepScreenStartTime = 0;
     public boolean isAction = false;
     public boolean isTired = false;
@@ -93,6 +94,9 @@ public class UI {
                     gp.environmentStatus.bangun();
                 }
                 return;
+            }
+            if(showCookingScreen) {
+                drawCookingPrompt();
             }
             if(!isAction){
                 drawGameStatus();
@@ -496,6 +500,14 @@ public class UI {
         g2.drawString(msg, getXforCenteredText(msg), y);
     }
 
+    public void drawCookingPrompt() {
+        g2.setFont(stardew.deriveFont(Font.BOLD, 24F));
+        g2.setColor(Color.white);
+        String msg = "Click C to Cook";
+        int y = gp.screenHeight - gp.tileSize * 2; 
+        g2.drawString(msg, getXforCenteredText(msg), y);
+    }
+
     public void drawTiredPrompt() {
         g2.setFont(stardew.deriveFont(Font.BOLD, 24F));
         g2.setColor(Color.white);
@@ -617,4 +629,65 @@ public class UI {
             g2.drawString(errorMessage, getXforCenteredText(errorMessage), boxY + boxHeight + 60);
         }
     }
+
+    public void drawCookingMenu(){
+        int width = gp.tileSize*5;
+        int height = gp.tileSize*2;
+        int x = (gp.screenWidth - width)/2;
+        int y = (gp.screenHeight - height)/2;
+
+        drawSubWindow(x, y, width, height);
+
+        g2.setFont(stardew.deriveFont(Font.BOLD, 36F));
+        String title = "Memasak";
+        int titleX = getXforCenteredText(title);
+        int titleY = y + gp.tileSize;
+        g2.setColor(kuninggelap);
+        g2.drawString(title, titleX + 3, titleY + 3);
+        g2.setColor(kuning);
+        g2.drawString(title, titleX, titleY); 
+
+
+        g2.setFont(stardew.deriveFont(Font.PLAIN, 24F));
+        String [] option = {"Memasak", "Back"};
+        int optionY = titleY + gp.tileSize;
+        for(int i = 0; i < option.length; i++) {
+            int optionX = getXforCenteredText(option[i]);
+            if(commandNum == i){
+                g2.setColor(kuninggelap);
+                g2.drawString(option[i], optionX + 3, optionY + 3);
+                g2.setColor(kuning);
+                g2.drawString(option[i], optionX, optionY);
+            } else {
+                g2.setColor(Color.white);
+                g2.drawString(option[i], optionX, optionY);
+            }
+        }
+        if(commandNum == 0){
+            List<String> availableRecipes = new ArrayList<>();
+            for(String recipe : gp.recipe.keySet()){
+                if(Boolean.TRUE.equals(gp.recipe.get(recipe))) {
+                    availableRecipes.add(recipe);
+                }
+            }
+            int recipeY = optionY + gp.tileSize / 2;
+            g2.setFont(stardew.deriveFont(Font.PLAIN, 24F));
+            for (int i = 0; i < availableRecipes.size(); i++) {
+                int recipeX = getXforCenteredText(availableRecipes.get(i));
+                // Suppose you have a variable commandNum2 for recipe selection
+                if (0 == i) {
+                    g2.setColor(kuninggelap);
+                    g2.drawString(">", recipeX - 32 + 3, recipeY + 3);
+                    g2.setColor(kuning);
+                    g2.drawString(">", recipeX - 32, recipeY);
+                }
+                g2.setColor(kuninggelap);
+                g2.drawString(availableRecipes.get(i), recipeX + 3, recipeY + 3);
+                g2.setColor(kuning);
+                g2.drawString(availableRecipes.get(i), recipeX, recipeY);
+                recipeY += gp.tileSize;
+            }
+        }
+    }
 }
+
