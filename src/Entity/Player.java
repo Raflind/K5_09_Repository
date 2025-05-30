@@ -20,7 +20,6 @@ import java.util.TimerTask;
 
 public class Player extends Entity{
     //atribut related to game
-    GamePanel gp;
     KeyHandler keyH;
     public Inventory inventory = new Inventory(); // ini nggak diinstansiasi di konstruktor?
     public final int screenX;
@@ -37,7 +36,7 @@ public class Player extends Entity{
         F, M
     }
     private Gender gender;
-    private Map<String, Relationship> partner = new HashMap<>();
+    private NPC partner;
     private GoldManager goldManager;
     private ShippingBin shippingBin;
 
@@ -48,7 +47,7 @@ public class Player extends Entity{
 
 
     public Player(GamePanel gp, KeyHandler keyH, int worldX, int worldY){
-        this.gp = gp;
+        super(gp);
         this.keyH = keyH;
         screenX = gp.screenWidth/2 - gp.tileSize/2;
         screenY = gp.screenWidth/2 - gp.tileSize/2;
@@ -96,6 +95,13 @@ public class Player extends Entity{
                 gp.ui.showSleepPrompt = true;
             } else {
                 gp.ui.showSleepPrompt = false;
+            }
+        }
+        if(gp.tileM.currMap.equals("HousePlayer")){
+            if(isCookingTile()){
+                gp.ui.showCookingScreen = true;
+            } else {
+                gp.ui.showCookingScreen = false;
             }
         }
         if(keyH.up == true && enMove){
@@ -194,8 +200,11 @@ public class Player extends Entity{
     public ShippingBin getShippingBin(){
         return shippingBin;
     }
-    public Relationship getPartnerStatus(String npcName){
-        return partner.get(npcName);
+    public NPC getPartner(){
+        return partner;
+    }
+    public Relationship getPartnerStatus(){
+        return getPartner().getRelationship();
     }
     public Inventory getInventory(){
         return inventory;
@@ -207,7 +216,7 @@ public class Player extends Entity{
         this.name = name;
     }
 
-    public void setEnergy(int energy) {
+    private void setEnergy(int energy) {
         if (energy <= MAX_ENERGY && energy >= -20) {
             this.energy = energy;
         } else if (energy > MAX_ENERGY) {
@@ -244,9 +253,8 @@ public class Player extends Entity{
         this.gender = gender;
     }
 
-    public void setPartnerStatus(NPC npc){
-        partner.replace(npc.getName(), npc.getRelationship());
-
+    public void setPartner(NPC partner){
+        this.partner = partner;
     }
 
     public boolean isVisitHouseTile() {
@@ -262,6 +270,15 @@ public class Player extends Entity{
     public boolean isSleepTile() {
         int[] visitTiles = {28, 29, 40, 41, 51, 52, 66, 67};
         for(int t : visitTiles){
+            if(gp.cChecker.colTile1 == t || gp.cChecker.colTile2 == t){
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean isCookingTile(){
+        int[] cookingTiles = {26,27};
+        for(int t : cookingTiles){
             if(gp.cChecker.colTile1 == t || gp.cChecker.colTile2 == t){
                 return true;
             }

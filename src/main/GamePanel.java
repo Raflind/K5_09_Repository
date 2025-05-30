@@ -4,11 +4,13 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 import Entity.Player;
 import Map.TileManager;
 import TimeSeasonWeather.*;
+import Action.Cooking.*;
 
 import javax.swing.JPanel;
 
@@ -22,12 +24,24 @@ public class GamePanel extends JPanel implements Runnable{
    final public int screenHeight =h*tileSize; // 16*12*3 = 576
    final int FPS = 60;
    private int frameCounter = 0;
-   public TileManager farmMap, oceanMap, forestMap, mountainMap, storeMap, housePlayerMap; /*blm lengkap*/
+   public TileManager farmMap, oceanMap, forestMap, mountainMap, storeMap, housePlayerMap, abigailMap, carolineMap, dascoMap, mayorMap, perryMap; /*blm lengkap*/
    public TileManager tileM;
    KeyHandler keyH = new KeyHandler(this);
    
    public UI ui = new UI(this);
    public Time time = new Time(6, 0);
+public HashMap<String, Boolean> recipe = new HashMap<String, Boolean>() {{
+    put("Fish And Chips", false);
+    put("Baguette", true);
+    put("Sashimi", false);
+    put("Fugu", false);
+    put("Wine", true);
+    put("Pumpkin Pie", true);
+    put("Fish Stew", false);
+    put("Spakbor Salad", true);
+    put("Fish Sandwich", false);
+    put("Legends of Spakbor", false);
+}};
    Timer timer = new Timer();
    public EnvironmentStatus environmentStatus = new EnvironmentStatus(time);
    Thread gameThread;
@@ -70,6 +84,11 @@ public class GamePanel extends JPanel implements Runnable{
     mountainMap = new TileManager(this, "Mountain");
     storeMap = new TileManager(this, "Store");
     housePlayerMap = new TileManager(this, "HousePlayer");
+    abigailMap = new TileManager(this, "Abigail");
+    carolineMap = new TileManager(this, "Caroline");
+    dascoMap = new TileManager(this, "Dasco");
+    mayorMap = new TileManager(this, "Mayor");
+    perryMap = new TileManager(this, "Perry");
     tileM = farmMap;
     player = new Player(this, keyH, tileM.worldX*tileSize, tileM.worldY*tileSize);
     setupGame();

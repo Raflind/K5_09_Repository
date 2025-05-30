@@ -31,7 +31,21 @@ public class UI {
     public int slotRow = 0;
     public boolean showVisitHousePrompt = false; // Tambahkan variabel ini
     public boolean inHouse = false; // Untuk menandakan apakah pemain berada di dalam rumah NPC
+<<<<<<< HEAD
     int subState = 0;
+=======
+    public boolean showFishPrompt = false;
+    public boolean showSleepPrompt = false;
+    public boolean showSleepScreen = false;
+    public boolean showCookingScreen = false;
+    private long sleepScreenStartTime = 0;
+    public boolean isAction = false;
+    public boolean isTired = false;
+    public String inputName = "";
+    public boolean showNameInputScreen = false;
+    public String errorMessage = "";
+    public long errorMessageTime = 0;
+>>>>>>> da9b464d7715897d2dde30f39c66f102d5cbbbbb
 
     public UI(GamePanel gp) {
         this.gp = gp;
@@ -70,7 +84,31 @@ public class UI {
     public void draw(Graphics2D g2) {
         this.g2 = g2;
         if(gp.gameState == gp.playState){
+<<<<<<< HEAD
             drawGameStatus();
+=======
+            if(showSleepScreen) {
+                drawSleepScreen();
+                if(System.currentTimeMillis() - sleepScreenStartTime >= 3000) {
+                    showSleepScreen = false;
+                    if (gp.player.getEnergy()<0.1*gp.player.MAX_ENERGY) {
+                        gp.player.setEnergy(gp.player.MAX_ENERGY/2);
+                    }   
+                    else {
+                        gp.player.setEnergy(gp.player.MAX_ENERGY); // Reset energy to 100 after sleep
+                    }
+                    gp.environmentStatus.bangun();
+                }
+                return;
+            }
+            if(showCookingScreen) {
+                drawCookingPrompt();
+            }
+            if(!isAction){
+                drawGameStatus();
+                drawEnergyBar(g2, gp.player);
+            }
+>>>>>>> da9b464d7715897d2dde30f39c66f102d5cbbbbb
             if(showVisitHousePrompt){
                 drawEnterHouse();
             }
@@ -89,7 +127,13 @@ public class UI {
                 drawTitleScreen();
             }
             else if (titleScreenState == 1) {
-                drawStoryScreen(); 
+                drawNameInputScreen(); 
+            }
+            else if (titleScreenState == 2) {
+                drawFarmNameInputScreen();
+            }
+            else if (titleScreenState == 3) {
+                drawStoryScreen();
             }
         }
         if(gp.gameState == gp.mapSelectState){
@@ -343,8 +387,8 @@ public class UI {
         g2.setStroke(new BasicStroke(3));
         g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorheight, 10, 10); 
 
-        /*DRAW ITEMS
-        for(int i = 0; i < gp.player.inventory.getCapacity(); i++) {
+        //DRAW ITEMS
+        for(int i = 0; i < gp.player.inventory.items.size(); i++) {
             if(gp.player.inventory.getItem(i) != null) {
                 g2.drawImage(gp.player.inventory.getItem(i).image, slotX, slotY, null);
             }
@@ -353,7 +397,7 @@ public class UI {
                 slotX = slotXstart;
                 slotY += gp.tileSize;
             }
-        }*/
+        }
     }
     public void drawSubWindow(int x, int y, int width, int height) {
         g2.setColor(new Color(0, 0, 0, 200)); // Semi-transparent black
@@ -669,4 +713,243 @@ public class UI {
         int y = gp.screenHeight - gp.tileSize; // posisi Y (bawah layar)
         g2.drawString(msg, getXforCenteredText(msg), y);
     }
+<<<<<<< HEAD
+=======
+
+    public void drawEnergyBar(Graphics2D g2, Player player) {
+        int barX = gp.tileSize;
+        int barY = gp.tileSize / 2;
+        int barWidth = gp.tileSize * 4;
+        int barHeight = gp.tileSize / 2;
+
+        // Background bar (abu-abu)
+        // g2.setColor(Color.GRAY);
+        // g2.fillRoundRect(barX, barY, barWidth, barHeight, 10, 10);
+
+        // Isi bar (merah/oranye)
+        float energyPercent = Math.max(0, Math.min(1, player.getEnergy() / 100f));
+        int fillWidth = (int)(barWidth * energyPercent);
+        g2.setColor(new Color(255, 140, 0)); // oranye
+        g2.fillRoundRect(barX, barY, fillWidth, barHeight, 10, 10);
+
+        // Border
+        g2.setColor(new Color(139, 69, 19, 180));
+        g2.drawRoundRect(barX, barY, barWidth, barHeight, 10, 10);
+
+        // Text
+        g2.setColor(kuninggelap);
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 18f));
+        String text = "Energy: " + player.getEnergy();
+        int textX = barX + barWidth/2 - g2.getFontMetrics().stringWidth(text)/2;
+        int textY = barY + barHeight - 5;
+        g2.drawString(text, textX, textY);
+    }
+
+    public void drawFishPrompt() {
+        g2.setFont(stardew.deriveFont(Font.BOLD, 24F));
+        g2.setColor(Color.white);
+        String msg = "Click F to Fish";
+        int y = gp.screenHeight - gp.tileSize * 2; 
+        g2.drawString(msg, getXforCenteredText(msg), y);
+    }
+
+    public void drawSleepPrompt() {
+        g2.setFont(stardew.deriveFont(Font.BOLD, 24F));
+        g2.setColor(Color.white);
+        String msg = "Click Z to Sleep";
+        int y = gp.screenHeight - gp.tileSize * 2; 
+        g2.drawString(msg, getXforCenteredText(msg), y);
+    }
+
+    public void drawCookingPrompt() {
+        g2.setFont(stardew.deriveFont(Font.BOLD, 24F));
+        g2.setColor(Color.white);
+        String msg = "Click C to Cook";
+        int y = gp.screenHeight - gp.tileSize * 2; 
+        g2.drawString(msg, getXforCenteredText(msg), y);
+    }
+
+    public void drawTiredPrompt() {
+        g2.setFont(stardew.deriveFont(Font.BOLD, 24F));
+        g2.setColor(Color.white);
+        String msg = "You are overly tired, you are sleeping now";
+        int y = gp.screenHeight - gp.tileSize * 2; 
+        g2.drawString(msg, getXforCenteredText(msg), y);
+    }
+
+    public void startSleepScreen() {
+        showSleepScreen = true;
+        sleepScreenStartTime = System.currentTimeMillis();
+    }
+    
+    public void drawSleepScreen() {
+        g2.setColor(Color.black);
+        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+        g2.setFont(stardew.deriveFont(Font.BOLD, 48F));
+        g2.setColor(Color.white);
+        String msg = "You are sleeping";
+        int x = getXforCenteredText(msg);
+        int y = gp.screenHeight / 2;
+        g2.drawString(msg, x, y);
+    }
+
+    public void drawNameInputScreen() {
+        g2.setColor(Color.black);
+        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+        BufferedImage bg;
+        try{
+            bg = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Menu/Background-dimmed.png"));
+            g2.drawImage(bg, 0, 0, null); 
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+        g2.setFont(stardew.deriveFont(Font.BOLD, 36F));
+        g2.setColor(kuninggelap);
+        String prompt = "Enter Your Name:";
+        int promptX = getXforCenteredText(prompt);
+        int promptY = gp.screenHeight / 2 - gp.tileSize;
+        g2.drawString(prompt, promptX+3, promptY+3);
+        g2.setColor(kuning);
+        g2.drawString(prompt, promptX, promptY);
+
+        // Kotak input
+        int boxWidth = gp.tileSize * 6;
+        int boxHeight = gp.tileSize;
+        int boxX = (gp.screenWidth - boxWidth) / 2;
+        int boxY = gp.screenHeight / 2 - 30;
+        g2.setColor(new Color(139, 69, 19, 180));
+        g2.drawRect(boxX, boxY, boxWidth, boxHeight);
+
+        // Nama yang sedang diketik
+        g2.setFont(stardew.deriveFont(Font.PLAIN, 32F));
+        g2.setColor(Color.white);
+        g2.drawString(inputName, boxX + 10, boxY + boxHeight - 15);
+
+        // Petunjuk
+        g2.setFont(stardew.deriveFont(Font.PLAIN, 24F));
+        g2.setColor(kuninggelap);
+        String info = "Press ENTER to confirm";
+        g2.drawString(info, getXforCenteredText(info) + 3, boxY + boxHeight + 30 + 3);
+        g2.setColor(kuning);
+        g2.drawString(info, getXforCenteredText(info), boxY + boxHeight + 30);
+
+        // Pesan error
+        if(!errorMessage.isEmpty() && System.currentTimeMillis() - errorMessageTime < 2000){
+            g2.setColor(Color.RED);
+            g2.setFont(stardew.deriveFont(Font.BOLD, 18F));
+            g2.drawString(errorMessage, getXforCenteredText(errorMessage), boxY + boxHeight + 60);
+        }
+    }
+
+    public void drawFarmNameInputScreen() {
+        g2.setColor(Color.black);
+        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+        BufferedImage bg;
+        try{
+            bg = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Menu/Background-dimmed.png"));
+            g2.drawImage(bg, 0, 0, null); 
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+        g2.setFont(stardew.deriveFont(Font.BOLD, 36F));
+        g2.setColor(kuninggelap);
+        String prompt = "Enter Your Farm Name:";
+        int promptX = getXforCenteredText(prompt);
+        int promptY = gp.screenHeight / 2 - gp.tileSize;
+        g2.drawString(prompt, promptX+3, promptY+3);
+        g2.setColor(kuning);
+        g2.drawString(prompt, promptX, promptY);
+
+        // Kotak input
+        int boxWidth = gp.tileSize * 6;
+        int boxHeight = gp.tileSize;
+        int boxX = (gp.screenWidth - boxWidth) / 2;
+        int boxY = gp.screenHeight / 2 - 30;
+        g2.setColor(new Color(139, 69, 19, 180));
+        g2.drawRect(boxX, boxY, boxWidth, boxHeight);
+
+        // Nama yang sedang diketik
+        g2.setFont(stardew.deriveFont(Font.PLAIN, 32F));
+        g2.setColor(Color.white);
+        g2.drawString(inputName, boxX + 10, boxY + boxHeight - 15);
+
+        // Petunjuk
+        g2.setFont(stardew.deriveFont(Font.PLAIN, 24F));
+        g2.setColor(kuninggelap);
+        String info = "Press ENTER to confirm";
+        g2.drawString(info, getXforCenteredText(info) + 3, boxY + boxHeight + 30 + 3);
+        g2.setColor(kuning);
+        g2.drawString(info, getXforCenteredText(info), boxY + boxHeight + 30);
+
+        // Pesan error
+        if(!errorMessage.isEmpty() && System.currentTimeMillis() - errorMessageTime < 2000){
+            g2.setColor(Color.RED);
+            g2.setFont(stardew.deriveFont(Font.BOLD, 18F));
+            g2.drawString(errorMessage, getXforCenteredText(errorMessage), boxY + boxHeight + 60);
+        }
+    }
+
+    public void drawCookingMenu(){
+        int width = gp.tileSize*5;
+        int height = gp.tileSize*2;
+        int x = (gp.screenWidth - width)/2;
+        int y = (gp.screenHeight - height)/2;
+
+        drawSubWindow(x, y, width, height);
+
+        g2.setFont(stardew.deriveFont(Font.BOLD, 36F));
+        String title = "Memasak";
+        int titleX = getXforCenteredText(title);
+        int titleY = y + gp.tileSize;
+        g2.setColor(kuninggelap);
+        g2.drawString(title, titleX + 3, titleY + 3);
+        g2.setColor(kuning);
+        g2.drawString(title, titleX, titleY); 
+
+
+        g2.setFont(stardew.deriveFont(Font.PLAIN, 24F));
+        String [] option = {"Memasak", "Back"};
+        int optionY = titleY + gp.tileSize;
+        for(int i = 0; i < option.length; i++) {
+            int optionX = getXforCenteredText(option[i]);
+            if(commandNum == i){
+                g2.setColor(kuninggelap);
+                g2.drawString(option[i], optionX + 3, optionY + 3);
+                g2.setColor(kuning);
+                g2.drawString(option[i], optionX, optionY);
+            } else {
+                g2.setColor(Color.white);
+                g2.drawString(option[i], optionX, optionY);
+            }
+        }
+        if(commandNum == 0){
+            List<String> availableRecipes = new ArrayList<>();
+            for(String recipe : gp.recipe.keySet()){
+                if(Boolean.TRUE.equals(gp.recipe.get(recipe))) {
+                    availableRecipes.add(recipe);
+                }
+            }
+            int recipeY = optionY + gp.tileSize / 2;
+            g2.setFont(stardew.deriveFont(Font.PLAIN, 24F));
+            for (int i = 0; i < availableRecipes.size(); i++) {
+                int recipeX = getXforCenteredText(availableRecipes.get(i));
+                // Suppose you have a variable commandNum2 for recipe selection
+                if (0 == i) {
+                    g2.setColor(kuninggelap);
+                    g2.drawString(">", recipeX - 32 + 3, recipeY + 3);
+                    g2.setColor(kuning);
+                    g2.drawString(">", recipeX - 32, recipeY);
+                }
+                g2.setColor(kuninggelap);
+                g2.drawString(availableRecipes.get(i), recipeX + 3, recipeY + 3);
+                g2.setColor(kuning);
+                g2.drawString(availableRecipes.get(i), recipeX, recipeY);
+                recipeY += gp.tileSize;
+            }
+        }
+    }
+>>>>>>> da9b464d7715897d2dde30f39c66f102d5cbbbbb
 }
+

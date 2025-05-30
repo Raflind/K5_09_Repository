@@ -3,8 +3,11 @@ package NPC;
 
 
 import java.util.ArrayList;
-import Items.Items;
 
+import Entity.Entity;
+import Entity.Player;
+import Items.Items;
+import main.GamePanel;
 import Exception.*;
 
 /**
@@ -17,7 +20,7 @@ import Exception.*;
  */
 
 
-public abstract class NPC{
+public abstract class NPC extends Entity{
     
     //Attribute
     private String name;
@@ -27,15 +30,27 @@ public abstract class NPC{
     private ArrayList<Items> likedItems;
     private ArrayList<Items> hatedItems;
     private Relationship relationshipStatus;
+    private static ArrayList<NPC> npcList;
+    private int visitedFreq;
+    private int giftedFreq;
+    private int chatFreq;
 
     //Contructor
-    public NPC(String name){
+    public NPC(String name, GamePanel gp){
+        super(gp);
         this.name = name;
         this.lovedItems = new ArrayList<Items>();
         this.likedItems = new ArrayList<Items>();
         this.hatedItems = new ArrayList<Items>();
         heartPoints = 0;
+        visitedFreq = 0;
+        giftedFreq = 0;
+        chatFreq = 0;
         relationshipStatus = Relationship.SINGLE;
+        if (npcList.size() != 1) {
+            npcList = new ArrayList<>();
+        }
+        npcList.add(this);
     }
 
     //Getter
@@ -66,6 +81,20 @@ public abstract class NPC{
     public Relationship getRelationship(){
         return relationshipStatus;
     }
+
+    public int getVisitingFreq(){
+        return visitedFreq;
+    }
+
+    public int getChattingFreq(){
+        return chatFreq;
+    }
+
+    public int getGiftingFreq(){
+        return giftedFreq;
+    }
+
+    
 
     //Setter
     public void setName(String name){
@@ -108,6 +137,10 @@ public abstract class NPC{
         }
     }
 
+    public void visited(){
+        visitedFreq++;
+    }
+
     //Methods
     private Boolean isLovedItem(Items item){
         return lovedItems.contains(item);
@@ -134,10 +167,10 @@ public abstract class NPC{
      * @param playerName isinya nama player nya buat dipake jadi parameter ngeluarin pesan
      * @param item item yang mau dikasih ke si npc ini
      */
-    public void recieveGifts(String playerName, Items item) throws WrongUseFunctionException{
+    public void recieveGifts(Player player, Items item) throws WrongUseFunctionException{
         
         //System Calling
-        System.out.println(getName() + " menerima barang yang diberikan " + playerName);
+        System.out.println(getName() + " menerima barang yang diberikan " + player.getName());
 
         if (isLovedItem(item)) {
             npcResponse("I reallyy love this, makaasihh");
@@ -149,31 +182,55 @@ public abstract class NPC{
             npcResponse("masuk lo apaan ngirim beginian");
             decreaseHeartPoints(25);
         }
+        giftedFreq++;
 
         System.out.println("Heart Points " + getName() + " : " + getHeartPoints());
     }
 
     
-    /**
-    public void updateRelation(){
+    
+    private void updateRelation(){
         switch (getRelationship()) {
             case Relationship.SINGLE:
                 setRelationshipStatus(Relationship.FIANCE);
-                
-                break;
-            
             case Relationship.FIANCE:
                 setRelationshipStatus(Relationship.SPOUSE);
-                break;
-
             case Relationship.SPOUSE:
                 setRelationshipStatus(Relationship.SINGLE);
-                break;
-        
             default:
                 break;
         }
-    } */
+    }
 
-    public abstract void interact();
+    public void propose(){
+        updateRelation();
+
+    }
+
+    public void marry(){
+        updateRelation();
+    }
+
+    public void breakUp(){
+        updateRelation();
+
+    }
+
+    public void chat() throws WrongUseFunctionException{
+        chatFreq++;
+        increaseHeartPoints(10);
+    }
+
+    public void ask(){
+
+    }
+
+
+    public void interact(Player player){
+        String name = player.getName();
+        npcResponse("Halo " + name + " sudah lama kita tidak berjumpa!");
+        npcResponse("apakah ada yang bisa saya bantu?");
+        int opt = 0; //harusnya string intinya pilihan optionnya
+        Boolean isInteract = true;
+    }
 }

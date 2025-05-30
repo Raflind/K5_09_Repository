@@ -1,14 +1,11 @@
 package NPC;
 
+import main.GamePanel;
+
 public class Abigail extends NPC {
     
-    public Abigail(){
-        super("Abigail");
-    }
-
-    @Override
-    public void interact(){
-        System.out.println("On-Develop");
+    public Abigail(GamePanel gp){
+        super("Abigail", gp);
     }
     
 }
