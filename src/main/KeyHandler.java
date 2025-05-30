@@ -9,6 +9,7 @@ import Map.TileManager;
 
 public class KeyHandler implements KeyListener {
     public boolean up, down, left, right;
+    public boolean enterPressed, escPressed;
     GamePanel gp;
 
     public KeyHandler(GamePanel gp){
@@ -39,8 +40,52 @@ public class KeyHandler implements KeyListener {
         if(gp.gameState == gp.mapSelectState){
             mapSelectState(code);
         }
+<<<<<<< HEAD
         if(gp.gameState == gp.cookingState){
             cookingState(code);
+=======
+        if(gp.gameState == gp.optionState){
+            optionState(code);
+        }
+
+    }
+
+    public void optionState(int code) {
+        if (code == KeyEvent.VK_ENTER) {
+            switch (gp.ui.subState) {
+                case 0: // MAIN MENU
+                    switch (gp.ui.commandNum) {
+                        case 0: gp.ui.subState = 1; break; // Help
+                        case 1: gp.ui.subState = 2; break; // List Object
+                        case 2: gp.ui.subState = 3; break; // Statistics
+                        case 3: gp.ui.subState = 4; break; // Actions
+                        case 4: gp.gameState = gp.titleState; break; // Exit to Title
+                        case 5: gp.gameState = gp.playState; break; // Back to game
+                    }
+                    break;
+                default:
+                    gp.ui.subState = 0;
+                    break;
+            }
+        }
+
+        if (gp.ui.subState == 0) {
+            int maxCommandNum = 5; // 6 opsi: 0–5
+
+            if (code == KeyEvent.VK_W) {
+                gp.ui.commandNum--;
+                if (gp.ui.commandNum < 0) {
+                    gp.ui.commandNum = maxCommandNum;
+                }
+            }
+
+            if (code == KeyEvent.VK_S) {
+                gp.ui.commandNum++;
+                if (gp.ui.commandNum > maxCommandNum) {
+                    gp.ui.commandNum = 0;
+                }
+            }
+>>>>>>> 9564a1ea3ec46dffcc09f9cfcd183ec7cbcc292f
         }
     }
 
@@ -313,10 +358,6 @@ public class KeyHandler implements KeyListener {
                     }
                     gp.player.worldX = gp.tileM.worldX * gp.tileSize;
                     gp.player.worldY = gp.tileM.worldY * gp.tileSize;
-                    gp.player.consumeEnergy(10);
-                    for(int i = 0; i<15/5; i++){
-                        gp.environmentStatus.time.addFiveMinutes(); //nambah 15 minit
-                    }
                     gp.gameState = gp.playState;
                 } else if (gp.ui.mapSelectionNum == totalMaps){
                     gp.gameState = gp.playState;
