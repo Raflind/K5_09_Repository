@@ -8,6 +8,8 @@ import java.awt.Graphics2D;
 import java.awt.FontFormatException;
 import javax.imageio.ImageIO;
 import Entity.Player;
+import Items.Items;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -25,6 +27,7 @@ public class UI {
     public int commandNum = 0;
     public int cookingCommand = 0;
     public int selectRecipe = 0;
+    public Items selectItems = null;
     public int titleScreenState = 0;
     public List<MapInfo> mapList;
     public int mapSelectionNum = 0; // Untuk navigasi pilihan map
@@ -38,6 +41,7 @@ public class UI {
     public boolean showSleepPrompt = false;
     public boolean showSleepScreen = false;
     public boolean showCookingScreen = false;
+    public boolean showShippingBinScreen = false;
     private long sleepScreenStartTime = 0;
     public boolean isAction = false;
     public boolean isTired = false;
@@ -95,12 +99,16 @@ public class UI {
                     else {
                         gp.player.setEnergy(gp.player.MAX_ENERGY); // Reset energy to 100 after sleep
                     }
+                    gp.player.shippingBin.sellAll(gp.player.goldManager);
                     gp.environmentStatus.bangun();
                 }
                 return;
             }
             if(showCookingScreen) {
                 drawCookingPrompt();
+            }
+            if(showShippingBinScreen) {
+                drawShippingBinPrompt();
             }
             if(!isAction){
                 drawGameStatus();
@@ -125,6 +133,9 @@ public class UI {
         }
         if(gp.gameState == gp.pauseState) {
             drawPauseScreen();
+        }
+        if(gp.gameState == gp.shippingBinState){
+            drawInventory();
         }
         if(gp.gameState == gp.titleState){
             if(titleScreenState==0){
@@ -407,6 +418,12 @@ public class UI {
                 slotX = slotXstart;
                 slotY += gp.tileSize;
             }
+        }
+        int index = slotRow * 4 + slotCol;
+        if(gp.player.inventory.items.size() > 0 && index < gp.player.inventory.items.size()) {
+            selectItems = gp.player.inventory.getItem(index);
+        } else {
+            selectItems = null; // Reset if no item is selected
         }
     }
     public void drawSubWindow(int x, int y, int width, int height) {
@@ -775,6 +792,14 @@ public class UI {
         g2.setFont(stardew.deriveFont(Font.BOLD, 24F));
         g2.setColor(Color.white);
         String msg = "Click C to Cook";
+        int y = gp.screenHeight - gp.tileSize * 2; 
+        g2.drawString(msg, getXforCenteredText(msg), y);
+    }
+
+    public void drawShippingBinPrompt(){
+        g2.setFont(stardew.deriveFont(Font.BOLD, 24F));
+        g2.setColor(Color.white);
+        String msg = "Click B to Open Shipping Bin";
         int y = gp.screenHeight - gp.tileSize * 2; 
         g2.drawString(msg, getXforCenteredText(msg), y);
     }

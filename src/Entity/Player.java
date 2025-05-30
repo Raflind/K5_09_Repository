@@ -39,8 +39,8 @@ public class Player extends Entity{
     }
     private Gender gender;
     private NPC partner;
-    private GoldManager goldManager;
-    private ShippingBin shippingBin;
+    public GoldManager goldManager = new GoldManager();
+    public ShippingBin shippingBin = new ShippingBin();
 
     /**
      * mau bikin constructor yang bisa masukin energy, name, farmName, dan gender
@@ -108,6 +108,13 @@ public class Player extends Entity{
                 gp.ui.showCookingScreen = true;
             } else {
                 gp.ui.showCookingScreen = false;
+            }
+        }
+        if(gp.tileM.currMap.equals("Farm")){
+            if(isShippingBinTile()){
+                gp.ui.showShippingBinScreen = true;
+            } else {
+                gp.ui.showShippingBinScreen = false;
             }
         }
         if(keyH.up == true && enMove){
@@ -294,6 +301,15 @@ public class Player extends Entity{
     public boolean isCookingTile(){
         int[] cookingTiles = {26,27};
         for(int t : cookingTiles){
+            if(gp.cChecker.colTile1 == t || gp.cChecker.colTile2 == t){
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean isShippingBinTile(){
+        int[] shippingBinTiles = {44, 46, 47};
+        for(int t : shippingBinTiles){
             if(gp.cChecker.colTile1 == t || gp.cChecker.colTile2 == t){
                 return true;
             }

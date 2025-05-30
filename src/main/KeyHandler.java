@@ -49,6 +49,9 @@ public class KeyHandler implements KeyListener {
         if(gp.gameState == gp.insufficientResourcesState){
             insufficientResourcesState(code);
         }
+        if(gp.gameState == gp.shippingBinState){
+            shippingBinState(code);
+        }
 
     }
 
@@ -201,6 +204,9 @@ public class KeyHandler implements KeyListener {
         }
         if(code == KeyEvent.VK_C && gp.ui.showCookingScreen) {
             gp.gameState = gp.cookingState;
+        }
+        if(code == KeyEvent.VK_B && gp.ui.showShippingBinScreen){
+            gp.gameState = gp.shippingBinState;
         }
         if(code == KeyEvent.VK_ENTER && gp.ui.showVisitHousePrompt) {
             gp.ui.showVisitHousePrompt = false;
@@ -386,6 +392,38 @@ public class KeyHandler implements KeyListener {
         if(gp.gameState == gp.insufficientResourcesState) {
             if(code == KeyEvent.VK_ESCAPE) {
                 gp.gameState = gp.cookingState; // Kembali ke play state
+            }
+        }
+    }
+    public void shippingBinState(int code) {
+        if(code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT){
+            if(gp.ui.slotCol != 0){
+                gp.ui.slotCol--;
+            }
+        }
+        if(code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT){
+            if(gp.ui.slotCol != 4){
+                gp.ui.slotCol++;
+            }
+        }
+        if(code == KeyEvent.VK_W || code == KeyEvent.VK_UP){
+            if(gp.ui.slotRow != 0){
+                gp.ui.slotRow--;
+            }
+        }
+        if(code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN){
+            if(gp.ui.slotRow != 3){
+                gp.ui.slotRow++;
+            }
+        }
+        if(code == KeyEvent.VK_ESCAPE) {
+            gp.gameState = gp.playState;
+        }
+        if(code == KeyEvent.VK_ENTER) {
+            if(gp.ui.selectItems != null) {
+                gp.player.shippingBin.addItem(gp.ui.selectItems);
+                gp.player.inventory.removeItem(gp.ui.selectItems);
+                gp.ui.selectItems = null; // Reset selected item after shipping
             }
         }
     }
