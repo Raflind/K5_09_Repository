@@ -25,7 +25,9 @@ public class Player extends Entity{
     public final int screenX;
     public final int screenY;
     public BufferedImage lelah;
+    public BufferedImage lelah, hoe, axe, rod, can;
     public boolean enMove = true; // kl bisa move
+    public int currTileNum;
 
     //atribut related to player logic
     private String name;
@@ -76,6 +78,10 @@ public class Player extends Entity{
             kiri1 = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Player/kiri1.png"));
             kiri2 = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Player/kiri2.png"));
             lelah = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Player/lelah.png"));
+            hoe = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Player/Hoe.png"));
+            axe = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Player/Pickaxe.png"));
+            rod = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Player/Fishing.png"));
+            can = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Player/WateringCan.png"));
         }
         catch(IOException e){
             e.printStackTrace();
@@ -149,7 +155,10 @@ public class Player extends Entity{
                 }
                 spriteCounter=0;
             }
+        } else {
+            spriteNum = 1; // kalau diam, spriteNum tetap 1
         }
+         currTileNum = gp.tileM.mapTileNum[worldX/gp.tileSize][worldY/gp.tileSize];
     }
 
     public void draw(Graphics2D comp){
@@ -176,6 +185,12 @@ public class Player extends Entity{
             break;
             case "lelah":
             image = lelah;
+            break;
+            case "hoe":
+            image = hoe;
+            break;
+            case "axe":
+            image = axe;
             break;
         }
         comp.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
@@ -285,4 +300,35 @@ public class Player extends Entity{
         }
         return false;
     }
+
+    public void tilling(){
+        if(currTileNum==1){
+            direction = "hoe";
+            enMove = false;
+            new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                direction = "diam";
+                enMove = true;
+                gp.tileM.mapTileNum[worldX/gp.tileSize][worldY/gp.tileSize] = 0;//ubah tile menjadi tanah yang sudah dicangkul
+            }}, 1000);
+        }
+    }
+
+    public void untilling(){
+        if(currTileNum==0){
+            direction = "axe";
+            enMove = false;
+            new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                direction = "diam";
+                enMove = true;
+                gp.tileM.mapTileNum[worldX/gp.tileSize][worldY/gp.tileSize] = 1;//ubah tile menjadi tanah yang blm cangkul
+            }}, 1000);
+        }
+    }
+
+    
+
 }

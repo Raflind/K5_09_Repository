@@ -1,8 +1,5 @@
 package TimeSeasonWeather;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 public class EnvironmentStatus {
     public enum Season {
         SPRING, SUMMER, AUTUMN, WINTER

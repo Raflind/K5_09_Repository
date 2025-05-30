@@ -202,6 +202,24 @@ public class KeyHandler implements KeyListener {
         if(code == KeyEvent.VK_C && gp.ui.showCookingScreen) {
             gp.gameState = gp.cookingState;
         }
+        if(code == KeyEvent.VK_ENTER && gp.ui.showVisitHousePrompt) {
+            gp.ui.showVisitHousePrompt = false;
+        }
+        if(gp.tileM.currMap.equals("Farm")) {
+            if(code == KeyEvent.VK_T) {
+                gp.player.tilling();
+            } else {
+                
+            }
+        } else if (gp.tileM.currMap.equals("Forest")) {
+            if(code == KeyEvent.VK_F){
+
+            } else {
+            }
+        } else {
+            gp.ui.showVisitHousePrompt = false;
+            
+        }
     }
 
     public void titleState(int code, KeyEvent e){

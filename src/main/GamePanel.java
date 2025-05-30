@@ -30,7 +30,7 @@ public class GamePanel extends JPanel implements Runnable{
    
    public UI ui = new UI(this);
    public Time time = new Time(6, 0);
-public HashMap<String, Boolean> recipe = new HashMap<String, Boolean>() {{
+   public HashMap<String, Boolean> recipe = new HashMap<String, Boolean>() {{
     put("Fish And Chips", true);
     put("Baguette", true);
     put("Sashimi", true);
@@ -211,27 +211,6 @@ public HashMap<String, Boolean> recipe = new HashMap<String, Boolean>() {{
         }
         comp.dispose();
     }
-<<<<<<< HEAD
-    else if(gameState==inventoryState){
-        ui.draw(comp);
-    }
-    else if(gameState==dialogueState){
-        // Draw dialogue box or other UI elements for dialogue state
-        // This can be implemented later
-    }
-    else if(gameState==pauseState){ 
-        ui.draw(comp);
-   }
-   else if(gameState==mapSelectState){
-        ui.draw(comp);
-    }
-    else if(gameState==optionState){
-        ui.draw(comp);
-    }
-    else if(gameState==cookingState){
-        ui.draw(comp);
-    }
-    }
     public void cookSelectedRecipe(String recipeName){
         Cooking cooking = null;
         switch(recipeName) {
@@ -276,6 +255,4 @@ public HashMap<String, Boolean> recipe = new HashMap<String, Boolean>() {{
 
         }
     }
-=======
->>>>>>> 9564a1ea3ec46dffcc09f9cfcd183ec7cbcc292f
 }
