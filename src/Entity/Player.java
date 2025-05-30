@@ -10,7 +10,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import Entity.NPC.NPC;
-import Entity.NPC.Relationship;
+import Entity.NPC.*;
 import Entity.PlayerNeeds.*;
 import Exception.EnergyLowException;
 import Items.Inventory;
@@ -218,7 +218,7 @@ public class Player extends Entity{
     public NPC getPartner(){
         return partner;
     }
-    public Relationship getPartnerStatus(){
+    public NPC.Relationship getPartnerStatus(){
         return getPartner().getRelationship();
     }
     public Inventory getInventory(){

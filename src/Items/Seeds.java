@@ -19,7 +19,7 @@ public class Seeds extends Items {
         this.harvestSeason = new ArrayList<Season>();
         this.harvestSeason.add(harvestSeason);
         if (name.equals("Wheat")) {
-            this.harvestSeason.add(Season.AUTUMN);
+            this.harvestSeason.add(Season.Fall);
         }
     }
 

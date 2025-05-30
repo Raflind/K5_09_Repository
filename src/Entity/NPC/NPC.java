@@ -18,7 +18,13 @@ import Exception.*;
 
 
 public abstract class NPC extends Entity{
-    
+
+    public enum Relationship {
+        SINGLE,
+        FIANCE,
+        SPOUSE
+    }
+
     //Attribute
     private String name;
     private int heartPoints;

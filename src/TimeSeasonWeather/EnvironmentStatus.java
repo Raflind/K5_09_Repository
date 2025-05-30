@@ -1,11 +1,13 @@
 package TimeSeasonWeather;
 
+import java.util.Random;
+
 public class EnvironmentStatus {
     public enum Season {
-        SPRING, SUMMER, AUTUMN, WINTER
+        Spring, Summer, Fall, Winter
     }
     public enum Weather {
-        RAINY, SUNNY
+        Rainy, Sunny
     }
     public Season season;
     public Weather weather;
@@ -15,8 +17,8 @@ public class EnvironmentStatus {
     public EnvironmentStatus(Time time) {
         this.time = time;
         this.day = 1;
-        this.weather = Weather.RAINY;
-        this.season = Season.SPRING; // Default season
+        this.weather = Weather.Sunny;
+        this.season = Season.Spring; // Default season
     }
 
     public Weather getWeather() {
@@ -48,17 +50,17 @@ public class EnvironmentStatus {
     public void nextSeason(){
         if(day >= 30) {
             switch (season) {
-                case SPRING:
-                    season = Season.SUMMER;
+                case Spring:
+                    season = Season.Summer;
                     break;
-                case SUMMER:
-                    season = Season.AUTUMN;
+                case Summer:
+                    season = Season.Fall;
                     break;
-                case AUTUMN:
-                    season = Season.WINTER;
+                case Fall:
+                    season = Season.Winter;
                     break;
-                case WINTER:
-                    season = Season.SPRING;
+                case Winter:
+                    season = Season.Spring;
                     break;
             }
             day = 1; // Reset day to 1 for the new season
@@ -67,6 +69,7 @@ public class EnvironmentStatus {
 
     public void nextDay() {
         if(time.getHour() == 0 && time.getMinute() == 0) {
+            randomizeWeather();
             setDay(this.day + 1);
         if (day > 30) {
             day = 1; // Reset to 1 after 30 days
@@ -83,7 +86,23 @@ public class EnvironmentStatus {
         else if(time.getHour()<24){
             time.setHour(6);
             time.setMinute(0);
+            randomizeWeather();
             day++;
+        }
+    }
+
+    public void randomizeWeather(){
+        if(season != Season.Winter){
+            Random rand = new Random();
+            int randomNumber = rand.nextInt(100000)%2;
+            switch (randomNumber) {
+                case 0:
+                    setWeather(Weather.Rainy);
+                    break;
+                default:
+                    setWeather(Weather.Sunny);
+                    break;
+            }
         }
     }
 }

@@ -207,7 +207,7 @@ public class GamePanel extends JPanel implements Runnable{
             ui.draw(comp);
         }
         else if(gameState == optionState) {
-            ui.drawOptionScreen(comp);
+            ui.draw(comp);;
         }
         else if(gameState == cookingState){
             ui.draw(comp);

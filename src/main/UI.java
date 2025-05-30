@@ -147,7 +147,7 @@ public class UI {
             // drawDialogueScreen();
         }
         if(gp.gameState == gp.optionState){
-            drawOptionScreen(g2);
+            drawOptionScreen();
         }  
         if(gp.gameState == gp.cookingState){
             drawCookingList();
@@ -416,7 +416,7 @@ public class UI {
 
     public void drawGameStatus(){
         int width = gp.tileSize*5;
-        int height = gp.tileSize*2;
+        int height = gp.tileSize*3 + 8;
         int x = gp.screenWidth - width - gp.tileSize / 2;
         int y = gp.tileSize / 2;
 
@@ -426,13 +426,16 @@ public class UI {
         int minute = gp.time.getMinute();
         int day = gp.environmentStatus.getDay();
         String season = gp.environmentStatus.season.name();
+        String map = gp.tileM.currMap;
 
         g2.setColor(kuning);
         g2.setFont(stardew.deriveFont(Font.BOLD, 36F));
         int textX = x + 20;
         int textY = y + 15;
         g2.drawString("Time: " + hour + ":" + minute, textX, textY + 30);
-        g2.drawString("Day " + day, textX, textY + 60);   
+        g2.drawString("Day " + day, textX, textY + 60);  
+        g2.drawString(season, textX, textY + 90);
+        g2.drawString(map, textX, textY + 120); 
     }
 
         // BufferedImage bg;
@@ -444,7 +447,7 @@ public class UI {
         //     e.printStackTrace();
         // }
 
-    public void drawOptionScreen(Graphics2D g2) {
+    public void drawOptionScreen() {
             g2.setColor(Color.black);
             g2.setFont(stardew.deriveFont(Font.PLAIN, 32F));
 
