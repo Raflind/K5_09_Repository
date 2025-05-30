@@ -33,6 +33,7 @@ public class KeyHandler implements KeyListener {
             inventoryState(code);
         }
         if(gp.gameState == gp.dialogueState){
+            dialogueState(code);
         }
         if(gp.gameState == gp.pauseState){
             pauseState(code);
@@ -211,6 +212,23 @@ public class KeyHandler implements KeyListener {
         if(code == KeyEvent.VK_ENTER && gp.ui.showVisitHousePrompt) {
             gp.ui.showVisitHousePrompt = false;
         }
+        if(code==KeyEvent.VK_M && gp.player.interactNPC==1) {
+            if(gp.npcManager.getActiveNPC().getName().equals("Abigail")) {
+                gp.ui.currentDialogue = "Halo! Akulah Abigail sang petualang! Aku suka untuk\nmelakukan eksplorasi! Salam kenal ya!";
+            } else if(gp.npcManager.getActiveNPC().getName().equals("Caroline")) {
+                gp.ui.currentDialogue = "Halo! Aku adalah pengrajin kayu terbaik di kota ini! \nSemua orang kenal denganku! Salam kenal ya!";
+            } else if(gp.npcManager.getActiveNPC().getName().equals("Dasco")) {
+                gp.ui.currentDialogue = "Khukhukhu, aku adalah Mafia terbesar Spakbor Hills! \nDasco namaku!";
+            } else if(gp.npcManager.getActiveNPC().getName().equals("MayorTadi")) {
+                gp.ui.currentDialogue = "Heh, gw mayornya di sini. Kenalin, Mayor Tadi";
+            } else if(gp.npcManager.getActiveNPC().getName().equals("Perry")) {
+                gp.ui.currentDialogue = "Perkenalkan, nama saya Perry, seorang penulis. \nSenang bisa berkenalan dengan Anda!";
+            } else if(gp.npcManager.getActiveNPC().getName().equals("Emily")) {
+                gp.ui.currentDialogue = "Haii! Aku Emily si baik hati… Salam kenal, \nsering-sering berkunjung yaa!";
+            } 
+            gp.player.interactNPC = 0;
+            gp.gameState = gp.dialogueState;
+        }
         if(gp.tileM.currMap.equals("Farm")) {
             if(code == KeyEvent.VK_T) {
                 gp.player.tilling();
@@ -383,6 +401,7 @@ public class KeyHandler implements KeyListener {
                     gp.player.worldX = gp.tileM.worldX * gp.tileSize;
                     gp.player.worldY = gp.tileM.worldY * gp.tileSize;
                     gp.gameState = gp.playState;
+                    gp.player.consumeEnergy(10);
                 } else if (gp.ui.mapSelectionNum == totalMaps){
                     gp.gameState = gp.playState;
                 }
@@ -425,6 +444,37 @@ public class KeyHandler implements KeyListener {
                 gp.player.inventory.removeItem(gp.ui.selectItems);
                 gp.ui.selectItems = null; // Reset selected item after shipping
             }
+        }
+    }
+
+    public void dialogueState(int code) {
+        int maxCommandNum = gp.ui.dialogueOptionsStore.length - 1; // atau dialogueOptions.length
+
+        if(code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT){
+            if((gp.ui.dialogueCommandNum + 1) % 3 != 0 && gp.ui.dialogueCommandNum < maxCommandNum){
+                gp.ui.dialogueCommandNum++;
+            }
+        }
+        if(code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT){
+            if(gp.ui.dialogueCommandNum % 3 != 0){
+                gp.ui.dialogueCommandNum--;
+            }
+        }
+        if(code == KeyEvent.VK_W || code == KeyEvent.VK_UP){
+            if(gp.ui.dialogueCommandNum - 3 >= 0){
+                gp.ui.dialogueCommandNum -= 3;
+            }
+        }
+        if(code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN){
+            if(gp.ui.dialogueCommandNum + 3 <= maxCommandNum){
+                gp.ui.dialogueCommandNum += 3;
+            }
+        }
+        if(code == KeyEvent.VK_ESCAPE){
+            gp.gameState = gp.playState;
+        }
+        if(code == KeyEvent.VK_ENTER){
+            // Aksi sesuai pilihan
         }
     }
 }

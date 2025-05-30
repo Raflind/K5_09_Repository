@@ -51,6 +51,9 @@ public class UI {
     public long errorMessageTime = 0;
     public List<String> availableRecipe = new ArrayList<>();
     public int subState;
+    public int dialogueCommandNum = 0; // 0: Chat, 1: Gift, 2: Propose, 3: Marry
+    public final String[] dialogueOptions = {"Chat", "Gift", "Propose", "Marry"};
+    public final String[] dialogueOptionsStore = {"Chat", "Gift", "Propose", "Marry", "Store"};
 
     public UI(GamePanel gp) {
         this.gp = gp;
@@ -126,6 +129,9 @@ public class UI {
             if(isTired){
                 drawTiredPrompt();
             }
+            if(gp.player.interactNPC==1){
+                drawInteraction();
+            }
             
         }
         if (gp.gameState == gp.inventoryState){
@@ -155,7 +161,11 @@ public class UI {
             drawMapSelectionScreen();
         }
         if(gp.gameState == gp.dialogueState){
-            // drawDialogueScreen();
+            if(gp.tileM.currMap.equals("Store")) {
+                drawDialogueScreen(dialogueOptionsStore);
+            } else {
+                drawDialogueScreen(dialogueOptions);
+            }
         }
         if(gp.gameState == gp.optionState){
             drawOptionScreen();
@@ -1044,6 +1054,56 @@ public class UI {
         g2.setColor(kuning);
         g2.drawString(msg, getXforCenteredText(msg), y + windowHeight / 2 + textHeight / 4);
     }
-        
+
+    public void drawDialogueScreen(String[] dialogueOption) {
+        // WINDOW
+        int y = gp.tileSize * 8;
+        int width = gp.screenWidth;
+        int height = gp.tileSize * 5; // Tinggi window, bisa dinaikkan jika opsi banyak
+        int x = 0;
+        drawSubWindow(x, y, width, height);
+
+        g2.setFont(stardew.deriveFont(Font.PLAIN, 32F));
+        int startX = x + gp.tileSize;
+        int startY = y + gp.tileSize;
+
+        // Tampilkan dialog utama
+        int textY = startY;
+        for (String line : currentDialogue.split("\n")) {
+            g2.setColor(kuninggelap);
+            g2.drawString(line, startX+3, textY+3);
+            g2.setColor(kuning);
+            g2.drawString(line, startX, textY);
+            textY += 40;
+        }
+
+        // Pilihan aksi (3 kolom)
+        int optionStartY = textY + 10;
+        int optionSpacingX = 140; // jarak antar kolom (atur sesuai kebutuhan)
+        int optionSpacingY = 40;  // jarak antar baris
+
+        g2.setFont(stardew.deriveFont(Font.BOLD, 28F));
+        for (int i = 0; i < dialogueOption.length; i++) {
+            int col = i % 3;
+            int row = i / 3;
+            int optionX = startX + col * optionSpacingX;
+            int optionY = optionStartY + row * optionSpacingY;
+
+            if (dialogueCommandNum == i) {
+                g2.setColor(Color.YELLOW);
+                g2.drawString(">", optionX - 30, optionY);
+            }
+            g2.setColor(Color.WHITE);
+            g2.drawString(dialogueOption[i], optionX, optionY);
+        }
+    }
+
+    public void drawInteraction() {
+        g2.setFont(stardew.deriveFont(Font.BOLD, 24F));
+        g2.setColor(Color.white);
+        String msg = "Click M to Interact";
+        int y = gp.screenHeight - gp.tileSize * 2; 
+        g2.drawString(msg, getXforCenteredText(msg), y);
+    }
 }
 

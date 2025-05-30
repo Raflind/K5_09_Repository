@@ -206,8 +206,9 @@ public class GamePanel extends JPanel implements Runnable{
             ui.draw(comp);
         }
         else if(gameState == dialogueState){
-            // Draw dialogue box or other UI elements for dialogue state
+           // Draw dialogue box or other UI elements for dialogue state
             // This can be implemented later
+            ui.draw(comp); // Ini akan memanggil ui.draw(comp)
         }
         else if(gameState == pauseState){ 
             ui.draw(comp);

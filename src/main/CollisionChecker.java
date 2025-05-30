@@ -67,12 +67,12 @@ public class CollisionChecker {
         }
     }
 
-    public boolean checkEntity(Entity entity, Entity target) {
+    public int checkEntity(Entity entity, Entity target) {
         int solidEntityX = entity.solidArea.x;
         int solidEntityY = entity.solidArea.y;
         int solidTargetX = target.solidArea.x;
         int solidTargetY = target.solidArea.y;
-        boolean contactPlayer = false;
+        int contactPlayer = 0;
         if (target != null) {
             // Get entity's solid area position
             entity.solidArea.x = entity.worldX + entity.solidArea.x;
@@ -101,7 +101,7 @@ public class CollisionChecker {
             if (entity.solidArea.intersects(target.solidArea)) {
                 if (target != entity) {
                     entity.collisionOn = true;
-                    contactPlayer = true;
+                    contactPlayer = 1;
                 }
             }
 
@@ -144,6 +144,7 @@ public class CollisionChecker {
         }
         if (entity.solidArea.intersects(gp.player.solidArea)) {
             entity.collisionOn = true;
+            gp.player.interactNPC = 1;
         }
         entity.solidArea.x = solidEntityX;
          entity.solidArea.y = solidEntityY;

@@ -27,6 +27,7 @@ public class Player extends Entity{
     public BufferedImage lelah, hoe, axe, rod, can;
     public boolean enMove = true; // kl bisa move
     public int currTileNum;
+    public int interactNPC = 0;
 
     //atribut related to player logic
     private String name;
@@ -135,7 +136,7 @@ public class Player extends Entity{
         collisionOn = false;
         gp.cChecker.checkTile(this); 
         if(gp.npcManager.getActiveNPC()!=null){
-            System.out.println(gp.cChecker.checkEntity(this, gp.npcManager.getActiveNPC()));
+            interactNPC  =  gp.cChecker.checkEntity(this, gp.npcManager.getActiveNPC());
         }
         if(collisionOn == false){
             switch(direction){
