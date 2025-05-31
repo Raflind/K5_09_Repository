@@ -122,6 +122,13 @@ public class Player extends Entity{
                 gp.ui.showFishPrompt = false;
             }
         }
+        if(gp.tileM.currMap.equals("Mountain") || gp.tileM.currMap.equals("Forest") || gp.tileM.currMap.equals("Ocean")){
+            if(isFishingTile()){
+                gp.ui.showFishPrompt = true;
+            } else {
+                gp.ui.showFishPrompt = false;
+            }
+        }
         if(keyH.up == true && enMove){
             direction = "blkg";
         }

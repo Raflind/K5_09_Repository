@@ -120,6 +120,11 @@ public class UI {
             if(showShippingBinScreen) {
                 drawShippingBinPrompt();
             }
+            if(showFishPrompt){
+                drawFishingPrompt();
+                gp.fishing.getPossibleFish(gp.environmentStatus.season, gp.environmentStatus.weather, gp.tileM.currMap, gp.time.getHour());
+                gp.fishing.displayPossibleFish();
+            }
             if(!isAction){
                 drawGameStatus();
                 drawEnergyBar(g2, gp.player);
@@ -496,8 +501,8 @@ public class UI {
         // }
 
     public void drawOptionScreen() {
-            g2.setColor(Color.black);
             g2.setFont(stardew.deriveFont(Font.PLAIN, 32F));
+            g2.setColor(kuning);
 
             int frameX = gp.tileSize * 6;
             int frameY = gp.tileSize;
@@ -1153,19 +1158,31 @@ public class UI {
     }
 
     public void drawGetFish(){
-        g2.setFont(stardew.deriveFont(Font.BOLD, 24F));
-        g2.setColor(kuninggelap);
         String msg = "You got a " + gp.fishing.caughtFish.getName();
-        int y = gp.screenHeight - gp.tileSize * 2; // posisi Y (bawah layar)
-        g2.drawString(msg, getXforCenteredText(msg), y);
+        g2.setFont(stardew.deriveFont(Font.BOLD, 24F));
+        int textWidth = g2.getFontMetrics().stringWidth(msg);
+        int textHeight = g2.getFontMetrics().getHeight();
+        int windowWidth = textWidth + gp.tileSize * 2;
+        int windowHeight = textHeight + gp.tileSize;
+        int x = (gp.screenWidth - windowWidth) / 2;
+        int y = (gp.screenHeight - windowHeight) / 2;
+        drawSubWindow(x, y, windowWidth, windowHeight);
+        g2.setColor(kuning);
+        g2.drawString(msg, getXforCenteredText(msg), y + windowHeight / 2 + textHeight / 4);
     }
 
     public void drawFailCaught(){
-        g2.setFont(stardew.deriveFont(Font.BOLD, 24F));
-        g2.setColor(Color.RED);
         String msg = "You failed to catch the fish!";
-        int y = gp.screenHeight - gp.tileSize * 2; // posisi Y (bawah layar)
-        g2.drawString(msg, getXforCenteredText(msg), y);
+        g2.setFont(stardew.deriveFont(Font.BOLD, 24F));
+        int textWidth = g2.getFontMetrics().stringWidth(msg);
+        int textHeight = g2.getFontMetrics().getHeight();
+        int windowWidth = textWidth + gp.tileSize * 2;
+        int windowHeight = textHeight + gp.tileSize;
+        int x = (gp.screenWidth - windowWidth) / 2;
+        int y = (gp.screenHeight - windowHeight) / 2;
+        drawSubWindow(x, y, windowWidth, windowHeight);
+        g2.setColor(Color.RED);
+        g2.drawString(msg, getXforCenteredText(msg), y + windowHeight / 2 + textHeight / 4);
     }
 }
 

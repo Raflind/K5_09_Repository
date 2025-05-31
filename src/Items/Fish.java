@@ -92,14 +92,44 @@ public class Fish extends Items {
         return this.location.contains(location);
     }
     public boolean isInTime(int hour) {
-        switch(Integer.compare(startTime, endTime)) {
-            case -1: // startTime < endTime
-                return (hour >= startTime && hour <= endTime);
-            case 1: // startTime > endTime
-                return (hour >= startTime || hour <= endTime);
-            default:
-                return false;
+        if(startTime <= endTime) {
+            return hour >= startTime && hour < endTime;
+        } else {
+            return hour >= startTime || hour < endTime; // Handles overnight fishing
         }
+    }
+
+    public String getWeather(){
+        StringBuilder weatherString = new StringBuilder();
+        for (int i = 0; i < weather.size(); i++) {
+            weatherString.append(weather.get(i).toString());
+            if (i < weather.size() - 1) {
+                weatherString.append(", ");
+            }
+        }
+        return weatherString.toString();
+    }
+
+    public String getSeason(){
+        StringBuilder seasonString = new StringBuilder();
+        for (int i = 0; i < season.size(); i++) {
+            seasonString.append(season.get(i).toString());
+            if (i < season.size() - 1) {
+                seasonString.append(", ");
+            }
+        }
+        return seasonString.toString();
+    }
+
+    public String getLocation(){
+        StringBuilder locationString = new StringBuilder();
+        for (int i = 0; i < location.size(); i++) {
+            locationString.append(location.get(i));
+            if (i < location.size() - 1) {
+                locationString.append(", ");
+            }
+        }
+        return locationString.toString();
     }
     
 }

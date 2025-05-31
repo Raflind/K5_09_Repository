@@ -53,6 +53,9 @@ public class KeyHandler implements KeyListener {
         if(gp.gameState == gp.shippingBinState){
             shippingBinState(code);
         }
+        if(gp.gameState == gp.fishingState){
+            fishingState(code, e);
+        }
 
     }
 
@@ -78,14 +81,14 @@ public class KeyHandler implements KeyListener {
         if (gp.ui.subState == 0) {
             int maxCommandNum = 5; // 6 opsi: 0–5
 
-            if (code == KeyEvent.VK_W) {
+            if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
                 gp.ui.commandNum--;
                 if (gp.ui.commandNum < 0) {
                     gp.ui.commandNum = maxCommandNum;
                 }
             }
 
-            if (code == KeyEvent.VK_S) {
+            if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
                 gp.ui.commandNum++;
                 if (gp.ui.commandNum > maxCommandNum) {
                     gp.ui.commandNum = 0;
@@ -214,6 +217,11 @@ public class KeyHandler implements KeyListener {
         }
         if(code == KeyEvent.VK_T){
             gp.gameState = gp.mapSelectState;
+        }
+        if(code == KeyEvent.VK_F && gp.ui.showFishPrompt) {
+            gp.gameState = gp.fishingState;
+            gp.ui.isGuessing = true; // Set isGuessing to true to start guessing
+            gp.ui.inputBuffer = ""; // Reset input buffer
         }
         if(code==KeyEvent.VK_M && gp.player.interactNPC==1) {
             if(gp.npcManager.getActiveNPC().getName().equals("Abigail")) {
@@ -483,10 +491,9 @@ public class KeyHandler implements KeyListener {
 
     public void fishingState(int code, KeyEvent e) {
         if(gp.ui.isGuessing){
-            gp.ui.inputBuffer = "";
             if (code == KeyEvent.VK_ENTER) {
                 int guess = Integer.parseInt(gp.ui.inputBuffer);
-                if (gp.guessList.size() < gp.fishing.attempt) {
+                if (gp.guessList.size() < gp.fishing.attempt - 1) {
                     gp.guessList.add(guess);
                 }
                 else{
@@ -509,11 +516,10 @@ public class KeyHandler implements KeyListener {
                 gp.guessList
             );
             gp.ui.fishGuess = gp.fishing.guess;
-            if(gp.ui.fishGuess){
-                if(code == KeyEvent.VK_ENTER){
-                    gp.gameState = gp.playState;
+            if(code == KeyEvent.VK_ENTER || code == KeyEvent.VK_ESCAPE) {
+                gp.guessList.clear();
+                gp.gameState = gp.playState;
                 }
-            }
         }
     }
 }

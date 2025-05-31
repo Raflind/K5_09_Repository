@@ -19,6 +19,7 @@ public class Fishing {
     public int attempt;
     public Boolean guess;
     public Fish caughtFish;
+    public int answer;
     private static List<Fish> fishList = new ArrayList<>();
     static{
         for (FishList fish : FishList.values()) {
@@ -44,15 +45,6 @@ public class Fishing {
 
     
     public void start(EnvironmentStatus.Season season, EnvironmentStatus.Weather weather, String location, int hour, Inventory inventory, List<Integer> guessList){
-        possibleFish.clear();
-        caughtFish = null;
-        for(Fish fish : possibleFish){
-            if(fish.isInLocation(location) && fish.isInSeason(season) && fish.isInWeather(weather) && fish.isInTime(hour)){
-                possibleFish.add(fish);
-            }
-        }
-        caughtFish = getFish();
-        int attempt = countFish.get(caughtFish.getFishType());
         int chance;
         switch(caughtFish.getFishType()){
             case Regular:
@@ -67,25 +59,72 @@ public class Fishing {
             default:
                 chance = 0;
         }
-        int answer = generator.nextInt(chance);
+        answer = generator.nextInt(chance);
         Scanner scanner = new Scanner(System.in);
         guess = false;
-        for(int i = 0 ; i < attempt; i++){
+        for(int i = 0 ; i < attempt-1; i++){
             if(guessList.get(i) == answer){
                 guess = true;
                 System.out.println("You caught a " + caughtFish.getName() + "!");
                 caughtFish.calculateSellPrice();
                 inventory.addItem(caughtFish);
-                break;
-            } else {
-                System.out.println("Wrong guess! Try again.");
+                return;
             }
         }
+        System.out.println("Wrong guess! Try again.");
     }
 
     private Fish getFish(){
-        int fishType = generator.nextInt() % possibleFish.size(); // jadi indeks dari fish nya
+        int fishType = generator.nextInt(possibleFish.size());// jadi indeks dari fish nya
         return possibleFish.get(fishType);
-        // return create
+    }
+
+    public void displayFish(){
+        for(Fish fish : fishList){
+            System.out.println("Name: " + fish.getName());
+            System.out.println("Sell Price: " + fish.getSellPrice());
+            System.out.println("Buy Price: " + fish.getBuyPrice());
+            System.out.println("Is Edible: " + fish.isEdible());
+            System.out.println("Fish Type: " + fish.getFishType());
+            System.out.println("Start Time: " + fish.startTime());
+            System.out.println("End Time: " + fish.endTime());
+            System.out.println("Location: " + fish.getLocation());
+            System.out.println("Season: " + fish.getSeason());
+            System.out.println("Weather: " + fish.getWeather());
+            System.out.println();
+        }
+    }
+
+    public void getPossibleFish(EnvironmentStatus.Season season, EnvironmentStatus.Weather weather, String location, int hour) {
+        possibleFish.clear();
+        for(Fish fish : fishList){
+            if(fish.isInLocation(location) && fish.isInSeason(season) && fish.isInWeather(weather) && fish.isInTime(hour)){
+                possibleFish.add(fish);
+            }
+        }
+        caughtFish = null;
+        caughtFish = getFish();
+        attempt = countFish.get(caughtFish.getFishType());
+    }
+
+    public void displayPossibleFish() {
+        if (possibleFish.isEmpty()) {
+            System.out.println("No fish available for the current conditions.");
+        } else {
+            System.out.println("Possible fish to catch:");
+            for (Fish fish : possibleFish) {
+                System.out.println("Name: " + fish.getName());
+                System.out.println("Sell Price: " + fish.getSellPrice());
+                System.out.println("Buy Price: " + fish.getBuyPrice());
+                System.out.println("Is Edible: " + fish.isEdible());
+                System.out.println("Fish Type: " + fish.getFishType());
+                System.out.println("Start Time: " + fish.startTime());
+                System.out.println("End Time: " + fish.endTime());
+                System.out.println("Location: " + fish.getLocation());
+                System.out.println("Season: " + fish.getSeason());
+                System.out.println("Weather: " + fish.getWeather());
+                System.out.println();
+            }
+        }
     }
 }
