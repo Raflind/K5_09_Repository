@@ -149,7 +149,7 @@ public class GamePanel extends JPanel implements Runnable{
         npcManager.activeNPC();      // Pilih NPC aktif sesuai map
         npcManager.updateActiveNPC(); // Update NPC aktif
         frameCounter++;
-        if(frameCounter >= FPS) {
+        if(frameCounter >= FPS && !ui.isAction) {
             time.addFiveMinutes();
             environmentStatus.setTime(time);
             environmentStatus.nextDay();
