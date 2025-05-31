@@ -47,14 +47,17 @@ public class KeyHandler implements KeyListener {
         if(gp.gameState == gp.cookingState){
             cookingState(code);
         }
-        if(gp.gameState == gp.insufficientResourcesState){
-            insufficientResourcesState(code);
+        if(gp.gameState == gp.insufficientResourcesCookingState){
+            insufficientResourcesCookingState(code);
         }
         if(gp.gameState == gp.shippingBinState){
             shippingBinState(code);
         }
         if(gp.gameState == gp.fishingState){
             fishingState(code, e);
+        }
+        if(gp.gameState == gp.insufficientEnergyState){
+            insufficientEnergyState(code);
         }
 
     }
@@ -155,8 +158,14 @@ public class KeyHandler implements KeyListener {
         if(code == KeyEvent.VK_ENTER){
             if(gp.ui.selectRecipe < gp.ui.availableRecipe.size()){
                 String selectedRecipe = gp.ui.availableRecipe.get(gp.ui.selectRecipe);
-                gp.cookSelectedRecipe(selectedRecipe);
-                gp.ui.showCookingScreen = false;
+                if(gp.player.getEnergy() < 10){
+                    gp.gameState = gp.insufficientEnergyState;
+                }
+                else{
+                    gp.cookSelectedRecipe(selectedRecipe);
+                    gp.ui.showCookingScreen = false;
+                    gp.player.setEnergy(gp.player.getEnergy() - 10); // Mengurangi energi pemain
+                }
             }
         }
         if(code == KeyEvent.VK_ESCAPE){
@@ -219,9 +228,16 @@ public class KeyHandler implements KeyListener {
             gp.gameState = gp.mapSelectState;
         }
         if(code == KeyEvent.VK_F && gp.ui.showFishPrompt) {
-            gp.gameState = gp.fishingState;
-            gp.ui.isGuessing = true; // Set isGuessing to true to start guessing
-            gp.ui.inputBuffer = ""; // Reset input buffer
+            if(gp.player.getEnergy() < 10) {
+                gp.gameState = gp.insufficientEnergyState; // Ganti ke state energi tidak cukup
+            }
+            else{
+                gp.gameState = gp.fishingState;
+                gp.ui.isGuessing = true; // Set isGuessing to true to start guessing
+                gp.ui.inputBuffer = ""; // Reset input buffer
+                gp.time.setMinute(gp.time.getMinute() + 15);
+                gp.player.consumeEnergy(5);
+            }
         }
         if(code==KeyEvent.VK_M && gp.player.interactNPC==1) {
             if(gp.npcManager.getActiveNPC().getName().equals("Abigail")) {
@@ -418,8 +434,8 @@ public class KeyHandler implements KeyListener {
                 }
             }
     }
-    public void insufficientResourcesState(int code) {
-        if(gp.gameState == gp.insufficientResourcesState) {
+    public void insufficientResourcesCookingState(int code) {
+        if(gp.gameState == gp.insufficientResourcesCookingState) {
             if(code == KeyEvent.VK_ESCAPE) {
                 gp.gameState = gp.cookingState; // Kembali ke play state
             }
@@ -520,6 +536,13 @@ public class KeyHandler implements KeyListener {
                 gp.guessList.clear();
                 gp.gameState = gp.playState;
                 }
+        }
+    }
+    public void insufficientEnergyState(int code) {
+        if(gp.gameState == gp.insufficientEnergyState) {
+            if(code == KeyEvent.VK_ESCAPE) {
+                gp.gameState = gp.playState; // Kembali ke play state
+            }
         }
     }
 }

@@ -186,8 +186,11 @@ public class UI {
         if(gp.gameState == gp.cookingState){
             drawCookingList();
         }
-        if(gp.gameState == gp.insufficientResourcesState){
+        if(gp.gameState == gp.insufficientResourcesCookingState){
             drawErrorMessageforCooking();
+        }
+        if(gp.gameState == gp.insufficientEnergyState){
+            drawErrorNoEnergy();
         }
         if(gp.gameState == gp.fishingState) {
             if(isGuessing){
@@ -1072,6 +1075,23 @@ public class UI {
 
     public void drawErrorMessageforCooking(){
         String msg = "Bahan Tidak Cukup";
+        g2.setFont(stardew.deriveFont(Font.BOLD, 28F));
+        int textWidth = g2.getFontMetrics().stringWidth(msg);
+        int textHeight = g2.getFontMetrics().getHeight();
+
+        int windowWidth = textWidth + gp.tileSize * 2;
+        int windowHeight = textHeight + gp.tileSize;
+        int x = (gp.screenWidth - windowWidth) / 2;
+        int y = (gp.screenHeight - windowHeight) / 2;
+
+        drawSubWindow(x, y, windowWidth, windowHeight);
+
+        g2.setColor(kuning);
+        g2.drawString(msg, getXforCenteredText(msg), y + windowHeight / 2 + textHeight / 4);
+    }
+
+    public void drawErrorNoEnergy(){
+        String msg = "Not Enough Energy";
         g2.setFont(stardew.deriveFont(Font.BOLD, 28F));
         int textWidth = g2.getFontMetrics().stringWidth(msg);
         int textHeight = g2.getFontMetrics().getHeight();

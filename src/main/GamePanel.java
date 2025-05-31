@@ -75,8 +75,9 @@ public class GamePanel extends JPanel implements Runnable{
    public final int optionState = 6;
    public final int cookingState = 7;
    public final int shippingBinState = 8;
-   public final int insufficientResourcesState = 9;
+   public final int insufficientResourcesCookingState = 9;
    public final int fishingState = 10;
+   public final int insufficientEnergyState = 11;
 
     public int subState = 0;
     public final int subState_none = 0;
@@ -232,12 +233,15 @@ public class GamePanel extends JPanel implements Runnable{
         else if(gameState == shippingBinState){
             ui.draw(comp);
         }
-        else if(gameState == insufficientResourcesState){
+        else if(gameState == insufficientResourcesCookingState){
             ui.draw(comp);
         }
         else if(gameState == fishingState){
             ui.draw(comp);
         }
+        else if(gameState == insufficientEnergyState){
+            ui.draw(comp);
+        }   
         comp.dispose();
     }
     public void cookSelectedRecipe(String recipeName){
@@ -276,7 +280,7 @@ public class GamePanel extends JPanel implements Runnable{
         }
         if(cooking != null){
             if(!cooking.checkIngredients(player.getInventory())){
-                gameState = insufficientResourcesState;
+                gameState = insufficientResourcesCookingState;
                 
             }
             else{
