@@ -467,7 +467,7 @@ public class UI {
         if(gp.player.inventory.items.size() > 0 && index < gp.player.inventory.items.size()) {
             selectItems = gp.player.inventory.getItem(index);
         } else {
-            selectItems = null; // Reset if no item is selected
+            selectItems = null; 
         }
         if (selectItems != null && selectItems.isEdible() && showEatPrompt) {
 
@@ -488,6 +488,8 @@ public class UI {
             g2.drawString(eatMsg, eatMsgX, eatMsgY);
         }
     }
+
+
     public void drawSubWindow(int x, int y, int width, int height) {
         g2.setColor(new Color(0, 0, 0, 200)); // Semi-transparent black
         g2.fillRoundRect(x, y, width, height, 35, 35); // Fill the window

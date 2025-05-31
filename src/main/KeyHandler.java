@@ -151,6 +151,7 @@ public class KeyHandler implements KeyListener {
         }
         if(code == KeyEvent.VK_ESCAPE){
             gp.gameState = gp.playState;
+            gp.ui.isAction = false; 
         }
         if (code == KeyEvent.VK_ENTER) {
             if (gp.ui.selectItems != null && gp.ui.selectItems.isEdible()) {
@@ -220,6 +221,8 @@ public class KeyHandler implements KeyListener {
             gp.gameState = gp.optionState; 
         }
         if(code == KeyEvent.VK_I){
+            gp.ui.isAction = true;
+            gp.ui.isAction = true;
             gp.gameState = gp.inventoryState;
         }
         if(code == KeyEvent.VK_P){

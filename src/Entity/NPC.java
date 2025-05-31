@@ -258,8 +258,8 @@ public class NPC extends Entity{
         return hatedItems.contains(item);
     }
 
-    public void npcResponse(String message){
-        System.out.println(getName() + ": " + message);
+    public String npcResponse(String message){
+        return message;
     }
 
     
@@ -283,7 +283,7 @@ public class NPC extends Entity{
             npcResponse("I liked this one, makasih");
             increaseHeartPoints(20);
         } else if(isHatedItem(item)){
-            npcResponse("masuk lo apaan ngirim beginian");
+            npcResponse("Maksud lo apaan ngirim beginian");
             decreaseHeartPoints(25);
         }
         giftedFreq++;
