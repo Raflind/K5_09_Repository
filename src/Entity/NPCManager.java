@@ -72,4 +72,7 @@ public class NPCManager {
             activeNPC.update();
         }
     }
+    public Map<String, NPC> getNPCMap() {
+        return npcMap;
+    }
 }

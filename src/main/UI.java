@@ -7,6 +7,8 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.FontFormatException;
 import javax.imageio.ImageIO;
+
+import Entity.NPC;
 import Entity.Player;
 import Items.Crops;
 import Items.Fish;
@@ -240,6 +242,10 @@ public class UI {
         if(gp.gameState == gp.watchState) {
             isAction = true; // Set isAction to true when in watch state
             drawWeatherDialogue();
+        }
+        if(gp.gameState == gp.endgameState) {
+            isAction = true; // Set isAction to true when in endgame state
+            drawEndgameScreen();
         }
     }
     
@@ -1641,6 +1647,68 @@ public class UI {
         int textY = boxY + boxHeight / 2 + g2.getFontMetrics().getAscent() / 2 - 4;
         g2.drawString(msg, textX, textY);
     }
+    public void drawEndgameScreen() {
+        int boxWidth = gp.screenWidth - gp.tileSize * 2;
+        int boxHeight = gp.screenHeight - gp.tileSize * 2 + 16;
+        int boxX = gp.tileSize;
+        int boxY = gp.tileSize;
 
+        drawSubWindow(boxX, boxY, boxWidth, boxHeight);
+
+        g2.setFont(stardew.deriveFont(Font.BOLD, 32F));
+        g2.setColor(kuning);
+        String title = "Endgame Summary";
+        int titleX = boxX + (boxWidth - g2.getFontMetrics().stringWidth(title)) / 2;
+        int titleY = boxY + 50;
+        g2.drawString(title, titleX, titleY);
+
+        g2.setFont(stardew.deriveFont(Font.PLAIN, 22F));
+        int textX = boxX + 40;
+        int textY = titleY + 40;
+        int lineHeight = 32;
+
+        // Fish caught details
+        int totalFish = 0;
+        for (Integer i : gp.fishcaught) totalFish += i;
+        g2.drawString("Total Fish Caught: " + totalFish, textX, textY);
+        textY += lineHeight;
+        g2.drawString("  Regular: " + gp.fishcaught.get(0), textX + 30, textY);
+        textY += lineHeight;
+        g2.drawString("  Common: " + gp.fishcaught.get(1), textX + 30, textY);
+        textY += lineHeight;
+        g2.drawString("  Legendary: " + gp.fishcaught.get(2), textX + 30, textY);
+        textY += lineHeight * 2;
+
+        // Income/Expenditure/Crops/Days
+        g2.drawString("Total Income: " + gp.totalIncome, textX, textY); textY += lineHeight;
+        g2.drawString("Total Expenditure: " + gp.totalExpenditure, textX, textY); textY += lineHeight;
+        g2.drawString("Average Income: " + gp.averageIncome, textX, textY); textY += lineHeight;
+        g2.drawString("Average Expenditure: " + gp.averageExpenditure, textX, textY); textY += lineHeight;
+        g2.drawString("Total Days Played: " + gp.totaldays, textX, textY); textY += lineHeight;
+        g2.drawString("Total Crops Harvested: " + gp.cropHarvested, textX, textY); textY += lineHeight * 2;
+
+        // NPC stats on the right side
+        int npcTextX = boxX + boxWidth / 2 + 40; // Move to the right half
+        int npcTextY = titleY + 40;
+        g2.setFont(stardew.deriveFont(Font.BOLD, 24F));
+        g2.drawString("NPC Relationships:", npcTextX, npcTextY);
+        npcTextY += lineHeight;
+
+        g2.setFont(stardew.deriveFont(Font.PLAIN, 20F));
+        for (NPC npc : gp.npcManager.getNPCMap().values()) {
+            String npcName = npc.getName();
+            String relationship = npc.getRelationship().toString();
+            int chatFreq = npc.getChattingFreq();
+            int giftFreq = npc.getGiftingFreq();
+            int visitFreq = npc.getVisitingFreq();
+
+            g2.drawString(npcName + ":", npcTextX + 20, npcTextY);
+            npcTextY += lineHeight - 8;
+            g2.drawString("  Relationship: " + relationship, npcTextX + 40, npcTextY); npcTextY += lineHeight - 8;
+            g2.drawString("  Chatting Frequency: " + chatFreq, npcTextX + 40, npcTextY); npcTextY += lineHeight - 8;
+            g2.drawString("  Gifting Frequency: " + giftFreq, npcTextX + 40, npcTextY); npcTextY += lineHeight - 8;
+            g2.drawString("  Visiting Frequency: " + visitFreq, npcTextX + 40, npcTextY); npcTextY += lineHeight;
+        }
+    }
 }
 

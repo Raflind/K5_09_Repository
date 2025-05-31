@@ -80,7 +80,9 @@ public class KeyHandler implements KeyListener {
         if(gp.gameState == gp.watchState){
             watchState(code);
         }
-
+        if(gp.gameState == gp.endgameState){
+            endgameState(code);
+        }
     }
 
     public void optionState(int code) {
@@ -282,6 +284,9 @@ public class KeyHandler implements KeyListener {
                 gp.time.setMinute(gp.time.getMinute() + 15);
                 gp.player.consumeEnergy(5);
             }
+        }
+        if(code==KeyEvent.VK_O){
+            gp.gameState = gp.endgameState;
         }
         if(code==KeyEvent.VK_M && gp.player.interactNPC==1) {
             if(gp.npcManager.getActiveNPC().getName().equals("Abigail")) {
@@ -522,6 +527,7 @@ public class KeyHandler implements KeyListener {
                 else{
                     gp.player.shippingBin.addItem(gp.ui.selectItems);
                     gp.player.inventory.removeItem(gp.ui.selectItems);
+                    gp.totalIncome += gp.ui.selectItems.getSellPrice();
                     gp.ui.selectItems = null; // Reset selected item after shipping
                 }
             }
@@ -623,7 +629,15 @@ public class KeyHandler implements KeyListener {
             );
             gp.ui.fishGuess = gp.fishing.guess;
             if(gp.ui.fishGuess){
-                gp.fishingCaught++;
+                if(gp.fishing.caughtFish != null){
+                    if(gp.fishing.caughtFish.getFishType() == Fish.FishType.Regular) {
+                        gp.fishcaught.set(0, gp.fishcaught.get(0) + 1);
+                    } else if(gp.fishing.caughtFish.getFishType() == Fish.FishType.Common) {
+                        gp.fishcaught.set(1, gp.fishcaught.get(1) + 1);
+                    } else if(gp.fishing.caughtFish.getFishType() == Fish.FishType.Legendary) {
+                        gp.fishcaught.set(2, gp.fishcaught.get(2) + 1);
+                    }
+                }
             }
             if(code == KeyEvent.VK_ENTER || code == KeyEvent.VK_ESCAPE) {
                 gp.guessList.clear();
@@ -754,6 +768,7 @@ public class KeyHandler implements KeyListener {
                         gp.recipe.put("Fish Sandwich", true);
                     }
                     gp.store.buyItem(gp.ui.selectItems, gp.player);
+                    gp.totalExpenditure += gp.ui.selectItems.getBuyPrice();
                     gp.ui.bought = true;
                 }
             }
@@ -798,6 +813,11 @@ public class KeyHandler implements KeyListener {
     public void watchState(int code) {
         if(code == KeyEvent.VK_ESCAPE) {
             gp.gameState = gp.playState; // Kembali ke play state
+        }
+    }
+    public void endgameState(int code) {
+        if(code == KeyEvent.VK_ESCAPE) {
+            gp.gameState = gp.playState;
         }
     }
 }

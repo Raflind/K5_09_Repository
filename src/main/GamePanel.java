@@ -88,6 +88,7 @@ public class GamePanel extends JPanel implements Runnable{
    public final int storeState = 14;
    public final int giftState = 15;
    public final int watchState = 16;
+   public final int endgameState = 17;
 
     public int subState = 0;
     public final int subState_none = 0;
@@ -95,9 +96,21 @@ public class GamePanel extends JPanel implements Runnable{
     public final int subState_listObject = 2;
     public final int subState_statistics = 3;
     public final int subState_actions = 4;
+    public int lastDay = -1;
 
-    //recipe count
-    public int fishingCaught = 0;
+    //endgame
+    public List<Integer> fishcaught= new ArrayList<>(){{
+        add(0);
+        add(0);
+        add(0);
+    }};
+    int totalIncome = 0;
+    int totalExpenditure = 0;
+    int averageIncome = 0;
+    int averageExpenditure = 0;
+    int totaldays = 1;
+    int cropHarvested = 0;
+
 
 
    public GamePanel() {
@@ -163,10 +176,18 @@ public class GamePanel extends JPanel implements Runnable{
             time.addFiveMinutes();
             environmentStatus.setTime(time);
             environmentStatus.nextDay();
+            if (environmentStatus.getDay() != lastDay) {
+                totaldays++;
+                lastDay = environmentStatus.getDay();
+            }
+            checkEndgameMarried();
+            checkEndgamegold();
             checkPufferfish();
             checkFishingCaught();
             checkHotPepper();
             checkLegend();
+            calculateAverageExpenditure();
+            calculateAverageIncome();
             frameCounter = 0;
             // Update other environmental aspects if needed
         }
@@ -275,6 +296,9 @@ public class GamePanel extends JPanel implements Runnable{
         else if(gameState == watchState){
             ui.draw(comp);
         }
+        else if(gameState == endgameState){
+            ui.draw(comp);
+        }
         comp.dispose();
     }
     public void cookSelectedRecipe(String recipeName){
@@ -328,7 +352,11 @@ public class GamePanel extends JPanel implements Runnable{
         }
     }
     public void checkFishingCaught(){
-        if(fishingCaught >=10){
+        int total = 0;
+        for(Integer i : fishcaught){
+            total += i;
+        }
+        if(total >= 10){
             recipe.put("Sashimi", true);
         }
     }
@@ -340,6 +368,30 @@ public class GamePanel extends JPanel implements Runnable{
     public void checkLegend(){
         if(player.inventory.containsItem(FishList.Legend.create()) || player.inventory.containsItem(FishList.Glacierfish.create()) || player.inventory.containsItem(FishList.CrimsonFish.create())){
             recipe.put("Legends of Spakbor", true);
+        }
+    }
+    public void calculateAverageIncome() {
+        if (totaldays > 0) {
+            averageIncome = totalIncome / Math.max(Math.floorDiv(totaldays, 30), 1);
+        } else {
+            averageIncome = 0; // Avoid division by zero
+        }
+    }
+    public void calculateAverageExpenditure() {
+        if (totaldays > 0) {
+            averageExpenditure = totalExpenditure / Math.max(Math.floorDiv(totaldays, 30), 1);
+        } else {
+            averageExpenditure = 0; // Avoid division by zero
+        }
+    }
+    public void checkEndgamegold(){
+        if(player.goldManager.getGold() >= 17209){
+            gameState = endgameState;
+        }
+    }
+    public void checkEndgameMarried(){
+        if(player.relationshipStatus == player.relationshipStatus.SPOUSE){
+            gameState = endgameState;
         }
     }
 }
