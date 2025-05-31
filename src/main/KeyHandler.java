@@ -829,5 +829,11 @@ public class KeyHandler implements KeyListener {
         if(code == KeyEvent.VK_ESCAPE) {
             gp.gameState = gp.playState;
         }
+        if (code == KeyEvent.VK_DOWN) {
+        gp.ui.endgameNpcScroll++;
+        }
+        if (code == KeyEvent.VK_UP && gp.ui.endgameNpcScroll > 0) {
+            gp.ui.endgameNpcScroll--;
+        }
     }
 }

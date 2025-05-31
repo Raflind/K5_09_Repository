@@ -597,7 +597,8 @@ public class Player extends Entity{
             }
 
             
-
+            //tambah totalharvested
+            gp.cropHarvested++;
 
             // Hapus seed dari daftar tanam
             inventory.plantedSeeds.remove(harvestedSeed);

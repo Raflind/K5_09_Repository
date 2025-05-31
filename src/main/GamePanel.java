@@ -51,6 +51,7 @@ public class GamePanel extends JPanel implements Runnable{
     put("Wine", true);
     put("Pumpkin Pie", true);
     put("Fish Stew", false);
+    put("Veggie Soup", false);
     put("Spakbor Salad", true);
     put("Fish Sandwich", false);
     put("Legends of Spakbor", false);
@@ -368,6 +369,11 @@ public class GamePanel extends JPanel implements Runnable{
     public void checkLegend(){
         if(player.inventory.containsItem(FishList.Legend.create()) || player.inventory.containsItem(FishList.Glacierfish.create()) || player.inventory.containsItem(FishList.CrimsonFish.create())){
             recipe.put("Legends of Spakbor", true);
+        }
+    }
+    public void checkVeggie(){
+        if(cropHarvested >= 1){
+            recipe.put("Veggie Soup", true);
         }
     }
     public void calculateAverageIncome() {

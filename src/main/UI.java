@@ -55,6 +55,7 @@ public class UI {
     private long sleepScreenStartTime = 0;
     public boolean isAction = false;
     public boolean isTired = false;
+    public int endgameNpcScroll = 0;
     public String inputName = "";
     public boolean showNameInputScreen = false;
     public String errorMessage = "";
@@ -1689,14 +1690,28 @@ public class UI {
         g2.drawString("Total Crops Harvested: " + gp.cropHarvested, textX, textY); textY += lineHeight * 2;
 
         // NPC stats on the right side
-        int npcTextX = boxX + boxWidth / 2 + 40; // Move to the right half
+        int npcTextX = boxX + boxWidth / 2 + 40; // Right half
         int npcTextY = titleY + 40;
         g2.setFont(stardew.deriveFont(Font.BOLD, 24F));
         g2.drawString("NPC Relationships:", npcTextX, npcTextY);
         npcTextY += lineHeight;
 
+        // Calculate how many NPCs fit
+        int availableHeight = boxY + boxHeight - npcTextY - 20;
+        int linesPerNpc = 5;
+        int npcsPerPage = Math.max(1, availableHeight / (lineHeight * linesPerNpc));
+
+        // Get all NPCs as a list
+        List<NPC> npcList = new ArrayList<>(gp.npcManager.getNPCMap().values());
+
+        // Clamp scroll
+        if (endgameNpcScroll > npcList.size() - npcsPerPage) endgameNpcScroll = Math.max(0, npcList.size() - npcsPerPage);
+        if (endgameNpcScroll < 0) endgameNpcScroll = 0;
+
+        // Draw only visible NPCs
         g2.setFont(stardew.deriveFont(Font.PLAIN, 20F));
-        for (NPC npc : gp.npcManager.getNPCMap().values()) {
+        for (int i = endgameNpcScroll; i < Math.min(npcList.size(), endgameNpcScroll + npcsPerPage); i++) {
+            NPC npc = npcList.get(i);
             String npcName = npc.getName();
             String relationship = npc.getRelationship().toString();
             int chatFreq = npc.getChattingFreq();
@@ -1709,6 +1724,14 @@ public class UI {
             g2.drawString("  Chatting Frequency: " + chatFreq, npcTextX + 40, npcTextY); npcTextY += lineHeight - 8;
             g2.drawString("  Gifting Frequency: " + giftFreq, npcTextX + 40, npcTextY); npcTextY += lineHeight - 8;
             g2.drawString("  Visiting Frequency: " + visitFreq, npcTextX + 40, npcTextY); npcTextY += lineHeight;
+        }
+
+        // Optional: Draw scroll indicator
+        if (npcList.size() > npcsPerPage) {
+            String scrollMsg = "Use UP/DOWN to scroll";
+            g2.setFont(stardew.deriveFont(Font.PLAIN, 16F));
+            g2.setColor(Color.LIGHT_GRAY);
+            g2.drawString(scrollMsg, npcTextX, boxY + boxHeight - 10);
         }
     }
 }
