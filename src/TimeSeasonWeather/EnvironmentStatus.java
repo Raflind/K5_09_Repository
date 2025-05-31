@@ -2,6 +2,9 @@ package TimeSeasonWeather;
 
 import java.util.Random;
 
+import Items.Seeds;
+import main.GamePanel;
+
 public class EnvironmentStatus {
     public enum Season {
         Spring, Summer, Fall, Winter
@@ -13,8 +16,10 @@ public class EnvironmentStatus {
     public Weather weather;
     public Time time;
     public int day;
+    GamePanel gp;
 
-    public EnvironmentStatus(Time time) {
+    public EnvironmentStatus(Time time, GamePanel gp) {
+        this.gp = gp;
         this.time = time;
         this.day = 1;
         this.weather = Weather.Sunny;
@@ -75,7 +80,54 @@ public class EnvironmentStatus {
             day = 1; // Reset to 1 after 30 days
             nextSeason(); // Check for season change
         }
+        changeDay();
+        }
     }
+
+    public void changeDay(){
+        if(weather == Weather.Rainy){
+            for(int x = 0; x < gp.farmMap.size; x++){
+                for(int y = 0; y < gp.farmMap.size; y++){
+                    if(gp.farmMap.mapTileNum[x][y] == 66 || gp.farmMap.mapTileNum[x][y] == 67){
+                        gp.farmMap.mapTileNum[x][y] = 67; // pastikan basah
+                        gp.farmMap.wetDaysLeft[x][y] = 2; // basah 2 hari
+                    }
+                }
+            }
+        }
+
+        if(season == Season.Winter){
+            for(int x = 0; x < gp.farmMap.size; x++){
+                for(int y = 0; y < gp.farmMap.size; y++){
+                    if(gp.farmMap.mapTileNum[x][y] == 66 || gp.farmMap.mapTileNum[x][y] == 67){
+                        gp.farmMap.mapTileNum[x][y] = 67; // pastikan basah
+                        gp.farmMap.wetDaysLeft[x][y] = 0; // basah 2 hari
+                    }
+                }
+            }
+        }
+
+        // Di EnvironmentStatus.nextDay(), setelah update hujan
+        for(int x = 0; x < gp.farmMap.size; x++){
+            for(int y = 0; y < gp.farmMap.size; y++){
+                if(gp.farmMap.mapTileNum[x][y] == 67){
+                    gp.farmMap.wetDaysLeft[x][y]--;
+                    if(gp.farmMap.wetDaysLeft[x][y] <= 0){
+                        gp.farmMap.wetDaysLeft[x][y] = 0;
+                        gp.farmMap.mapTileNum[x][y] = 66; // keringkan
+                    }
+                }
+            }
+        }
+
+        for (Seeds seed : gp.player.inventory.plantedSeeds) {
+            seed.incrementDayElapsed(); 
+            if (seed.isHarvestable()) {
+                int x = seed.posX;
+                int y = seed.posY;
+                gp.farmMap.mapTileNum[x][y] = 68; // ubah tile jadi siap panen
+            }
+        }
     }
 
     public void bangun(){
@@ -88,6 +140,7 @@ public class EnvironmentStatus {
             time.setMinute(0);
             randomizeWeather();
             day++;
+            changeDay();
         }
     }
 

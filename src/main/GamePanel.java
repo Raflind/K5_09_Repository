@@ -56,7 +56,7 @@ public class GamePanel extends JPanel implements Runnable{
     put("Legends of Spakbor", false);
 }};
    Timer timer = new Timer();
-   public EnvironmentStatus environmentStatus = new EnvironmentStatus(time);
+   public EnvironmentStatus environmentStatus = new EnvironmentStatus(time, this);
    Thread gameThread;
    public CollisionChecker cChecker = new CollisionChecker(this);
    public Player player;
