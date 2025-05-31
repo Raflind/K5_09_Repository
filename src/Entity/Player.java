@@ -113,8 +113,13 @@ public class Player extends Entity{
         if(gp.tileM.currMap.equals("Farm")){
             if(isShippingBinTile()){
                 gp.ui.showShippingBinScreen = true;
-            } else {
+            }
+            else if (isFishingTile()){
+                gp.ui.showFishPrompt = true;
+            } 
+            else {
                 gp.ui.showShippingBinScreen = false;
+                gp.ui.showFishPrompt = false;
             }
         }
         if(keyH.up == true && enMove){
@@ -346,6 +351,28 @@ public class Player extends Entity{
                 gp.tileM.mapTileNum[worldX/gp.tileSize][worldY/gp.tileSize] = 1;//ubah tile menjadi tanah yang blm cangkul
             }}, 1000);
         }
+    }
+
+    public boolean isFishingTile(){
+        int[] fishingTiles = null;
+        if(gp.tileM.currMap == "Farm"){
+            fishingTiles = new int[]{48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60};
+        }
+        if(gp.tileM.currMap == "Mountain"){
+            fishingTiles = new int[]{320, 330, 345, 340, 322, 336, 327, 325, 323};
+        }
+        else if(gp.tileM.currMap == "Forest"){
+            fishingTiles = new int[]{18};
+        }
+        else if(gp.tileM.currMap == "Ocean"){
+            fishingTiles = new int[]{14};
+        }
+        for(int t : fishingTiles){
+            if(gp.cChecker.colTile1 == t || gp.cChecker.colTile2 == t){
+                return true;
+            }
+        }
+        return false;
     }
 
     

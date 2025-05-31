@@ -212,6 +212,9 @@ public class KeyHandler implements KeyListener {
         if(code == KeyEvent.VK_ENTER && gp.ui.showVisitHousePrompt) {
             gp.ui.showVisitHousePrompt = false;
         }
+        if(code == KeyEvent.VK_T){
+            gp.gameState = gp.mapSelectState;
+        }
         if(code==KeyEvent.VK_M && gp.player.interactNPC==1) {
             if(gp.npcManager.getActiveNPC().getName().equals("Abigail")) {
                 gp.ui.currentDialogue = "Halo! Akulah Abigail sang petualang! Aku suka untuk\nmelakukan eksplorasi! Salam kenal ya!";
@@ -475,6 +478,42 @@ public class KeyHandler implements KeyListener {
         }
         if(code == KeyEvent.VK_ENTER){
             // Aksi sesuai pilihan
+        }
+    }
+
+    public void fishingState(int code, KeyEvent e) {
+        if(gp.ui.isGuessing){
+            gp.ui.inputBuffer = "";
+            if (code == KeyEvent.VK_ENTER) {
+                int guess = Integer.parseInt(gp.ui.inputBuffer);
+                if (gp.guessList.size() < gp.fishing.attempt) {
+                    gp.guessList.add(guess);
+                }
+                else{
+                    gp.ui.isGuessing = false;
+                }
+                gp.ui.inputBuffer = ""; // Clear input after each attempt
+            } else if (code == KeyEvent.VK_BACK_SPACE && gp.ui.inputBuffer.length() > 0) {
+                gp.ui.inputBuffer = gp.ui.inputBuffer.substring(0, gp.ui.inputBuffer.length() - 1);
+            } else if (e != null && Character.isDigit(e.getKeyChar())) { // For numbers only
+                gp.ui.inputBuffer += e.getKeyChar();
+            }
+        }
+        else{
+            gp.fishing.start(
+                gp.environmentStatus.season, 
+                gp.environmentStatus.weather, 
+                gp.tileM.currMap, 
+                gp.time.getHour(), 
+                gp.player.inventory, 
+                gp.guessList
+            );
+            gp.ui.fishGuess = gp.fishing.guess;
+            if(gp.ui.fishGuess){
+                if(code == KeyEvent.VK_ENTER){
+                    gp.gameState = gp.playState;
+                }
+            }
         }
     }
 }

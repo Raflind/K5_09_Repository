@@ -18,7 +18,8 @@ public enum FoodsList implements ItemCreator<Foods>{
     FishStew("Fish Stew", 260, 280, true, 70, null),
     SpakborSalad("Spakbor Salad", 250, 0, true, 70, null),
     FishSandwich("Fish Sandwich", 180, 200, true, 50, null),
-    TheLegendsofSpakbor("The Legends of Spakbor", 2000, 0, true, 100, null);
+    TheLegendsofSpakbor("The Legends of Spakbor", 2000, 0, true, 100, null),
+    CookedPigHead("Cooked Pig's Head", 0, 1000, true, 100, null);
 
     private String name;
     private int sellPrice;

@@ -42,6 +42,8 @@ public class UI {
     public boolean showSleepScreen = false;
     public boolean showCookingScreen = false;
     public boolean showShippingBinScreen = false;
+    public boolean isGuessing = true;
+    public boolean fishGuess = false;
     private long sleepScreenStartTime = 0;
     public boolean isAction = false;
     public boolean isTired = false;
@@ -54,6 +56,11 @@ public class UI {
     public int dialogueCommandNum = 0; // 0: Chat, 1: Gift, 2: Propose, 3: Marry
     public final String[] dialogueOptions = {"Chat", "Gift", "Propose", "Marry"};
     public final String[] dialogueOptionsStore = {"Chat", "Gift", "Propose", "Marry", "Store"};
+    public boolean showInputBox = false;
+    public String inputBuffer = "";
+    public String inputPrompt = "Enter Guess:";
+    public long lastBlink = 0;
+    public boolean showCursor = true;
 
     public UI(GamePanel gp) {
         this.gp = gp;
@@ -175,6 +182,17 @@ public class UI {
         }
         if(gp.gameState == gp.insufficientResourcesState){
             drawErrorMessageforCooking();
+        }
+        if(gp.gameState == gp.fishingState) {
+            if(isGuessing){
+                drawInputBox();
+            }
+            else if(fishGuess && !isGuessing){
+                drawGetFish();
+            }
+            else if(!fishGuess && !isGuessing){
+                drawFailCaught();
+            }
         }
     }
     
@@ -806,6 +824,14 @@ public class UI {
         g2.drawString(msg, getXforCenteredText(msg), y);
     }
 
+    public void drawFishingPrompt() {
+        g2.setFont(stardew.deriveFont(Font.BOLD, 24F));
+        g2.setColor(Color.white);
+        String msg = "Click F to Fishing";
+        int y = gp.screenHeight - gp.tileSize * 2; 
+        g2.drawString(msg, getXforCenteredText(msg), y);
+    }
+
     public void drawShippingBinPrompt(){
         g2.setFont(stardew.deriveFont(Font.BOLD, 24F));
         g2.setColor(Color.white);
@@ -1103,6 +1129,42 @@ public class UI {
         g2.setColor(Color.white);
         String msg = "Click M to Interact";
         int y = gp.screenHeight - gp.tileSize * 2; 
+        g2.drawString(msg, getXforCenteredText(msg), y);
+    }
+
+    public void drawInputBox(){
+        int width = gp.tileSize * 8;
+        int height = gp.tileSize * 2;
+        int x = (gp.screenWidth - width) / 2;
+        int y = (gp.screenHeight - height) / 2;
+        drawSubWindow(x, y, width, height);
+
+        g2.setFont(stardew.deriveFont(Font.BOLD, 28F));
+        g2.setColor(kuning);
+        g2.drawString(inputPrompt, x + 20, y + 40);
+
+        // Blinking cursor
+        if (System.currentTimeMillis() - lastBlink > 500) {
+            showCursor = !showCursor;
+            lastBlink = System.currentTimeMillis();
+        }
+        String display = inputBuffer + (showCursor ? "|" : "");
+        g2.drawString(display, x + 20, y + 80);
+    }
+
+    public void drawGetFish(){
+        g2.setFont(stardew.deriveFont(Font.BOLD, 24F));
+        g2.setColor(kuninggelap);
+        String msg = "You got a " + gp.fishing.caughtFish.getName();
+        int y = gp.screenHeight - gp.tileSize * 2; // posisi Y (bawah layar)
+        g2.drawString(msg, getXforCenteredText(msg), y);
+    }
+
+    public void drawFailCaught(){
+        g2.setFont(stardew.deriveFont(Font.BOLD, 24F));
+        g2.setColor(Color.RED);
+        String msg = "You failed to catch the fish!";
+        int y = gp.screenHeight - gp.tileSize * 2; // posisi Y (bawah layar)
         g2.drawString(msg, getXforCenteredText(msg), y);
     }
 }

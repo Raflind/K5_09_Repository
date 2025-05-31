@@ -38,6 +38,9 @@ public class Fish extends Items {
     public int startTime() {
         return startTime;
     }
+    public FishType getFishType() {
+        return fishType;
+    }
     public int getInterval(){
         int interval = 0;
         if(this.getName().equals("Halibut")){
@@ -52,18 +55,21 @@ public class Fish extends Items {
         return location.size();
     }
     public void calculateSellPrice() {
-        int seasonCount = getSeasonCount();
-        int timeCount = getInterval();
-        int weatherCount = getWeatherCount();
-        int locationCount = getLocationCount();
+        int seasonCount = Math.max(getSeasonCount(), 1);
+        int timeCount = Math.max(getInterval(), 1);
+        int weatherCount = Math.max(getWeatherCount(), 1);
+        int locationCount = Math.max(getLocationCount(), 1);
         int basePrice = 0;
         switch(fishType) {
             case Regular:
                 basePrice = 5;
+                break;
             case Common:
                 basePrice = 10;
+                break;
             case Legendary:
                 basePrice = 25;
+                break;
             default:
                 System.out.println("Invalid fish type.");
         }
@@ -73,6 +79,27 @@ public class Fish extends Items {
 
     public boolean isLegendary() {
         return fishType == FishType.Legendary;
+    }
+
+    public boolean isInSeason(Season season) {
+        return this.season.contains(season);
+    }
+
+    public boolean isInWeather(Weather weather) {
+        return this.weather.contains(weather);
+    }
+    public boolean isInLocation(String location) {
+        return this.location.contains(location);
+    }
+    public boolean isInTime(int hour) {
+        switch(Integer.compare(startTime, endTime)) {
+            case -1: // startTime < endTime
+                return (hour >= startTime && hour <= endTime);
+            case 1: // startTime > endTime
+                return (hour >= startTime || hour <= endTime);
+            default:
+                return false;
+        }
     }
     
 }

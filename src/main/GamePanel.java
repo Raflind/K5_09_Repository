@@ -4,7 +4,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import Entity.Player;
@@ -12,6 +14,7 @@ import Map.TileManager;
 import TimeSeasonWeather.*;
 import Action.Cooking.*;
 import Entity.NPCManager;
+import Action.Fishing.Fishing;
 
 import javax.swing.JPanel;
 
@@ -30,9 +33,12 @@ public class GamePanel extends JPanel implements Runnable{
    public NPCManager npcManager;
    KeyHandler keyH = new KeyHandler(this);
    
+
+   public Fishing fishing = new Fishing();
    public Cooking curCooking;
    public UI ui = new UI(this);
    public Time time = new Time(6, 0);
+   public List<Integer> guessList = new ArrayList<>();
    public HashMap<String, Boolean> recipe = new HashMap<String, Boolean>() {{
     put("Fish And Chips", true);
     put("Baguette", true);
@@ -70,6 +76,7 @@ public class GamePanel extends JPanel implements Runnable{
    public final int cookingState = 7;
    public final int shippingBinState = 8;
    public final int insufficientResourcesState = 9;
+   public final int fishingState = 10;
 
     public int subState = 0;
     public final int subState_none = 0;
@@ -226,6 +233,9 @@ public class GamePanel extends JPanel implements Runnable{
             ui.draw(comp);
         }
         else if(gameState == insufficientResourcesState){
+            ui.draw(comp);
+        }
+        else if(gameState == fishingState){
             ui.draw(comp);
         }
         comp.dispose();
