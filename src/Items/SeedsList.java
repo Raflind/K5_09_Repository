@@ -39,6 +39,10 @@ public enum SeedsList implements ItemCreator<Seeds>{
         this.harvestSeason = harvestSeason;
     }
 
+    public String getName() {
+        return name;
+    }
+
     @Override
     public Seeds create() {
         BufferedImage image = null;

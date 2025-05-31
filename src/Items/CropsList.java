@@ -38,6 +38,10 @@ public enum CropsList implements ItemCreator<Crops> {
         this.image = image;
     }
 
+    public String getName() {
+        return name;
+    }
+
 
     @Override
     public Crops create() {

@@ -22,6 +22,10 @@ public enum ItemMiscList implements ItemCreator<Items> {
         this.image = image;
     }
 
+    public String getName() {
+        return name;
+    }
+
     /**
      * @pakai : Items item = ItemMiscList.(nama si item).create()
      * @Contoh contoh Items item = ItemMiscList.Coal.create() 

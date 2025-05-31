@@ -54,6 +54,10 @@ public enum FishList implements ItemCreator<Fish>{
         this.image = image;
     }
 
+    public String getName() {
+        return name;
+    }
+
     @Override
     public Fish create() {
         BufferedImage image = null;
