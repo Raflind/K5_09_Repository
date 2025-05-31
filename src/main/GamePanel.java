@@ -110,7 +110,7 @@ public class GamePanel extends JPanel implements Runnable{
     int averageIncome = 0;
     int averageExpenditure = 0;
     int totaldays = 1;
-    int cropHarvested = 0;
+    public int cropHarvested = 0;
 
 
 
