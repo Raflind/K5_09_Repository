@@ -564,12 +564,16 @@ public class KeyHandler implements KeyListener {
                 //gift
             }
             else if(gp.ui.dialogueCommandNum==2){
-                gp.npcManager.getActiveNPC().propose();
+                // if(gp.player.getInventory().containsItem(Ring)){
+                    gp.npcManager.getActiveNPC().propose();
+                // }
                 gp.ui.currentDialogue = gp.npcManager.getActiveNPC().getResponse();
                 gp.ui.dialogueCommandNum = 5;
             }
             else if(gp.ui.dialogueCommandNum==3){
-                gp.npcManager.getActiveNPC().marry();
+                // if(gp.player.getInventory().containsItem(Ring)){
+                    gp.npcManager.getActiveNPC().marry();
+                // }
                 gp.ui.currentDialogue = gp.npcManager.getActiveNPC().getResponse();
                 gp.ui.dialogueCommandNum = 5;
             }
