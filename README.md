@@ -17,4 +17,7 @@ Pada suatu ketika di negeri sana, terdapat Dr. Asep Spakbor, beliau selalu ingin
 
 Tugas besar ini dibuat dengan Java. Untuk menjalankan program ini, Anda dapat melakukan hal sebagai berikut 
 - Clone repository ini pada terminal Anda
-- *to be determined*
+- Ubah directory Anda ke src dengan command berikut : ```cd src```
+- Ketikkan command: ```javac main\*.java Map\*.java Entity\*.java TimeSeasonWeather\*.java Items\*.java Action\Cooking\*.java Action\Fishing\*.java```
+- Ketikkan command: ```java main.Main```
+
