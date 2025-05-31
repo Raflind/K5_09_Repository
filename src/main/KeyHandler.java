@@ -10,6 +10,7 @@ import Items.Crops;
 import Items.Equipment;
 import Items.Fish;
 import Items.Foods;
+import Items.ItemMiscList;
 import Map.TileManager;
 
 public class KeyHandler implements KeyListener {
@@ -554,7 +555,6 @@ public class KeyHandler implements KeyListener {
                 try {
                     gp.npcManager.getActiveNPC().chat();
                 } catch (WrongUseFunctionException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
                 gp.ui.currentDialogue = gp.npcManager.getActiveNPC().getResponse();
@@ -564,12 +564,16 @@ public class KeyHandler implements KeyListener {
                 //gift
             }
             else if(gp.ui.dialogueCommandNum==2){
-                gp.npcManager.getActiveNPC().propose();
+                if(gp.player.getInventory().containsItem(ItemMiscList.ProposalRing.create())){
+                    gp.npcManager.getActiveNPC().propose();
+                }
                 gp.ui.currentDialogue = gp.npcManager.getActiveNPC().getResponse();
                 gp.ui.dialogueCommandNum = 5;
             }
             else if(gp.ui.dialogueCommandNum==3){
-                gp.npcManager.getActiveNPC().marry();
+                if(gp.player.getInventory().containsItem(ItemMiscList.ProposalRing.create())){
+                    gp.npcManager.getActiveNPC().marry();
+                }
                 gp.ui.currentDialogue = gp.npcManager.getActiveNPC().getResponse();
                 gp.ui.dialogueCommandNum = 5;
             }

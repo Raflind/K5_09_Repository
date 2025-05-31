@@ -356,6 +356,7 @@ public class NPC extends Entity{
             npcResponse("Mau banget aku nikah sama kamu!");
             updateRelation();
             gp.environmentStatus.marry();
+            gp.player.consumeEnergy(80);
         }
         else{
             npcResponse("Aduh... ngga bisa");
