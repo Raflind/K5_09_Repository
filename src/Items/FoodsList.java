@@ -36,6 +36,11 @@ public enum FoodsList implements ItemCreator<Foods>{
         this.energyPoints = energyPoints;
         this.image = image;
     }
+
+    public String getName() {
+        return name;
+    }
+    
     @Override
     public Foods create() {
         BufferedImage image = null;
