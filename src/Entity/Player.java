@@ -62,7 +62,7 @@ public class Player extends Entity{
         direction = "diam";
         this.worldX = worldX;
         this.worldY = worldY;
-        energy = 20;
+        energy = MAX_ENERGY;
         getPlayerImage();
     }
 
@@ -78,10 +78,10 @@ public class Player extends Entity{
             kiri1 = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Player/kiri1.png"));
             kiri2 = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Player/kiri2.png"));
             lelah = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Player/lelah.png"));
-            /*hoe = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Player/Hoe.png"));
+            hoe = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Player/Hoe.png"));
             axe = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Player/Pickaxe.png"));
             rod = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Player/Fishing.png"));
-            can = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Player/WateringCan.png")); */
+            can = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Player/WateringCan.png"));
         }
         catch(IOException e){
             e.printStackTrace();
@@ -334,6 +334,8 @@ public class Player extends Entity{
 
     public void tilling(){
         if(currTileNum==1){
+            gp.ui.isAction = true;
+            consumeEnergy(5);
             direction = "hoe";
             enMove = false;
             new Timer().schedule(new TimerTask() {
@@ -341,13 +343,16 @@ public class Player extends Entity{
             public void run() {
                 direction = "diam";
                 enMove = true;
-                gp.tileM.mapTileNum[worldX/gp.tileSize][worldY/gp.tileSize] = 0;//ubah tile menjadi tanah yang sudah dicangkul
+                gp.tileM.mapTileNum[worldX/gp.tileSize][worldY/gp.tileSize] = 0;
+                gp.ui.isAction = false;
             }}, 1000);
         }
     }
 
     public void untilling(){
         if(currTileNum==0){
+            gp.ui.isAction = true;
+            consumeEnergy(5);
             direction = "axe";
             enMove = false;
             new Timer().schedule(new TimerTask() {
@@ -355,7 +360,8 @@ public class Player extends Entity{
             public void run() {
                 direction = "diam";
                 enMove = true;
-                gp.tileM.mapTileNum[worldX/gp.tileSize][worldY/gp.tileSize] = 1;//ubah tile menjadi tanah yang blm cangkul
+                gp.tileM.mapTileNum[worldX/gp.tileSize][worldY/gp.tileSize] = 1;
+                gp.ui.isAction = false;
             }}, 1000);
         }
     }

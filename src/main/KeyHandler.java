@@ -224,7 +224,7 @@ public class KeyHandler implements KeyListener {
         if(code == KeyEvent.VK_ENTER && gp.ui.showVisitHousePrompt) {
             gp.ui.showVisitHousePrompt = false;
         }
-        if(code == KeyEvent.VK_T){
+        if(code == KeyEvent.VK_V){
             gp.gameState = gp.mapSelectState;
         }
         if(code == KeyEvent.VK_F && gp.ui.showFishPrompt) {
@@ -259,8 +259,8 @@ public class KeyHandler implements KeyListener {
         if(gp.tileM.currMap.equals("Farm")) {
             if(code == KeyEvent.VK_T) {
                 gp.player.tilling();
-            } else {
-                
+            } else if(code==KeyEvent.VK_U) {
+                gp.player.untilling();
             }
         } else if (gp.tileM.currMap.equals("Forest")) {
             if(code == KeyEvent.VK_F){
@@ -429,6 +429,9 @@ public class KeyHandler implements KeyListener {
                     gp.player.worldY = gp.tileM.worldY * gp.tileSize;
                     gp.gameState = gp.playState;
                     gp.player.consumeEnergy(10);
+                    for(int i = 0; i<3;i++){
+                        gp.time.addFiveMinutes();
+                    }
                 } else if (gp.ui.mapSelectionNum == totalMaps){
                     gp.gameState = gp.playState;
                 }
