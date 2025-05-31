@@ -10,18 +10,9 @@ import main.GamePanel;
 
 
 public class Store {
-    private List<String> itemsStore;
-    private HashMap<String, Boolean> RecipeStore;
-    private GamePanel gp;
-    private Inventory inventory;
-    private Player player;
-    private List<ItemCreator<? extends Items>> itemCreators;
+    public List<Items> itemsStore;
 
-    public Store(GamePanel gp){
-        this.gp = gp;
-        this.player = gp.player;
-        this.inventory = player.inventory;
-        this.RecipeStore = gp.recipe;
+    public Store(){
         loadItemsStore();
     }
 
@@ -29,25 +20,26 @@ public class Store {
     private void loadItemsStore(){
         itemsStore = new ArrayList<>();
         for (ItemMiscList item : ItemMiscList.values()) {
-            itemsStore.add(item.getName());
-            itemCreators.add(item);
+            itemsStore.add(item.create());
         }
         for (FoodsList food : FoodsList.values()) {
-            itemsStore.add(food.getName());
-            itemCreators.add(food);
+            if(!food.getName().equals("Spakbor Salad") && !food.getName().equals("Fugu") && !food.getName().equals("The Legends of Spakbor")) {
+                itemsStore.add(food.create());
+            }
         }
         for (SeedsList seed : SeedsList.values()) {
-            itemsStore.add(seed.getName());
-            itemCreators.add(seed);
+            itemsStore.add(seed.create());
         }
         for (CropsList crop : CropsList.values()) {
-            itemsStore.add(crop.getName());
-            itemCreators.add(crop);
+            if(!crop.getName().equals("Potato") && !crop.getName().equals("Cranberry") && !crop.getName().equals("Hot Pepper") && !crop.getName().equals("Melon")) {
+                // Exclude Potato and Cranberry from the store
+                itemsStore.add(crop.create());
+            }
         }
 
     }
 
-    public void pay(int amount){
+    public void pay(int amount, Player player){
         if (player.goldManager.spendGold(amount)){
             System.out.println("Payment successful. You paid: " + amount + " gold.");
         } else {
@@ -55,54 +47,21 @@ public class Store {
         } 
     }
 
-    public void buyRecipe(String recipeName){
-        if (recipeName.equals(" Fish Sandwich") || recipeName.equals("Fish n' Chips")){
-            if (!RecipeStore.get(recipeName)) {
-                if(recipeName.equals(" Fish Sandwich")){
-                    pay(150);
-                } else if(recipeName.equals("Fish n' Chips")){
-                    pay(100);
-                }
-                RecipeStore.put(recipeName, true);
-                System.out.println("You have bought the recipe: " + recipeName);
-            } else {
-                System.out.println("You already own this recipe");
-            }
-        } else {
-            System.out.println("Recipe is not available in the store");
-        }
-    }
-
-     public void buyItem(String itemName) {
-        if (!itemsStore.contains(itemName)) {
-            System.out.println("Item not found in the store");
-            return;
-        }
-
-        // Cari ItemCreator dari itemCreators
-        for (ItemCreator<? extends Items> creator : itemCreators) {
-            if (creator.getName().equalsIgnoreCase(itemName)) {
-                Items item = creator.create();
-
+     public void buyItem(String itemName, Player player) {
+        for(Items item : itemsStore) {
+            if (item.getName().equals(itemName)) {
                 if (player.goldManager.spendGold(item.getBuyPrice())) {
-                    inventory.addItem(item);
-                    System.out.println("You have bought: " + item.getName());
+                    player.inventory.addItem(item);
+                    System.out.println("You have bought: " + itemName);
+                    return;
                 } else {
-                    System.out.println("Not enough gold to buy: " + item.getName());
+                    System.out.println("Not enough gold to buy: " + itemName);
+                    return;
                 }
-                return; // stop loop
             }
-        }
-
-        // fallback, kalau ternyata tidak ketemu (tidak mungkin terjadi jika itemsStore benar)
-        System.out.println("Unexpected error: item template not found for " + itemName);
+        }   
     }
-
-    public List<String> getItemsStore() {
+    public List<Items> getItemsStore() {
         return itemsStore;
     }
-    public HashMap<String, Boolean> getRecipeStore() {
-        return RecipeStore;
-    }
-
 }

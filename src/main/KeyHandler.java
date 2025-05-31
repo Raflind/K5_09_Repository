@@ -154,22 +154,19 @@ public class KeyHandler implements KeyListener {
         }
         if (code == KeyEvent.VK_ENTER) {
             if (gp.ui.selectItems != null && gp.ui.selectItems.isEdible()) {
-                if (!gp.ui.showEatPrompt) {
-                    gp.ui.showEatPrompt = true;
-                } else {
-                    if(gp.ui.selectItems instanceof Foods){
-                        gp.player.setEnergy(gp.player.getEnergy() + ((Foods) gp.ui.selectItems).getEnergyPoints());
-                    }
-                    else if(gp.ui.selectItems instanceof Fish){
-                        gp.player.setEnergy(gp.player.getEnergy() + 1); // Default energy gain for non-food items
-                    }
-                    else if(gp.ui.selectItems instanceof Crops){
-                        gp.player.setEnergy(gp.player.getEnergy() + 3);
-                    }
-                    gp.player.inventory.removeItem(gp.ui.selectItems);
-                    gp.ui.showEatPrompt = false;
-                    gp.ui.selectItems = null;
+                gp.ui.showEatPrompt = true;
+                if(gp.ui.selectItems instanceof Foods){
+                    gp.player.setEnergy(gp.player.getEnergy() + ((Foods) gp.ui.selectItems).getEnergyPoints());
                 }
+                else if(gp.ui.selectItems instanceof Fish){
+                    gp.player.setEnergy(gp.player.getEnergy() + 1); // Default energy gain for non-food items
+                }
+                else if(gp.ui.selectItems instanceof Crops){
+                    gp.player.setEnergy(gp.player.getEnergy() + 3);
+                }
+                gp.player.inventory.removeItem(gp.ui.selectItems);
+                gp.ui.showEatPrompt = false;
+                gp.ui.selectItems = null;
             }
         }
     }
@@ -481,7 +478,7 @@ public class KeyHandler implements KeyListener {
             }
         }
         if(code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT){
-            if(gp.ui.slotCol != 4){
+            if(gp.ui.slotCol != 5){
                 gp.ui.slotCol++;
             }
         }
@@ -491,7 +488,7 @@ public class KeyHandler implements KeyListener {
             }
         }
         if(code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN){
-            if(gp.ui.slotRow != 3){
+            if(gp.ui.slotRow != 5){
                 gp.ui.slotRow++;
             }
         }

@@ -8,6 +8,9 @@ import java.awt.Graphics2D;
 import java.awt.FontFormatException;
 import javax.imageio.ImageIO;
 import Entity.Player;
+import Items.Crops;
+import Items.Fish;
+import Items.Foods;
 import Items.Items;
 
 import java.io.IOException;
@@ -463,7 +466,7 @@ public class UI {
                 slotY += gp.tileSize;
             }
         }
-        int index = slotRow * 4 + slotCol;
+        int index = slotRow * 6 + slotCol;
         if(gp.player.inventory.items.size() > 0 && index < gp.player.inventory.items.size()) {
             selectItems = gp.player.inventory.getItem(index);
         } else {
@@ -486,6 +489,41 @@ public class UI {
             int eatMsgX = eatBoxX + (eatBoxWidth - g2.getFontMetrics().stringWidth(eatMsg)) / 2;
             int eatMsgY = eatBoxY + eatBoxHeight / 2 + g2.getFontMetrics().getAscent() / 2 - 4;
             g2.drawString(eatMsg, eatMsgX, eatMsgY);
+        }
+        if (selectItems != null) {
+            String name = selectItems.getName();
+            String type = selectItems.getClass().getSimpleName();
+            String energy = "";
+            String enter = "";
+            if(selectItems instanceof Fish) {
+                energy = "Energy: " + "1";
+                enter = "Press Enter to Eat";
+            }
+            else if(selectItems instanceof Crops) {
+                energy = "Energy: " + "3";
+                enter = "Press Enter to Eat";
+            }
+            else if(selectItems instanceof Foods){
+                energy = "Energy: " + ((Foods)selectItems).getEnergyPoints();
+                enter = "Press Enter to Eat";
+            }
+            int infoBoxWidth = gp.tileSize * 5;
+            int infoBoxHeight = gp.tileSize * 3;
+            int infoBoxX = gp.tileSize * 2; // Left side of the screen
+            int infoBoxY = gp.screenHeight - infoBoxHeight - gp.tileSize;
+
+            drawSubWindow(infoBoxX, infoBoxY, infoBoxWidth, infoBoxHeight);
+
+            g2.setFont(stardew.deriveFont(Font.BOLD, 22F));
+            g2.setColor(kuning);
+            int textY = infoBoxY + 35;
+            g2.drawString("Name: " + name, infoBoxX + 20, textY);
+            textY += 30;
+            g2.drawString("Type: " + type, infoBoxX + 20, textY);
+            textY += 30;
+            g2.drawString(energy, infoBoxX + 20, textY);
+            textY += 30;
+            g2.drawString(enter, infoBoxX + 20, textY);
         }
     }
     public void drawSubWindow(int x, int y, int width, int height) {
