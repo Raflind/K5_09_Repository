@@ -74,6 +74,9 @@ public class KeyHandler implements KeyListener {
         if(gp.gameState == gp.storeState){
             storeState(code);
         }
+        if(gp.gameState == gp.giftState){
+            giftState(code);
+        }
 
     }
 
@@ -561,7 +564,7 @@ public class KeyHandler implements KeyListener {
                 gp.ui.dialogueCommandNum = 5;
             }
             else if(gp.ui.dialogueCommandNum==1){
-                //gift
+                gp.gameState = gp.giftState;
             }
             else if(gp.ui.dialogueCommandNum==2){
                 if(gp.player.getInventory().containsItem(ItemMiscList.ProposalRing.create())){
@@ -609,7 +612,7 @@ public class KeyHandler implements KeyListener {
                 gp.environmentStatus.weather, 
                 gp.tileM.currMap, 
                 gp.time.getHour(), 
-                gp.player.inventory, 
+                gp.player.inventory,
                 gp.guessList
             );
             gp.ui.fishGuess = gp.fishing.guess;
@@ -746,6 +749,42 @@ public class KeyHandler implements KeyListener {
                     }
                     gp.store.buyItem(gp.ui.selectItems, gp.player);
                     gp.ui.bought = true;
+                }
+            }
+        }
+    }
+    public void giftState(int code) {
+        if(code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT){
+            if(gp.ui.slotCol != 0){
+                gp.ui.slotCol--;
+            }
+        }
+        if(code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT){
+            if(gp.ui.slotCol != 5){
+                gp.ui.slotCol++;
+            }
+        }
+        if(code == KeyEvent.VK_W || code == KeyEvent.VK_UP){
+            if(gp.ui.slotRow != 0){
+                gp.ui.slotRow--;
+            }
+        }
+        if(code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN){
+            if(gp.ui.slotRow != 5){
+                gp.ui.slotRow++;
+            }
+        }
+        if(code == KeyEvent.VK_ESCAPE){
+            gp.gameState = gp.playState;
+            gp.ui.isAction = false; 
+        }
+        if (code == KeyEvent.VK_ENTER) {
+            if (gp.ui.selectItems != null && !(gp.ui.selectItems instanceof Equipment)) {
+                try {
+                    gp.npcManager.getActiveNPC().recieveGifts(gp.player, gp.ui.selectItems);
+                    gp.ui.currentDialogue = gp.npcManager.getActiveNPC().getResponse();
+                } catch (WrongUseFunctionException e) {
+                    e.printStackTrace();
                 }
             }
         }

@@ -26,7 +26,7 @@ public class UI {
     public String message = "";
     int messageCounter = 0;
     public boolean finish = false;
-    public String currentDialogue = "";
+    public String currentDialogue = ". . .";
     public int commandNum = 0;
     public int cookingCommand = 0;
     public int selectRecipe = 0;
@@ -227,6 +227,11 @@ public class UI {
             if(drawNotenoughGold){
                 drawNotenoughGold();
             }
+        }
+        if(gp.gameState == gp.giftState){
+            isAction = true;
+            drawInventoryGift();
+            drawResponse();
         }
     }
     
@@ -1514,6 +1519,90 @@ public class UI {
         int textX = boxX + (boxWidth - g2.getFontMetrics().stringWidth(goldMsg)) / 2;
         int textY = boxY + boxHeight / 2 + g2.getFontMetrics().getAscent() / 2 - 4;
         g2.drawString(goldMsg, textX, textY);
+    }
+    public void drawInventoryGift(){
+         //FRAME
+        int frameX = gp.tileSize*9;
+        int frameY = gp.tileSize*2;
+        int frameWidth = gp.tileSize*7;
+        int frameHeight = gp.tileSize*7;
+        drawSubWindow(frameX, frameY, frameWidth, frameHeight);
+
+        //SLOT
+        final int slotXstart = frameX + 20;
+        final int slotYstart = frameY + 20;
+        int slotX = slotXstart;
+        int slotY = slotYstart;
+
+        //CURSOR
+        int cursorX = slotX + (gp.tileSize * slotCol);
+        int cursorY = slotY + (gp.tileSize * slotRow);
+        int cursorWidth = gp.tileSize;
+        int cursorheight = gp.tileSize;
+
+        //DRAW CURSOR
+        g2.setColor(Color.WHITE);
+        g2.setStroke(new BasicStroke(3));
+        g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorheight, 10, 10); 
+
+        //DRAW ITEMS
+        for(int i = 0; i < gp.player.inventory.items.size(); i++) {
+            if(gp.player.inventory.getItem(i) != null) {
+                g2.drawImage(gp.player.inventory.getItem(i).image, slotX, slotY, null);
+            }
+            slotX += gp.tileSize; // Move to the next slot
+            if((i + 1) % 6 == 0) { // Move to the next row after 5 items
+                slotX = slotXstart;
+                slotY += gp.tileSize;
+            }
+        }
+        int index = slotRow * 6 + slotCol;
+        if(gp.player.inventory.items.size() > 0 && index < gp.player.inventory.items.size()) {
+            selectItems = gp.player.inventory.getItem(index);
+        } else {
+            selectItems = null; 
+        }
+        if (selectItems != null) {
+            String name = selectItems.getName();
+            String type = selectItems.getClass().getSimpleName();
+            String enter = "Press Enter to Gift";
+            int infoBoxWidth = gp.tileSize * 5;
+            int infoBoxHeight = gp.tileSize * 3;
+            int infoBoxX = gp.tileSize * 2; // Left side of the screen
+            int infoBoxY = gp.screenHeight - infoBoxHeight - gp.tileSize;
+
+            drawSubWindow(infoBoxX, infoBoxY, infoBoxWidth, infoBoxHeight);
+
+            g2.setFont(stardew.deriveFont(Font.BOLD, 22F));
+            g2.setColor(kuning);
+            int textY = infoBoxY + 35;
+            g2.drawString("Name: " + name, infoBoxX + 20, textY);
+            textY += 30;
+            g2.drawString("Type: " + type, infoBoxX + 20, textY);
+            textY += 30;
+            g2.drawString(enter, infoBoxX + 20, textY);
+        }
+    }
+    public void drawResponse() {
+        int y = gp.tileSize * 8;
+        int width = gp.screenWidth;
+        int height = gp.tileSize * 5; // Tinggi window, bisa dinaikkan jika opsi banyak
+        int x = 0;
+        drawSubWindow(x, y, width, height);
+
+        g2.setFont(stardew.deriveFont(Font.PLAIN, 32F));
+        int startX = x + gp.tileSize;
+        int startY = y + gp.tileSize;
+
+        // Tampilkan dialog utama
+        int textY = startY;
+        for (String line : currentDialogue.split("\n")) {
+            g2.setColor(kuninggelap);
+            g2.drawString(line, startX+3, textY+3);
+            g2.setColor(kuning);
+            g2.drawString(line, startX, textY);
+            textY += 40;
+        }
     }
 }
 

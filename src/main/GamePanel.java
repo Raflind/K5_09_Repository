@@ -86,6 +86,7 @@ public class GamePanel extends JPanel implements Runnable{
    public final int stoveState = 12; 
    public final int addFuelState = 13; 
    public final int storeState = 14;
+   public final int giftState = 15;
 
     public int subState = 0;
     public final int subState_none = 0;
@@ -267,6 +268,9 @@ public class GamePanel extends JPanel implements Runnable{
         else if(gameState == storeState){
             ui.draw(comp);
         }
+        else if(gameState == giftState){
+            ui.draw(comp);
+        }
         comp.dispose();
     }
     public void cookSelectedRecipe(String recipeName){
@@ -333,4 +337,5 @@ public class GamePanel extends JPanel implements Runnable{
         if(player.inventory.containsItem(FishList.Legend.create()) || player.inventory.containsItem(FishList.Glacierfish.create()) || player.inventory.containsItem(FishList.CrimsonFish.create())){
             recipe.put("Legends of Spakbor", true);
         }
+    }
 }
