@@ -87,6 +87,7 @@ public class GamePanel extends JPanel implements Runnable{
    public final int addFuelState = 13; 
    public final int storeState = 14;
    public final int giftState = 15;
+   public final int watchState = 16;
 
     public int subState = 0;
     public final int subState_none = 0;
@@ -269,6 +270,9 @@ public class GamePanel extends JPanel implements Runnable{
             ui.draw(comp);
         }
         else if(gameState == giftState){
+            ui.draw(comp);
+        }
+        else if(gameState == watchState){
             ui.draw(comp);
         }
         comp.dispose();

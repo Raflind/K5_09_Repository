@@ -41,6 +41,7 @@ public class UI {
     public boolean showVisitHousePrompt = false; // Tambahkan variabel ini
     public boolean inHouse = false; // Untuk menandakan apakah pemain berada di dalam rumah NPC
     public boolean showFishPrompt = false;
+    public boolean showTVprompt = false;
     public boolean showSleepPrompt = false;
     public boolean showSleepScreen = false;
     public boolean showCookingScreen = false;
@@ -135,6 +136,9 @@ public class UI {
             if(!isAction){
                 drawGameStatus();
                 drawEnergyBar(g2, gp.player);
+            }
+            if(showTVprompt){
+                drawTVPrompt();
             }
             if(showVisitHousePrompt){
                 drawEnterHouse();
@@ -232,6 +236,10 @@ public class UI {
             isAction = true;
             drawInventoryGift();
             drawResponse();
+        }
+        if(gp.gameState == gp.watchState) {
+            isAction = true; // Set isAction to true when in watch state
+            drawWeatherDialogue();
         }
     }
     
@@ -918,6 +926,14 @@ public class UI {
         g2.drawString(msg, getXforCenteredText(msg), y);
     }
 
+    public void drawTVPrompt() {
+        g2.setFont(stardew.deriveFont(Font.BOLD, 24F));
+        g2.setColor(Color.white);
+        String msg = "Click J to Watch TV";
+        int y = gp.screenHeight - gp.tileSize * 2; 
+        g2.drawString(msg, getXforCenteredText(msg), y);
+    }
+
     public void drawFishingPrompt() {
         g2.setFont(stardew.deriveFont(Font.BOLD, 24F));
         g2.setColor(Color.white);
@@ -1508,7 +1524,7 @@ public class UI {
         int boxWidth = gp.tileSize * 4;
         int boxHeight = gp.tileSize * 2;
         // Position: center between store (right) and inventory (left)
-        int boxX = (gp.screenWidth - boxWidth) / 2;
+        int boxX = (gp.screenWidth - boxWidth) / 2 +150;
         int boxY = gp.tileSize * 2 + gp.tileSize * 7 + 20; // below the inventory/store panels
 
         drawSubWindow(boxX, boxY, boxWidth, boxHeight);
@@ -1604,5 +1620,27 @@ public class UI {
             textY += 40;
         }
     }
+    public void drawWeatherDialogue() {
+        // Get current weather as string
+        String weather = gp.environmentStatus.weather.name(); // Adjust if your weather is stored differently
+        String msg = "Current Weather: " + weather;
+
+        // Box dimensions
+        int boxWidth = gp.tileSize * 6;
+        int boxHeight = gp.tileSize * 2;
+        int boxX = (gp.screenWidth - boxWidth) / 2;
+        int boxY = gp.screenHeight / 2 - boxHeight;
+
+        // Draw the dialogue box
+        drawSubWindow(boxX, boxY, boxWidth, boxHeight);
+
+        // Draw the text
+        g2.setFont(stardew.deriveFont(Font.BOLD, 28F));
+        g2.setColor(kuning);
+        int textX = boxX + (boxWidth - g2.getFontMetrics().stringWidth(msg)) / 2;
+        int textY = boxY + boxHeight / 2 + g2.getFontMetrics().getAscent() / 2 - 4;
+        g2.drawString(msg, textX, textY);
+    }
+
 }
 

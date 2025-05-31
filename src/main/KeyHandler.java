@@ -77,6 +77,9 @@ public class KeyHandler implements KeyListener {
         if(gp.gameState == gp.giftState){
             giftState(code);
         }
+        if(gp.gameState == gp.watchState){
+            watchState(code);
+        }
 
     }
 
@@ -264,6 +267,9 @@ public class KeyHandler implements KeyListener {
         }
         if(code == KeyEvent.VK_V){
             gp.gameState = gp.mapSelectState;
+        }
+        if(code == KeyEvent.VK_J && gp.ui.showTVprompt) {
+            gp.gameState = gp.watchState;
         }
         if(code == KeyEvent.VK_F && gp.ui.showFishPrompt) {
             if(gp.player.getEnergy() < 10) {
@@ -787,6 +793,11 @@ public class KeyHandler implements KeyListener {
                     e.printStackTrace();
                 }
             }
+        }
+    }
+    public void watchState(int code) {
+        if(code == KeyEvent.VK_ESCAPE) {
+            gp.gameState = gp.playState; // Kembali ke play state
         }
     }
 }

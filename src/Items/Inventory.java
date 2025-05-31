@@ -19,9 +19,6 @@ public class Inventory {
         for(int i = 0; i < 15; i++){
             items.add(SeedsList.Parsnip.create());
         } 
-        items.add(CropsList.Parsnip.create());
-        items.add(FoodsList.Baguette.create());
-        items.add(FishList.Halibut.create());
     }
 
     public Inventory(int capacity) {

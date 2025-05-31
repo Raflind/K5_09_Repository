@@ -112,8 +112,13 @@ public class Player extends Entity{
         if(gp.tileM.currMap.equals("HousePlayer")){
             if(isCookingTile()){
                 gp.ui.showCookingScreen = true;
-            } else {
+            }            
+            else if(isTVTile()){
+                gp.ui.showTVprompt = true;
+            } 
+            else {
                 gp.ui.showCookingScreen = false;
+                gp.ui.showTVprompt = false;
             }
         }
         if(gp.tileM.currMap.equals("Farm")){
@@ -221,6 +226,9 @@ public class Player extends Entity{
             break;
             case "axe":
             image = axe;
+            break;
+            case "rod":
+            image = rod;
             break;
         }
         comp.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
@@ -333,6 +341,15 @@ public class Player extends Entity{
     public boolean isShippingBinTile(){
         int[] shippingBinTiles = {44, 46, 47};
         for(int t : shippingBinTiles){
+            if(gp.cChecker.colTile1 == t || gp.cChecker.colTile2 == t){
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean isTVTile(){
+        int[] tvTiles = {19, 20};
+        for(int t : tvTiles){
             if(gp.cChecker.colTile1 == t || gp.cChecker.colTile2 == t){
                 return true;
             }
