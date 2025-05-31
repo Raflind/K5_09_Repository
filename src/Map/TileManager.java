@@ -23,6 +23,7 @@ public class TileManager {
     public Tile[] perry;
     public Tile[] housePlayer; 
     public int mapTileNum[][];
+    public int[][] wetDaysLeft;
     public int worldX;
     public int worldY;
     BufferedReader br;
@@ -42,6 +43,7 @@ public class TileManager {
             size=32;
             worldX = 12;
             worldY = 16;
+            wetDaysLeft = new int[size][size]; // size = jumlah tile per sisi
             loadFarm();
         } else if(map.equals("Mountain")) {
             worldX = 5;
@@ -135,8 +137,8 @@ public class TileManager {
 
     public void loadFarm(){
         try{
-            farmTile = new Tile[67];
-            for(int i = 0; i <= 66; i++){
+            farmTile = new Tile[69];
+            for(int i = 0; i <= 68; i++){
                 farmTile[i] = new Tile();
                 farmTile[i].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/FarmMap/" + i + ".png"));
             }

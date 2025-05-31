@@ -181,6 +181,12 @@ public class KeyHandler implements KeyListener {
                 gp.ui.selectItems = null;
             }
         }
+        if(gp.tileM.currMap.equals("Farm")) {
+            if(code==KeyEvent.VK_H ) {
+                gp.gameState = gp.playState;
+                gp.player.planting();
+            }
+        }
     }
 
     public void cookingState(int code){
@@ -307,7 +313,11 @@ public class KeyHandler implements KeyListener {
                 gp.player.tilling();
             } else if(code==KeyEvent.VK_U) {
                 gp.player.untilling();
-            }
+            } else if(code==KeyEvent.VK_J) {
+                gp.player.watering();
+            } else if(code==KeyEvent.VK_K) {
+                gp.player.harvesting();
+            } 
         } else if (gp.tileM.currMap.equals("Forest")) {
             if(code == KeyEvent.VK_F){
 

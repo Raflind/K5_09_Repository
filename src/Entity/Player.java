@@ -12,7 +12,11 @@ import javax.imageio.ImageIO;
 import Entity.NPC.*;
 import Entity.PlayerNeeds.*;
 import Exception.EnergyLowException;
+import Items.Crops;
+import Items.CropsList;
 import Items.Inventory;
+import Items.Items;
+import Items.Seeds;
 import main.GamePanel;
 import main.KeyHandler;
 import java.util.Timer;
@@ -230,6 +234,9 @@ public class Player extends Entity{
             case "rod":
             image = rod;
             break;
+            case "can":
+            image = can;
+            break;
         }
         comp.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
     }
@@ -436,4 +443,169 @@ public class Player extends Entity{
         return relationshipStatus == Relationship.FIANCE;
     }
 
+    public void planting(){
+        int index = gp.ui.slotRow * 6 + gp.ui.slotCol;
+        Items item = gp.player.inventory.getItem(index);
+        if(currTileNum == 0 && item != null && item instanceof Seeds && ((Seeds) item).isPlantable(gp.environmentStatus.season)){
+            gp.ui.isAction = true;
+            consumeEnergy(5);
+            direction = "diam";
+            enMove = false;
+            Seeds seed = (Seeds) item;
+            gp.player.inventory.plantedSeeds.add(seed);
+            gp.player.inventory.removeItem(seed);
+            int tileX = (worldX + gp.tileSize / 2) / gp.tileSize;
+            int tileY = (worldY + gp.tileSize / 2) / gp.tileSize;
+            seed.posX = tileX;
+            seed.posY = tileY;
+            seed.dayelapsed = 0; // reset hari berlalu
+            new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                enMove = true;
+                gp.tileM.mapTileNum[tileX][tileY] = 66;
+                gp.tileM.wetDaysLeft[tileX][tileY] = 0;
+                gp.ui.isAction = false;
+            }}, 1000);
+        }
+        else if(!(item instanceof Seeds)){
+            gp.ui.isAction = false;
+            System.out.println("item bukan benih");
+        }
+        else if(((Seeds) gp.player.inventory.getItem(index)).isPlantable(gp.environmentStatus.season)){
+            System.out.println("weather tidak cocok");
+        }
+    }
+
+    public void watering(){
+        if(currTileNum == 67 || currTileNum == 66){
+            gp.ui.isAction = true;
+            consumeEnergy(5);
+            direction = "can";
+            enMove = false;
+            int tileX = (worldX + gp.tileSize / 2) / gp.tileSize;
+            int tileY = (worldY + gp.tileSize / 2) / gp.tileSize;
+            Seeds seed = null;
+            for(Seeds s : inventory.plantedSeeds){
+                if(s.posX == tileX && s.posY == tileY){
+                    seed = s;
+                    break;
+                }
+            }
+            if(seed != null){
+                new Timer().schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    enMove = true;
+                    gp.ui.isAction = false;
+                    direction = "diam";
+                    gp.tileM.mapTileNum[tileX][tileY] = 67;
+                    gp.tileM.wetDaysLeft[tileX][tileY] = 1; // basah 1 hari
+                }}, 1000);
+            }
+        }
+    }
+
+    public void harvesting(){
+    if (currTileNum == 68) {
+        Seeds harvestedSeed = null;
+        int tileX = (worldX + gp.tileSize / 2) / gp.tileSize;
+        int tileY = (worldY + gp.tileSize / 2) / gp.tileSize;
+        for (Seeds s : inventory.plantedSeeds) {
+            if (s.posX == tileX && s.posY == tileY) {
+                harvestedSeed = s;
+                break;
+            }
+        }
+        if (harvestedSeed != null) {
+            if(harvestedSeed.getName().equals("Wheat Seeds")){
+                Crops crop = CropsList.Wheat.create();
+                for(int i = 0; i < crop.getCropsTotal(); i++){
+                    gp.player.inventory.addItem(crop);
+                }
+                System.out.println("Berhasil panen: " + crop.getName());
+            }
+            else if(harvestedSeed.getName().equals("Parsnip Seeds")){
+                Crops crop = CropsList.Parsnip.create();
+                for(int i = 0; i < crop.getCropsTotal(); i++){
+                    gp.player.inventory.addItem(crop);
+                }
+                System.out.println("Berhasil panen: " + crop.getName());
+            }
+            else if(harvestedSeed.getName().equals("Cauliflower Seeds")){
+                Crops crop = CropsList.Cauliflower.create();
+                for(int i = 0; i < crop.getCropsTotal(); i++){
+                    gp.player.inventory.addItem(crop);
+                }
+                System.out.println("Berhasil panen: " + crop.getName());
+            }
+            else if(harvestedSeed.getName().equals("Potato Seeds")){
+                Crops crop = CropsList.Potato.create();
+                for(int i = 0; i < crop.getCropsTotal(); i++){
+                    gp.player.inventory.addItem(crop);
+                }
+                System.out.println("Berhasil panen: " + crop.getName());
+            }
+            else if(harvestedSeed.getName().equals("Blueberry Seeds")){
+                Crops crop = CropsList.Blueberry.create();
+                for(int i = 0; i < crop.getCropsTotal(); i++){
+                    gp.player.inventory.addItem(crop);
+                }
+                System.out.println("Berhasil panen: " + crop.getName());
+            }
+            else if(harvestedSeed.getName().equals("Tomato Seeds")){
+                Crops crop = CropsList.Tomato.create();
+                for(int i = 0; i < crop.getCropsTotal(); i++){
+                    gp.player.inventory.addItem(crop);
+                }
+                System.out.println("Berhasil panen: " + crop.getName());
+            }
+            else if(harvestedSeed.getName().equals("Hot Pepper Seeds")){
+                Crops crop = CropsList.HotPepper.create();
+                for(int i = 0; i < crop.getCropsTotal(); i++){
+                    gp.player.inventory.addItem(crop);
+                }
+                System.out.println("Berhasil panen: " + crop.getName());
+            }
+            else if(harvestedSeed.getName().equals("Melon Seeds")){
+                Crops crop = CropsList.Melon.create();
+                for(int i = 0; i < crop.getCropsTotal(); i++){
+                    gp.player.inventory.addItem(crop);
+                }
+                System.out.println("Berhasil panen: " + crop.getName());
+            }
+            else if(harvestedSeed.getName().equals("Cranberry Seeds")){
+                Crops crop = CropsList.Cranberry.create();
+                for(int i = 0; i < crop.getCropsTotal(); i++){
+                    gp.player.inventory.addItem(crop);
+                }
+                System.out.println("Berhasil panen: " + crop.getName());
+            }
+            else if(harvestedSeed.getName().equals("Pumpkin Seeds")){
+                Crops crop = CropsList.Pumpkin.create();
+                for(int i = 0; i < crop.getCropsTotal(); i++){
+                    gp.player.inventory.addItem(crop);
+                }
+                System.out.println("Berhasil panen: " + crop.getName());
+            }
+            else if(harvestedSeed.getName().equals("Grape Seeds")){
+                Crops crop = CropsList.Grape.create();
+                for(int i = 0; i < crop.getCropsTotal(); i++){
+                    gp.player.inventory.addItem(crop);
+                }
+                System.out.println("Berhasil panen: " + crop.getName());
+            }
+
+            
+
+
+            // Hapus seed dari daftar tanam
+            inventory.plantedSeeds.remove(harvestedSeed);
+
+            // Ubah tile jadi tanah kosong
+            gp.tileM.mapTileNum[tileX][tileY] = 0;
+            gp.tileM.wetDaysLeft[tileX][tileY] = 0;
+        }
+    }
+    }
 }

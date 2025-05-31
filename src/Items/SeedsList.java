@@ -10,7 +10,7 @@ import TimeSeasonWeather.EnvironmentStatus.Season;
 
 public enum SeedsList implements ItemCreator<Seeds>{
     Parsnip("Parsnip Seeds", 10, 20, false, 1, null, Season.Spring),
-    Cauliflowe("Cauliflower Seeds", 40, 80, false, 5, null,  Season.Spring),
+    Cauliflower("Cauliflower Seeds", 40, 80, false, 5, null,  Season.Spring),
     Potato("Potato Seeds", 25, 50, false, 3, null, Season.Spring),
     Wheat("Wheat Seeds",30, 60, false, 1, null, Season.Spring),
     Blueberry("Blueberry Seeds", 40, 80, false, 7, null, Season.Summer),

@@ -8,9 +8,11 @@ import javax.imageio.ImageIO;
 public class Inventory {
     public List<Items> items;
     private int capacity;
+    public List<Seeds> plantedSeeds;
 
     public Inventory() {
         this.items = new ArrayList<>();
+        this.plantedSeeds = new ArrayList<>();
         this.capacity = 36; 
         items.add(EquipmentList.Hoe.create());
         items.add(EquipmentList.Pickaxe.create());

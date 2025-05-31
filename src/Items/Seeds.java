@@ -9,7 +9,8 @@ public class Seeds extends Items {
     private int daystoHarvest;
     private ArrayList<Season> harvestSeason;
     private boolean isWatered;
-    private int dayelapsed;
+    public int dayelapsed;
+    public int posX, posY;
 
     public Seeds(String name, int sellPrice, int buyPrice, boolean isEdible, int daystoHarvest, BufferedImage image, Season harvestSeason) {
         super(name, sellPrice, buyPrice, isEdible, image);
@@ -21,6 +22,8 @@ public class Seeds extends Items {
         if (name.equals("Wheat")) {
             this.harvestSeason.add(Season.Fall);
         }
+        posX = 33;
+        posY = 33;
     }
 
     public void water() {
@@ -43,6 +46,14 @@ public class Seeds extends Items {
         this.dayelapsed++;
     }
     public boolean isHarvestable() {
-        return dayelapsed >= daystoHarvest && isWatered;
+        return dayelapsed >= daystoHarvest;
+    }
+    public boolean isPlantable(Season curr){
+        for (Season season : harvestSeason) {
+            if (curr == season) {
+                return true;
+            }
+        }
+        return false;
     }
 }
