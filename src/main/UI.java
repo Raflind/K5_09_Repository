@@ -168,6 +168,7 @@ public class UI {
             drawMapSelectionScreen();
         }
         if(gp.gameState == gp.dialogueState){
+            isAction = true; // Set isAction to true when in dialogue state
             if(gp.tileM.currMap.equals("Store")) {
                 drawDialogueScreen(dialogueOptionsStore);
             } else {
