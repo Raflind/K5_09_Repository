@@ -292,6 +292,7 @@ public class KeyHandler implements KeyListener {
             }
         }
         if(code==KeyEvent.VK_O){
+            gp.ui.isAction = true;
             gp.gameState = gp.endgameState;
         }
         if(code==KeyEvent.VK_M && gp.player.interactNPC==1) {
@@ -352,7 +353,11 @@ public class KeyHandler implements KeyListener {
                     gp.ui.mapSelectionNum = 0;
                 }
                 if(gp.ui.commandNum == 1){
-                    System.out.println("Anda memilih CREDITS.");
+                    System.out.println("18222084\tAnanda Farhan Raihandra");
+                    System.out.println("18223088\tWijaksara Aptaluhung");
+                    System.out.println("18223086\tRaditya Zaki Athaya");
+                    System.out.println("18223016\tMuhammad Daffa Al Ghifari");
+                    System.out.println("18223038\tRafli Dwi Nugraha");
                 }
                 if(gp.ui.commandNum == 2){
                     System.exit(0);
@@ -828,6 +833,7 @@ public class KeyHandler implements KeyListener {
     public void endgameState(int code) {
         if(code == KeyEvent.VK_ESCAPE) {
             gp.gameState = gp.playState;
+            gp.ui.isAction = false;
         }
         if (code == KeyEvent.VK_DOWN) {
         gp.ui.endgameNpcScroll++;

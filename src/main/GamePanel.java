@@ -34,32 +34,20 @@ public class GamePanel extends JPanel implements Runnable{
    public TileManager farmMap, oceanMap, forestMap, mountainMap, storeMap, housePlayerMap, abigailMap, carolineMap, dascoMap, mayorMap, perryMap; /*blm lengkap*/
    public TileManager tileM;
    public NPCManager npcManager;
-   KeyHandler keyH = new KeyHandler(this);
+   KeyHandler keyH;
    
 
-   public Fishing fishing = new Fishing();
+   public Fishing fishing;
    public Cooking curCooking;
-   public UI ui = new UI(this);
-   public Time time = new Time(6, 0);
-   public Store store = new Store();
-   public List<Integer> guessList = new ArrayList<>();
-   public HashMap<String, Boolean> recipe = new HashMap<String, Boolean>() {{
-    put("Fish And Chips", false);
-    put("Baguette", true);
-    put("Sashimi", false);
-    put("Fugu", false);
-    put("Wine", true);
-    put("Pumpkin Pie", true);
-    put("Fish Stew", false);
-    put("Veggie Soup", false);
-    put("Spakbor Salad", true);
-    put("Fish Sandwich", false);
-    put("Legends of Spakbor", false);
-}};
-   Timer timer = new Timer();
-   public EnvironmentStatus environmentStatus = new EnvironmentStatus(time, this);
+   public UI ui;
+   public Time time;
+   public Store store;
+   public List<Integer> guessList;
+   public HashMap<String, Boolean> recipe;
+   Timer timer;
+   public EnvironmentStatus environmentStatus;
    Thread gameThread;
-   public CollisionChecker cChecker = new CollisionChecker(this);
+   public CollisionChecker cChecker;
    public Player player;
    //default pos
    int x = 100;
@@ -100,11 +88,7 @@ public class GamePanel extends JPanel implements Runnable{
     public int lastDay = -1;
 
     //endgame
-    public List<Integer> fishcaught= new ArrayList<>(){{
-        add(0);
-        add(0);
-        add(0);
-    }};
+    public List<Integer> fishcaught;
     int totalIncome = 0;
     int totalExpenditure = 0;
     int averageIncome = 0;
@@ -115,11 +99,43 @@ public class GamePanel extends JPanel implements Runnable{
 
 
    public GamePanel() {
+    getInstance();
     this.setPreferredSize(new Dimension(screenWidth, screenHeight));
     this.setBackground(Color.black);
     this.setDoubleBuffered(true);
     this.addKeyListener(keyH);
     this.setFocusable(true);
+    setupGame();
+   }
+
+   public void getInstance(){
+    keyH = new KeyHandler(this);
+    timer = new Timer();
+    environmentStatus = new EnvironmentStatus(time, this);
+    fishing = new Fishing();
+    ui = new UI(this);
+    time = new Time(6, 0);
+    store = new Store();
+    guessList = new ArrayList<>();
+    recipe = new HashMap<String, Boolean>() {{
+        put("Fish And Chips", false);
+        put("Baguette", true);
+        put("Sashimi", false);
+        put("Fugu", false);
+        put("Wine", true);
+        put("Pumpkin Pie", true);
+        put("Fish Stew", false);
+        put("Veggie Soup", false);
+        put("Spakbor Salad", true);
+        put("Fish Sandwich", false);
+        put("Legends of Spakbor", false);
+    }};
+    cChecker = new CollisionChecker(this);
+    fishcaught= new ArrayList<>(){{
+        add(0);
+        add(0);
+        add(0);
+    }};
     farmMap = new TileManager(this, "Farm");
     oceanMap = new TileManager(this, "Ocean");
     forestMap = new TileManager(this, "Forest");
@@ -134,7 +150,6 @@ public class GamePanel extends JPanel implements Runnable{
     tileM = farmMap;
     player = new Player(this, keyH, tileM.worldX*tileSize, tileM.worldY*tileSize);
     npcManager = new Entity.NPCManager(this);
-    setupGame();
    }
 
    public void setupGame(){

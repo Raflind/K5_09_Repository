@@ -609,9 +609,9 @@ public class UI {
             g2.setFont(stardew.deriveFont(Font.PLAIN, 32F));
             g2.setColor(kuning);
 
-            int frameX = gp.tileSize * 6;
+            int frameX = gp.tileSize * 2;
             int frameY = gp.tileSize;
-            int frameWidth = gp.tileSize * 8;
+            int frameWidth = gp.tileSize * 12;
             int frameHeight = gp.tileSize * 10;
             drawSubWindow(frameX, frameY, frameWidth, frameHeight);
 
@@ -619,9 +619,8 @@ public class UI {
                 case 0: options_main(frameX, frameY); break;
                 case 1: options_help(frameX, frameY); break;
                 case 2: options_listObject(frameX, frameY); break;
-                case 3: options_statistics(frameX, frameY); break;
-                case 4: options_actions(frameX, frameY); break;
-                case 5: options_exitConfirmation(frameX, frameY); break;
+                case 3: options_actions(frameX, frameY); break;
+                case 4: options_exitConfirmation(frameX, frameY); break;
             }
 
             gp.keyH.enterPressed = false;
@@ -637,7 +636,7 @@ public class UI {
         textY += gp.tileSize * 2;
 
         String[] options = {
-            "Help", "List Object", "Statistics", "Actions", "Exit", "Back"
+            "Help", "List Object", "Actions", "Exit", "Back"
         };
 
         for (int i = 0; i < options.length; i++) {
@@ -651,8 +650,7 @@ public class UI {
                         case 1: subState = 2; break;
                         case 2: subState = 3; break;
                         case 3: subState = 4; break;
-                        case 4: subState = 5; break;
-                        case 5: gp.gameState = gp.playState; commandNum = 0; break;
+                        case 4: subState = gp.gameState = gp.playState; commandNum = 0; break;
                     }
                 }
             }
@@ -677,11 +675,6 @@ public class UI {
             "of land. Your goal is simple: live your life however you want.",
             "You can farm, explore, interact with NPCs, build relationships,",
             "and even get married.",
-            "",
-            "There is no true ending — the game continues as long as you wish.",
-            "You’re free to play at your own pace, set your own goals, and",
-            "create your own routine.",
-            "",
             "— HOW TO PLAY —",
             "",
             "• Move with W (up), A (left), S (down), D (right).",
@@ -793,9 +786,9 @@ public class UI {
             "Here are the various actions you can perform. Each action affects",
             "your energy, time, or social relationships.",
             "",
-            "1. Planting        → Plant seeds on tilled soil.",
-            "2. Watering        → Water your crops to help them grow.",
-            "3. Harvesting      → Harvest crops that are ready.",
+            "1. Planting        → Plant seeds on tilled soil (H)",
+            "2. Watering        → Water your crops to help them grow (J)",
+            "3. Harvesting      → Harvest crops that are ready (K)",
             "4. Eating          → Eat food to restore your energy.",
             "5. Sleeping        → Sleep to recover energy and start a new day.",
             "6. Fishing         → Fish in specific locations.",
@@ -808,12 +801,11 @@ public class UI {
             "13. Moving         → Move between tiles on the map.",
             "14. ShowTime       → Show current time, season, weather, and day.",
             "15. ShowLocation   → Show your current location.",
-            "16. OpenInventory  → Display all inventory items.",
+            "16. OpenInventory  → Display all inventory items (I)",
             "17. SellToBin      → Sell items using the Shipping Bin.",
-            "18. Tilling        → Turn land into tillable soil.",
-            "19. RecoverLand    → Revert soil back to normal.",
+            "18. Tilling        → Turn land into tillable soil (T)",
+            "19. RecoverLand    → Revert soil back to normal (U)",
             "20. Watching       → Watch TV for fun.",
-            "21. Save           → Save your game progress.",
             "",
             "Note:",
             "- Some actions need items or conditions.",
@@ -841,28 +833,7 @@ public class UI {
 
     // EXIT CONFIRMATION SCREEN
     public void options_exitConfirmation(int frameX, int frameY) {
-        int textX = frameX + gp.tileSize;
-        int textY = frameY + gp.tileSize;
-
-        g2.drawString("Are you sure you want to exit?", getXforCenteredText("Are you sure you want to exit?"), textY);
-
-        textY += gp.tileSize * 2;
-
-        String[] options = {"Yes", "No"};
-        for (int i = 0; i < options.length; i++) {
-            g2.drawString(options[i], textX, textY);
-            if (commandNum == i) {
-                g2.drawString(">", textX - 25, textY);
-                if (gp.keyH.enterPressed) {
-                    if (i == 0) {
-                        gp.gameState = gp.titleState; 
-                    } else {
-                        subState = 0; 
-                    }
-                }
-            }
-            textY += gp.tileSize;
-        }
+        System.exit(0);
     }
 
     public void drawEnterHouse(){
@@ -1734,5 +1705,7 @@ public class UI {
             g2.drawString(scrollMsg, npcTextX, boxY + boxHeight - 10);
         }
     }
+
+    
 }
 
