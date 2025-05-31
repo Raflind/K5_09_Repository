@@ -65,6 +65,9 @@ public class UI {
     public String inputPrompt = "Enter Guess:";
     public long lastBlink = 0;
     public boolean showCursor = true;
+    public boolean initInteract = false;
+    public boolean bought = false;
+    public boolean drawNotenoughGold = false;
 
     public UI(GamePanel gp) {
         this.gp = gp;
@@ -152,12 +155,13 @@ public class UI {
         }
         if (gp.gameState == gp.inventoryState){
             drawInventory();
+            drawPlayerGold();
         }
         if(gp.gameState == gp.pauseState) {
             drawPauseScreen();
         }
         if(gp.gameState == gp.shippingBinState){
-            drawInventory();
+            drawShippingBin();
         }
         if(gp.gameState == gp.titleState){
             if(titleScreenState==0){
@@ -212,6 +216,17 @@ public class UI {
         }
         if(gp.gameState == gp.addFuelState){
             drawInventory();
+        }
+        if(gp.gameState == gp.storeState){
+            drawStore();
+            drawPlayerGold();
+            drawInventoryLeft();
+            if(bought){
+                drawBoughtstatus();
+            }
+            if(drawNotenoughGold){
+                drawNotenoughGold();
+            }
         }
     }
     
@@ -470,7 +485,7 @@ public class UI {
         if(gp.player.inventory.items.size() > 0 && index < gp.player.inventory.items.size()) {
             selectItems = gp.player.inventory.getItem(index);
         } else {
-            selectItems = null; // Reset if no item is selected
+            selectItems = null; 
         }
         if (selectItems != null && selectItems.isEdible() && showEatPrompt) {
 
@@ -526,6 +541,8 @@ public class UI {
             g2.drawString(enter, infoBoxX + 20, textY);
         }
     }
+
+
     public void drawSubWindow(int x, int y, int width, int height) {
         g2.setColor(new Color(0, 0, 0, 200)); // Semi-transparent black
         g2.fillRoundRect(x, y, width, height, 35, 35); // Fill the window
@@ -1212,7 +1229,7 @@ public class UI {
         int optionSpacingY = 40;  // jarak antar baris
 
         g2.setFont(stardew.deriveFont(Font.BOLD, 28F));
-        for (int i = 0; i < dialogueOption.length; i++) {
+        if(initInteract){for (int i = 0; i < dialogueOption.length; i++) {
             int col = i % 3;
             int row = i / 3;
             int optionX = startX + col * optionSpacingX;
@@ -1224,7 +1241,7 @@ public class UI {
             }
             g2.setColor(Color.WHITE);
             g2.drawString(dialogueOption[i], optionX, optionY);
-        }
+        }}
     }
 
     public void drawInteraction() {
@@ -1281,6 +1298,222 @@ public class UI {
         drawSubWindow(x, y, windowWidth, windowHeight);
         g2.setColor(Color.RED);
         g2.drawString(msg, getXforCenteredText(msg), y + windowHeight / 2 + textHeight / 4);
+    }
+
+    public void drawInventoryLeft(){
+        //FRAME
+        int frameX = gp.tileSize;
+        int frameY = gp.tileSize/2;
+        int frameWidth = gp.tileSize*7;
+        int frameHeight = gp.tileSize*7;
+        drawSubWindow(frameX, frameY, frameWidth, frameHeight);
+
+        //SLOT
+        final int slotXstart = frameX + 20;
+        final int slotYstart = frameY + 20;
+        int slotX = slotXstart;
+        int slotY = slotYstart;
+
+        //CURSOR
+        int cursorX = slotX + (gp.tileSize * slotCol);
+        int cursorY = slotY + (gp.tileSize * slotRow);
+        int cursorWidth = gp.tileSize;
+        int cursorheight = gp.tileSize;
+
+        //DRAW ITEMS
+        for(int i = 0; i < gp.player.inventory.items.size(); i++) {
+            if(gp.player.inventory.getItem(i) != null) {
+                g2.drawImage(gp.player.inventory.getItem(i).image, slotX, slotY, null);
+            }
+            slotX += gp.tileSize; // Move to the next slot
+            if((i + 1) % 6 == 0) { // Move to the next row after 5 items
+                slotX = slotXstart;
+                slotY += gp.tileSize;
+            }
+        }
+    }
+    public void drawStore() {
+        //FRAME
+        int frameX = gp.tileSize*9;
+        int frameY = gp.tileSize/2;
+        int frameWidth = gp.tileSize*7;
+        int frameHeight = gp.tileSize*7;
+        drawSubWindow(frameX, frameY, frameWidth, frameHeight);
+
+        //SLOT
+        final int slotXstart = frameX + 20;
+        final int slotYstart = frameY + 20;
+        int slotX = slotXstart;
+        int slotY = slotYstart;
+
+        //CURSOR
+        int cursorX = slotX + (gp.tileSize * slotCol);
+        int cursorY = slotY + (gp.tileSize * slotRow);
+        int cursorWidth = gp.tileSize;
+        int cursorheight = gp.tileSize;
+
+        //DRAW CURSOR
+        g2.setColor(Color.WHITE);
+        g2.setStroke(new BasicStroke(3));
+        g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorheight, 10, 10); 
+
+        //DRAW ITEMS
+        for(int i = 0; i < gp.store.itemsStore.size(); i++) {
+            if(gp.store.getItem(i) != null) {
+                g2.drawImage(gp.store.getItem(i).image, slotX, slotY, null);
+            }
+            slotX += gp.tileSize; // Move to the next slot
+            if((i + 1) % 6 == 0) { // Move to the next row after 5 items
+                slotX = slotXstart;
+                slotY += gp.tileSize;
+            }
+        }
+        int index = slotRow * 6 + slotCol;
+        if(gp.store.itemsStore.size() > 0 && index < gp.store.itemsStore.size()) {
+            selectItems = gp.store.getItem(index);
+        } else {
+            selectItems = null; 
+        }
+        if (selectItems != null) {
+            String name = selectItems.getName();
+            String type = selectItems.getClass().getSimpleName();
+            String cost = selectItems.getBuyPrice() + "Gold";
+            String enter = "Press Enter to Buy";
+            int infoBoxWidth = gp.tileSize * 5;
+            int infoBoxHeight = gp.tileSize * 3;
+            int infoBoxX = gp.tileSize * 2; // Left side of the screen
+            int infoBoxY = gp.screenHeight - infoBoxHeight - gp.tileSize;
+
+            drawSubWindow(infoBoxX, infoBoxY, infoBoxWidth, infoBoxHeight);
+
+            g2.setFont(stardew.deriveFont(Font.BOLD, 22F));
+            g2.setColor(kuning);
+            int textY = infoBoxY + 35;
+            g2.drawString("Name: " + name, infoBoxX + 20, textY);
+            textY += 30;
+            g2.drawString("Type: " + type, infoBoxX + 20, textY);
+            textY += 30;
+            g2.drawString(cost, infoBoxX + 20, textY);
+            textY += 30;
+            g2.drawString(enter, infoBoxX + 20, textY);
+        }
+    }
+
+    public void drawBoughtstatus(){
+        String message = "You bought ";
+        String item = selectItems.getName();
+        int infoBoxWidth = gp.tileSize * 5;
+        int infoBoxHeight = gp.tileSize * 3;
+        int infoBoxX = gp.tileSize * 2; // Left side of the screen
+        int infoBoxY = gp.screenHeight - infoBoxHeight - gp.tileSize;
+
+        drawSubWindow(infoBoxX, infoBoxY, infoBoxWidth, infoBoxHeight);
+
+        g2.setFont(stardew.deriveFont(Font.BOLD, 22F));
+        g2.setColor(kuning);
+        int textY = infoBoxY + 30;
+        g2.drawString(message, infoBoxX + 20, textY+60);
+        textY = infoBoxY + 30;
+        g2.drawString(item, infoBoxX + 20, textY+60);
+    }
+    public void drawShippingBin(){
+        //FRAME
+        int frameX = gp.tileSize*9;
+        int frameY = gp.tileSize*2;
+        int frameWidth = gp.tileSize*7;
+        int frameHeight = gp.tileSize*7;
+        drawSubWindow(frameX, frameY, frameWidth, frameHeight);
+
+        //SLOT
+        final int slotXstart = frameX + 20;
+        final int slotYstart = frameY + 20;
+        int slotX = slotXstart;
+        int slotY = slotYstart;
+
+        //CURSOR
+        int cursorX = slotX + (gp.tileSize * slotCol);
+        int cursorY = slotY + (gp.tileSize * slotRow);
+        int cursorWidth = gp.tileSize;
+        int cursorheight = gp.tileSize;
+
+        //DRAW CURSOR
+        g2.setColor(Color.WHITE);
+        g2.setStroke(new BasicStroke(3));
+        g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorheight, 10, 10); 
+
+        //DRAW ITEMS
+        for(int i = 0; i < gp.player.inventory.items.size(); i++) {
+            if(gp.player.inventory.getItem(i) != null) {
+                g2.drawImage(gp.player.inventory.getItem(i).image, slotX, slotY, null);
+            }
+            slotX += gp.tileSize; // Move to the next slot
+            if((i + 1) % 6 == 0) { // Move to the next row after 5 items
+                slotX = slotXstart;
+                slotY += gp.tileSize;
+            }
+        }
+        int index = slotRow * 6 + slotCol;
+        if(gp.player.inventory.items.size() > 0 && index < gp.player.inventory.items.size()) {
+            selectItems = gp.player.inventory.getItem(index);
+        } else {
+            selectItems = null; 
+        }
+        if (selectItems != null) {
+            String name = selectItems.getName();
+            String type = selectItems.getClass().getSimpleName();
+            String sell = selectItems.getSellPrice() + "Gold";
+            String enter = "Press Enter to Sell";
+            int infoBoxWidth = gp.tileSize * 5;
+            int infoBoxHeight = gp.tileSize * 3;
+            int infoBoxX = gp.tileSize * 2; // Left side of the screen
+            int infoBoxY = gp.screenHeight - infoBoxHeight - gp.tileSize;
+
+            drawSubWindow(infoBoxX, infoBoxY, infoBoxWidth, infoBoxHeight);
+
+            g2.setFont(stardew.deriveFont(Font.BOLD, 22F));
+            g2.setColor(kuning);
+            int textY = infoBoxY + 35;
+            g2.drawString("Name: " + name, infoBoxX + 20, textY);
+            textY += 30;
+            g2.drawString("Type: " + type, infoBoxX + 20, textY);
+            textY += 30;
+            g2.drawString(sell, infoBoxX + 20, textY);
+            textY += 30;
+            g2.drawString(enter, infoBoxX + 20, textY);
+        }
+    }
+    public void drawNotenoughGold(){
+        String message = "You don't have";
+        String gold =  " enough Gold";
+        int infoBoxWidth = gp.tileSize * 5;
+        int infoBoxHeight = gp.tileSize * 3;
+        int infoBoxX = gp.tileSize * 2; // Left side of the screen
+        int infoBoxY = gp.screenHeight - infoBoxHeight - gp.tileSize;
+
+        drawSubWindow(infoBoxX, infoBoxY, infoBoxWidth, infoBoxHeight);
+
+        g2.setFont(stardew.deriveFont(Font.BOLD, 22F));
+        g2.setColor(Color.RED);
+        int textY = infoBoxY + 20;
+        g2.drawString(message, infoBoxX + 20, textY+60);
+        textY = infoBoxY + 50;
+        g2.drawString(gold, infoBoxX + 20, textY+60);
+    }
+    public void drawPlayerGold() {
+        int boxWidth = gp.tileSize * 4;
+        int boxHeight = gp.tileSize * 2;
+        // Position: center between store (right) and inventory (left)
+        int boxX = (gp.screenWidth - boxWidth) / 2;
+        int boxY = gp.tileSize * 2 + gp.tileSize * 7 + 20; // below the inventory/store panels
+
+        drawSubWindow(boxX, boxY, boxWidth, boxHeight);
+
+        g2.setFont(stardew.deriveFont(Font.BOLD, 28F));
+        g2.setColor(kuning);
+        String goldMsg = "Gold: " + gp.player.goldManager.getGold();
+        int textX = boxX + (boxWidth - g2.getFontMetrics().stringWidth(goldMsg)) / 2;
+        int textY = boxY + boxHeight / 2 + g2.getFontMetrics().getAscent() / 2 - 4;
+        g2.drawString(goldMsg, textX, textY);
     }
 }
 

@@ -41,6 +41,12 @@ public class Player extends Entity{
     private NPC partner;
     public GoldManager goldManager = new GoldManager();
     public ShippingBin shippingBin = new ShippingBin();
+    public enum Relationship {
+        SINGLE,
+        FIANCE,
+        SPOUSE
+    }
+    public Relationship relationshipStatus = Relationship.SINGLE;
 
     /**
      * mau bikin constructor yang bisa masukin energy, name, farmName, dan gender
@@ -180,7 +186,9 @@ public class Player extends Entity{
         } else {
             spriteNum = 1; // kalau diam, spriteNum tetap 1
         }
-         currTileNum = gp.tileM.mapTileNum[worldX/gp.tileSize][worldY/gp.tileSize];
+        int tileX = (worldX + gp.tileSize / 2) / gp.tileSize;
+        int tileY = (worldY + gp.tileSize / 2) / gp.tileSize;
+        currTileNum = gp.tileM.mapTileNum[tileX][tileY];
     }
 
     public void draw(Graphics2D comp){
@@ -338,12 +346,14 @@ public class Player extends Entity{
             consumeEnergy(5);
             direction = "hoe";
             enMove = false;
+            int tileX = (worldX + gp.tileSize / 2) / gp.tileSize;
+            int tileY = (worldY + gp.tileSize / 2) / gp.tileSize;   
             new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
                 direction = "diam";
                 enMove = true;
-                gp.tileM.mapTileNum[worldX/gp.tileSize][worldY/gp.tileSize] = 0;
+                gp.tileM.mapTileNum[tileX][tileY] = 0;
                 gp.ui.isAction = false;
             }}, 1000);
         }
@@ -355,12 +365,14 @@ public class Player extends Entity{
             consumeEnergy(5);
             direction = "axe";
             enMove = false;
+            int tileX = (worldX + gp.tileSize / 2) / gp.tileSize;
+            int tileY = (worldY + gp.tileSize / 2) / gp.tileSize;
             new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
                 direction = "diam";
                 enMove = true;
-                gp.tileM.mapTileNum[worldX/gp.tileSize][worldY/gp.tileSize] = 1;
+                gp.tileM.mapTileNum[tileX][tileY] = 1;
                 gp.ui.isAction = false;
             }}, 1000);
         }
@@ -388,6 +400,23 @@ public class Player extends Entity{
         return false;
     }
 
+    public void updateRelation(){
+        switch (relationshipStatus) {
+            case SINGLE:
+                relationshipStatus = Relationship.FIANCE;
+            case FIANCE:
+                relationshipStatus = Relationship.SPOUSE;
+            default:
+                break;
+        }
+    }
     
+    public boolean isSingle(){
+        return relationshipStatus == Relationship.SINGLE;
+    }
+
+    public boolean isEngaged(){
+        return relationshipStatus == Relationship.FIANCE;
+    }
 
 }

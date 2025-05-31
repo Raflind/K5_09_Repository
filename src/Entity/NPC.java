@@ -40,16 +40,23 @@ public class NPC extends Entity{
     private ArrayList<Items> hatedItems;
     private Relationship relationshipStatus;
     private static ArrayList<NPC> npcList;
-    private int visitedFreq;
-    private int giftedFreq;
-    private int chatFreq;
+    private int visitedFreq = 0;
+    private int giftedFreq = 0;
+    private int chatFreq = 0;
     private int actionLockCounter = 0;
     private int spriteCounter = 0;
     private int spriteNum = 1;
+    public String[] chatStrings = new String[3];
+    public int proposalDate = 0;
+    public String words;
 
     //Contructor
-    public NPC(String name, GamePanel gp){
+    public NPC(String name, GamePanel gp, String chatStrings1, String chatStrings2, String chatStrings3) {
         super(gp);
+        this.chatStrings[0] = chatStrings1;
+        this.chatStrings[1] = chatStrings2;
+        this.chatStrings[2] = chatStrings3;
+        this.gp = gp;
         this.name = name;
         this.lovedItems = new ArrayList<Items>();
         this.likedItems = new ArrayList<Items>();
@@ -225,7 +232,7 @@ public class NPC extends Entity{
         if (getHeartPoints() + plusHeartPoints < getMAX_HEARTPOINTS()) {
             heartPoints += plusHeartPoints;
         }else if(getHeartPoints() + plusHeartPoints >= getMAX_HEARTPOINTS()){
-            heartPoints = getHeartPoints();
+            heartPoints = getMAX_HEARTPOINTS();
         } else if(plusHeartPoints < 0){
             throw new WrongUseFunctionException("gunakan decreaseHeartPoints() untuk mengurangi");
         }
@@ -258,8 +265,12 @@ public class NPC extends Entity{
         return hatedItems.contains(item);
     }
 
-    public void npcResponse(String message){
-        System.out.println(getName() + ": " + message);
+    public void  npcResponse(String message){
+        words = message;
+    }
+    
+    public String getResponse(){
+        return words;
     }
 
     
@@ -283,10 +294,13 @@ public class NPC extends Entity{
             npcResponse("I liked this one, makasih");
             increaseHeartPoints(20);
         } else if(isHatedItem(item)){
-            npcResponse("masuk lo apaan ngirim beginian");
+            npcResponse("Maksud lo apaan ngirim beginian");
             decreaseHeartPoints(25);
+        } else{
+            npcResponse("Nyeh udah sering dikasih");
         }
         giftedFreq++;
+        gp.player.inventory.removeItem(item);
 
         System.out.println("Heart Points " + getName() + " : " + getHeartPoints());
     }
@@ -295,47 +309,67 @@ public class NPC extends Entity{
     
     private void updateRelation(){
         switch (getRelationship()) {
-            case SINGLE:
+            case Relationship.SINGLE:
                 setRelationshipStatus(Relationship.FIANCE);
-            case FIANCE:
+                break;
+            case Relationship.FIANCE:
                 setRelationshipStatus(Relationship.SPOUSE);
-            case SPOUSE:
+                break;
+            case Relationship.SPOUSE:
                 setRelationshipStatus(Relationship.SINGLE);
+                break;
             default:
                 break;
         }
     }
 
     public void propose(){
-        updateRelation();
+        System.out.println(getHeartPoints());
+        if(getHeartPoints() == getMAX_HEARTPOINTS() && gp.player.isSingle()){
+            npcResponse("Mau banget aku tunangan sama kamu!");
+            updateRelation();
+            gp.player.updateRelation();
+            proposalDate = gp.environmentStatus.getDay();
+            gp.player.consumeEnergy(10);
+            gp.player.setPartner(this);
+        }
+        else if(gp.player.isEngaged()){
+            npcResponse("Kamu sudah bertunangan!");
+            gp.player.consumeEnergy(20);
 
+        }
+        else{
+            npcResponse("Najong ewh");
+            gp.player.consumeEnergy(20);
+        }
+
+        for(int i = 0; i<11; i++){
+            gp.environmentStatus.time.addFiveMinutes();
+        }
+        
     }
 
     public void marry(){
-        updateRelation();
-    }
-
-    public void breakUp(){
-        updateRelation();
-
+        System.out.println(gp.environmentStatus.getDay() - proposalDate);
+        System.out.println(getRelationship());
+        if(gp.environmentStatus.getDay() - proposalDate >= 1  && getRelationship() == Relationship.FIANCE){
+            npcResponse("Mau banget aku nikah sama kamu!");
+            updateRelation();
+            gp.environmentStatus.marry();
+        }
+        else{
+            npcResponse("Aduh... ngga bisa");
+        }
     }
 
     public void chat() throws WrongUseFunctionException{
+        gp.player.consumeEnergy(10);
         chatFreq++;
+        Random random = new Random();
+        int i = random.nextInt(chatStrings.length);
+        npcResponse(chatStrings[i]);
         increaseHeartPoints(10);
-    }
-
-    public void ask(){
-
-    }
-
-
-    public void interact(Player player){
-        String name = player.getName();
-        npcResponse("Halo " + name + " sudah lama kita tidak berjumpa!");
-        npcResponse("apakah ada yang bisa saya bantu?");
-        int opt = 0; //harusnya string intinya pilihan optionnya
-        Boolean isInteract = true;
+        gp.environmentStatus.time.addFiveMinutes();
     }
 
     public void loadNPCImages() {

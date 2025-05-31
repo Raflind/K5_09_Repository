@@ -9,7 +9,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import Action.Store.Store;
 import Entity.Player;
+import Items.CropsList;
+import Items.FishList;
 import Map.TileManager;
 import TimeSeasonWeather.*;
 import Action.Cooking.*;
@@ -38,16 +41,17 @@ public class GamePanel extends JPanel implements Runnable{
    public Cooking curCooking;
    public UI ui = new UI(this);
    public Time time = new Time(6, 0);
+   public Store store = new Store();
    public List<Integer> guessList = new ArrayList<>();
    public HashMap<String, Boolean> recipe = new HashMap<String, Boolean>() {{
-    put("Fish And Chips", true);
+    put("Fish And Chips", false);
     put("Baguette", true);
-    put("Sashimi", true);
-    put("Fugu", true);
+    put("Sashimi", false);
+    put("Fugu", false);
     put("Wine", true);
-    put("Pumpkin Pie", false);
+    put("Pumpkin Pie", true);
     put("Fish Stew", false);
-    put("Spakbor Salad", false);
+    put("Spakbor Salad", true);
     put("Fish Sandwich", false);
     put("Legends of Spakbor", false);
 }};
@@ -81,6 +85,7 @@ public class GamePanel extends JPanel implements Runnable{
    public final int insufficientEnergyState = 11;
    public final int stoveState = 12; 
    public final int addFuelState = 13; 
+   public final int storeState = 14;
 
     public int subState = 0;
     public final int subState_none = 0;
@@ -88,6 +93,9 @@ public class GamePanel extends JPanel implements Runnable{
     public final int subState_listObject = 2;
     public final int subState_statistics = 3;
     public final int subState_actions = 4;
+
+    //recipe count
+    public int fishingCaught = 0;
 
 
    public GamePanel() {
@@ -153,6 +161,10 @@ public class GamePanel extends JPanel implements Runnable{
             time.addFiveMinutes();
             environmentStatus.setTime(time);
             environmentStatus.nextDay();
+            checkPufferfish();
+            checkFishingCaught();
+            checkHotPepper();
+            checkLegend();
             frameCounter = 0;
             // Update other environmental aspects if needed
         }
@@ -252,6 +264,9 @@ public class GamePanel extends JPanel implements Runnable{
         else if(gameState == addFuelState){
             ui.draw(comp);
         }
+        else if(gameState == storeState){
+            ui.draw(comp);
+        }
         comp.dispose();
     }
     public void cookSelectedRecipe(String recipeName){
@@ -299,4 +314,23 @@ public class GamePanel extends JPanel implements Runnable{
             }
         }
     }
+    public void checkPufferfish(){
+        if(player.inventory.containsItem(FishList.Pufferfish.create())){
+            recipe.put("Fugu", true);
+        }
+    }
+    public void checkFishingCaught(){
+        if(fishingCaught >=10){
+            recipe.put("Sashimi", true);
+        }
+    }
+    public void checkHotPepper(){
+        if(player.inventory.containsItem(CropsList.HotPepper.create())){
+            recipe.put("Fish Stew", true);
+        }
+    }
+    public void checkLegend(){
+        if(player.inventory.containsItem(FishList.Legend.create()) || player.inventory.containsItem(FishList.Glacierfish.create()) || player.inventory.containsItem(FishList.CrimsonFish.create())){
+            recipe.put("Legends of Spakbor", true);
+        }
 }

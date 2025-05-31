@@ -9,7 +9,7 @@ import javax.imageio.ImageIO;
 
 public enum FoodsList implements ItemCreator<Foods>{
     Baguette("Baguette", 80, 100, true, 25, null),
-    FishNChips("Fish", 135, 150, true, 50, null),
+    FishNChips("Fish and Chips", 135, 150, true, 50, null),
     Sashimi("Sashimi", 275, 300, true, 70, null),
     Fugu("Fugu", 135, 0, true, 50, null),
     Wine("Wine", 90, 100, true, 20, null),
