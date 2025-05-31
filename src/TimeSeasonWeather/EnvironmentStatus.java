@@ -91,6 +91,19 @@ public class EnvironmentStatus {
         }
     }
 
+    public void marry(){
+        if(time.getHour()<22){
+            time.setHour(22);
+            time.setMinute(0);
+        }
+        else{
+            time.setHour(22);
+            time.setMinute(0);
+            randomizeWeather();
+            day++;
+        }
+    }
+
     public void randomizeWeather(){
         if(season != Season.Winter){
             Random rand = new Random();

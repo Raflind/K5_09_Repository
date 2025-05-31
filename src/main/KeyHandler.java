@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import Entity.Player;
+import Exception.WrongUseFunctionException;
 import Items.Crops;
 import Items.Equipment;
 import Items.Fish;
@@ -286,8 +287,10 @@ public class KeyHandler implements KeyListener {
             } else if(gp.npcManager.getActiveNPC().getName().equals("Emily")) {
                 gp.ui.currentDialogue = "Haii! Aku Emily si baik hati… Salam kenal, \nsering-sering berkunjung yaa!";
             } 
+            gp.ui.isAction = true;
             gp.player.interactNPC = 0;
             gp.gameState = gp.dialogueState;
+            gp.ui.initInteract = true;
         }
         if(gp.tileM.currMap.equals("Farm")) {
             if(code == KeyEvent.VK_T) {
@@ -516,8 +519,10 @@ public class KeyHandler implements KeyListener {
     }
 
     public void dialogueState(int code) {
-        int maxCommandNum = gp.ui.dialogueOptionsStore.length - 1; // atau dialogueOptions.length
-
+        int maxCommandNum = gp.ui.dialogueOptions.length - 1; // atau dialogueOptions.length
+        if(gp.tileM.currMap.equals("Store")) {
+            maxCommandNum = gp.ui.dialogueOptionsStore.length - 1; // Atur sesuai jumlah opsi di toko
+        }
         if(code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT){
             if((gp.ui.dialogueCommandNum + 1) % 3 != 0 && gp.ui.dialogueCommandNum < maxCommandNum){
                 gp.ui.dialogueCommandNum++;
@@ -540,9 +545,40 @@ public class KeyHandler implements KeyListener {
         }
         if(code == KeyEvent.VK_ESCAPE){
             gp.gameState = gp.playState;
+            gp.ui.dialogueCommandNum = 0;
+            gp.ui.isAction = false;
         }
         if(code == KeyEvent.VK_ENTER){
-            // Aksi sesuai pilihan
+            gp.ui.initInteract = false;
+            if(gp.ui.dialogueCommandNum==0){
+                try {
+                    gp.npcManager.getActiveNPC().chat();
+                } catch (WrongUseFunctionException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                gp.ui.currentDialogue = gp.npcManager.getActiveNPC().getResponse();
+                gp.ui.dialogueCommandNum = 5;
+            }
+            else if(gp.ui.dialogueCommandNum==1){
+                //gift
+            }
+            else if(gp.ui.dialogueCommandNum==2){
+                gp.npcManager.getActiveNPC().propose();
+                gp.ui.currentDialogue = gp.npcManager.getActiveNPC().getResponse();
+                gp.ui.dialogueCommandNum = 5;
+            }
+            else if(gp.ui.dialogueCommandNum==3){
+                gp.npcManager.getActiveNPC().marry();
+                gp.ui.currentDialogue = gp.npcManager.getActiveNPC().getResponse();
+                gp.ui.dialogueCommandNum = 5;
+            }
+            else if(gp.ui.dialogueCommandNum==4){
+                //store
+            }
+            else{
+                return;
+            }
         }
     }
 

@@ -62,6 +62,7 @@ public class UI {
     public String inputPrompt = "Enter Guess:";
     public long lastBlink = 0;
     public boolean showCursor = true;
+    public boolean initInteract = false;
 
     public UI(GamePanel gp) {
         this.gp = gp;
@@ -1176,7 +1177,7 @@ public class UI {
         int optionSpacingY = 40;  // jarak antar baris
 
         g2.setFont(stardew.deriveFont(Font.BOLD, 28F));
-        for (int i = 0; i < dialogueOption.length; i++) {
+        if(initInteract){for (int i = 0; i < dialogueOption.length; i++) {
             int col = i % 3;
             int row = i / 3;
             int optionX = startX + col * optionSpacingX;
@@ -1188,7 +1189,7 @@ public class UI {
             }
             g2.setColor(Color.WHITE);
             g2.drawString(dialogueOption[i], optionX, optionY);
-        }
+        }}
     }
 
     public void drawInteraction() {
