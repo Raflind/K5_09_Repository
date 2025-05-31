@@ -44,6 +44,7 @@ public class UI {
     public boolean showShippingBinScreen = false;
     public boolean isGuessing = true;
     public boolean fishGuess = false;
+    public boolean showEatPrompt = false;
     private long sleepScreenStartTime = 0;
     public boolean isAction = false;
     public boolean isTired = false;
@@ -202,6 +203,12 @@ public class UI {
             else if(!fishGuess && !isGuessing){
                 drawFailCaught();
             }
+        }
+        if(gp.gameState == gp.stoveState){
+            drawCookingMenu();
+        }
+        if(gp.gameState == gp.addFuelState){
+            drawInventory();
         }
     }
     
@@ -423,9 +430,9 @@ public class UI {
     public void drawInventory() {
         //FRAME
         int frameX = gp.tileSize*9;
-        int frameY = gp.tileSize;
-        int frameWidth = gp.tileSize*6;
-        int frameHeight = gp.tileSize*5;
+        int frameY = gp.tileSize*2;
+        int frameWidth = gp.tileSize*7;
+        int frameHeight = gp.tileSize*7;
         drawSubWindow(frameX, frameY, frameWidth, frameHeight);
 
         //SLOT
@@ -451,7 +458,7 @@ public class UI {
                 g2.drawImage(gp.player.inventory.getItem(i).image, slotX, slotY, null);
             }
             slotX += gp.tileSize; // Move to the next slot
-            if((i + 1) % 4 == 0) { // Move to the next row after 4 items
+            if((i + 1) % 6 == 0) { // Move to the next row after 5 items
                 slotX = slotXstart;
                 slotY += gp.tileSize;
             }
@@ -461,6 +468,24 @@ public class UI {
             selectItems = gp.player.inventory.getItem(index);
         } else {
             selectItems = null; // Reset if no item is selected
+        }
+        if (selectItems != null && selectItems.isEdible() && showEatPrompt) {
+
+            // DRAW OPITON
+            int eatBoxWidth = gp.tileSize * 2;
+            int eatBoxHeight = gp.tileSize;
+            // Position the box to the right of the selected slot
+            int eatBoxX = cursorX + cursorWidth + 10;
+            int eatBoxY = cursorY;
+
+            drawSubWindow(eatBoxX, eatBoxY, eatBoxWidth, eatBoxHeight);
+
+            g2.setFont(stardew.deriveFont(Font.BOLD, 22F));
+            g2.setColor(kuning);
+            String eatMsg = "Eat";
+            int eatMsgX = eatBoxX + (eatBoxWidth - g2.getFontMetrics().stringWidth(eatMsg)) / 2;
+            int eatMsgY = eatBoxY + eatBoxHeight / 2 + g2.getFontMetrics().getAscent() / 2 - 4;
+            g2.drawString(eatMsg, eatMsgX, eatMsgY);
         }
     }
     public void drawSubWindow(int x, int y, int width, int height) {
@@ -989,10 +1014,24 @@ public class UI {
         g2.drawString(title, titleX + 3, titleY + 3);
         g2.setColor(kuning);
         g2.drawString(title, titleX, titleY);
+        
+        //Stove Fuel
+        int fuelBoxWidth = gp.tileSize * 3;
+        int fuelBoxHeight = gp.tileSize;
+        int fuelBoxX = x - width + 150; // 16px padding from right edge
+        int fuelBoxY = y + 16; // 16px padding from top edge
+        drawSubWindow(fuelBoxX, fuelBoxY, fuelBoxWidth, fuelBoxHeight);
+
+        g2.setFont(stardew.deriveFont(Font.PLAIN, 24F));
+        g2.setColor(kuning);
+        String fuelMsg = "Fuel: " + gp.stoveFuel; // Change to your actual fuel variable
+        int fuelMsgX = fuelBoxX + (fuelBoxWidth - g2.getFontMetrics().stringWidth(fuelMsg)) / 2;
+        int fuelMsgY = fuelBoxY + fuelBoxHeight / 2 + g2.getFontMetrics().getAscent() / 2 - 4;
+        g2.drawString(fuelMsg, fuelMsgX, fuelMsgY);
 
         // Options
         g2.setFont(stardew.deriveFont(Font.PLAIN, 28F));
-        String options = "Memasak";
+        String options = "Cook";
         int optionX = getXforCenteredText(options);
         int optionY = titleY + 64; // Start below the title
         g2.setColor(kuninggelap);
@@ -1005,7 +1044,7 @@ public class UI {
             g2.setColor(kuning);
             g2.drawString(">", optionX - 32, optionY);
             }
-        options = "Kembali";
+        options = "Add Fuel";
         optionX = getXforCenteredText(options);
         optionY += 64;
         g2.setColor(kuninggelap);

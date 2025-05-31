@@ -60,6 +60,7 @@ public class GamePanel extends JPanel implements Runnable{
    int x = 100;
    int y = 100;
    int speed = 5;
+   public int stoveFuel = 2;
    //world setting
    final public int worldwh = 32;
    public final int worldWidth = worldwh*tileSize;
@@ -78,6 +79,8 @@ public class GamePanel extends JPanel implements Runnable{
    public final int insufficientResourcesCookingState = 9;
    public final int fishingState = 10;
    public final int insufficientEnergyState = 11;
+   public final int stoveState = 12; 
+   public final int addFuelState = 13; 
 
     public int subState = 0;
     public final int subState_none = 0;
@@ -85,6 +88,7 @@ public class GamePanel extends JPanel implements Runnable{
     public final int subState_listObject = 2;
     public final int subState_statistics = 3;
     public final int subState_actions = 4;
+
 
    public GamePanel() {
     this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -242,6 +246,12 @@ public class GamePanel extends JPanel implements Runnable{
         else if(gameState == insufficientEnergyState){
             ui.draw(comp);
         }   
+        else if(gameState == stoveState){
+            ui.draw(comp);
+        }
+        else if(gameState == addFuelState){
+            ui.draw(comp);
+        }
         comp.dispose();
     }
     public void cookSelectedRecipe(String recipeName){
@@ -279,7 +289,7 @@ public class GamePanel extends JPanel implements Runnable{
                 break;
         }
         if(cooking != null){
-            if(!cooking.checkIngredients(player.getInventory())){
+            if(!cooking.checkIngredients(player.getInventory()) || stoveFuel < 1){
                 gameState = insufficientResourcesCookingState;
                 
             }

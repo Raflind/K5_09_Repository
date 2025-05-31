@@ -11,14 +11,17 @@ public class Inventory {
 
     public Inventory() {
         this.items = new ArrayList<>();
-        this.capacity = 20; 
-        try {
-            items.add(new Items("Wheat", 10, 5, true, ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Items/Wheat.png"))));
-            items.add(new Items("Wheat", 10, 5, true, ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Items/Wheat.png"))));
-            items.add(new Items("Wheat", 10, 5, true, ImageIO.read(getClass().getClassLoader().getResourceAsStream("res/Items/Wheat.png"))));
-        } catch (IOException e) {
-            e.printStackTrace();
+        this.capacity = 36; 
+        items.add(EquipmentList.Hoe.create());
+        items.add(EquipmentList.Pickaxe.create());
+        items.add(EquipmentList.WateringCan.create());
+        items.add(EquipmentList.FishingRod.create());
+        for(int i = 0; i < 15; i++){
+            items.add(SeedsList.Parsnip.create());
         } 
+        items.add(CropsList.Parsnip.create());
+        items.add(FoodsList.Baguette.create());
+        items.add(FishList.Halibut.create());
     }
 
     public Inventory(int capacity) {

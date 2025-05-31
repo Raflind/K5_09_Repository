@@ -5,6 +5,10 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import Entity.Player;
+import Items.Crops;
+import Items.Equipment;
+import Items.Fish;
+import Items.Foods;
 import Map.TileManager;
 
 public class KeyHandler implements KeyListener {
@@ -58,6 +62,12 @@ public class KeyHandler implements KeyListener {
         }
         if(gp.gameState == gp.insufficientEnergyState){
             insufficientEnergyState(code);
+        }
+        if(gp.gameState == gp.addFuelState){
+            addFuelState(code);
+        }
+        if(gp.gameState == gp.stoveState){
+            stoveState(code);
         }
 
     }
@@ -125,7 +135,7 @@ public class KeyHandler implements KeyListener {
             }
         }
         if(code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT){
-            if(gp.ui.slotCol != 4){
+            if(gp.ui.slotCol != 5){
                 gp.ui.slotCol++;
             }
         }
@@ -135,12 +145,32 @@ public class KeyHandler implements KeyListener {
             }
         }
         if(code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN){
-            if(gp.ui.slotRow != 3){
+            if(gp.ui.slotRow != 5){
                 gp.ui.slotRow++;
             }
         }
         if(code == KeyEvent.VK_ESCAPE){
             gp.gameState = gp.playState;
+        }
+        if (code == KeyEvent.VK_ENTER) {
+            if (gp.ui.selectItems != null && gp.ui.selectItems.isEdible()) {
+                if (!gp.ui.showEatPrompt) {
+                    gp.ui.showEatPrompt = true;
+                } else {
+                    if(gp.ui.selectItems instanceof Foods){
+                        gp.player.setEnergy(gp.player.getEnergy() + ((Foods) gp.ui.selectItems).getEnergyPoints());
+                    }
+                    else if(gp.ui.selectItems instanceof Fish){
+                        gp.player.setEnergy(gp.player.getEnergy() + 1); // Default energy gain for non-food items
+                    }
+                    else if(gp.ui.selectItems instanceof Crops){
+                        gp.player.setEnergy(gp.player.getEnergy() + 3);
+                    }
+                    gp.player.inventory.removeItem(gp.ui.selectItems);
+                    gp.ui.showEatPrompt = false;
+                    gp.ui.selectItems = null;
+                }
+            }
         }
     }
 
@@ -216,7 +246,7 @@ public class KeyHandler implements KeyListener {
             gp.ui.showSleepPrompt = false;
         }
         if(code == KeyEvent.VK_C && gp.ui.showCookingScreen) {
-            gp.gameState = gp.cookingState;
+            gp.gameState = gp.stoveState;
         }
         if(code == KeyEvent.VK_B && gp.ui.showShippingBinScreen){
             gp.gameState = gp.shippingBinState;
@@ -467,9 +497,14 @@ public class KeyHandler implements KeyListener {
         }
         if(code == KeyEvent.VK_ENTER) {
             if(gp.ui.selectItems != null) {
-                gp.player.shippingBin.addItem(gp.ui.selectItems);
-                gp.player.inventory.removeItem(gp.ui.selectItems);
-                gp.ui.selectItems = null; // Reset selected item after shipping
+                if(gp.ui.selectItems instanceof Equipment){
+                    //Gak ngapangapain
+                }
+                else{
+                    gp.player.shippingBin.addItem(gp.ui.selectItems);
+                    gp.player.inventory.removeItem(gp.ui.selectItems);
+                    gp.ui.selectItems = null; // Reset selected item after shipping
+                }
             }
         }
     }
@@ -542,6 +577,73 @@ public class KeyHandler implements KeyListener {
         if(gp.gameState == gp.insufficientEnergyState) {
             if(code == KeyEvent.VK_ESCAPE) {
                 gp.gameState = gp.playState; // Kembali ke play state
+            }
+        }
+    }
+    public void stoveState(int code){
+        if(gp.gameState == gp.stoveState){
+            if(code == KeyEvent.VK_ESCAPE){
+                gp.gameState = gp.playState; // Kembali ke play state
+            }
+            if(code == KeyEvent.VK_W || code == KeyEvent.VK_UP){
+                if(gp.ui.cookingCommand > 0){
+                    gp.ui.cookingCommand--;
+                }
+            }
+            if(code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN){
+                if(gp.ui.cookingCommand < 1){
+                    gp.ui.cookingCommand++;
+                }
+            }
+            if(code == KeyEvent.VK_ENTER){
+                switch (gp.ui.cookingCommand) {
+                    case 0: // Memasak
+                        gp.gameState = gp.cookingState;
+                        break;
+                    case 1: // Tambah Bahan Bakar
+                        gp.gameState = gp.addFuelState; // Ganti ke state menambah bahan bakar
+                        break;
+                }
+            }
+        }
+    }
+
+    public void addFuelState(int code) {
+        if(gp.gameState == gp.addFuelState) {
+            if(code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT){
+                if(gp.ui.slotCol != 0){
+                    gp.ui.slotCol--;
+                }
+            }
+            if(code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT){
+                if(gp.ui.slotCol != 4){
+                    gp.ui.slotCol++;
+                }
+            }
+            if(code == KeyEvent.VK_W || code == KeyEvent.VK_UP){
+                if(gp.ui.slotRow != 0){
+                    gp.ui.slotRow--;
+                }
+            }
+            if(code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN){
+                if(gp.ui.slotRow != 3){
+                    gp.ui.slotRow++;
+                }
+            }
+            if(code == KeyEvent.VK_ESCAPE) {
+                gp.gameState = gp.playState;
+            }
+            if(code == KeyEvent.VK_ENTER) {
+                if(gp.ui.selectItems != null) {
+                    if(gp.ui.selectItems.getName().equals("Firewood")){
+                        gp.stoveFuel += 1;
+                        gp.player.inventory.removeItem(gp.ui.selectItems);
+                    }
+                    if(gp.ui.selectItems.getName().equals("Coal")){
+                        gp.stoveFuel += 2;
+                        gp.player.inventory.removeItem(gp.ui.selectItems);
+                    }
+                }
             }
         }
     }
